@@ -8,8 +8,27 @@ phina.globalize();
 var ASSETS = {
   image: {
     bg: "http://jsrun.it/assets/a/G/5/Y/aG5YD.png",
-    objects: 'http://user-images.githubusercontent.com/39637599/40726302-6751e03a-6460-11e8-812f-5d2770abb494.png',
+    objects: 'http://user-images.githubusercontent.com/39637599/40733177-030311ca-6470-11e8-9757-5783b9824fe8.png',
   },
+  // animation
+  spritesheet: {
+    "player_ss":
+    {
+      "frame": {
+        "width": 120,
+        "height": 120,
+        "cols": 4,
+        "rows": 1,
+      },
+      "animations" : {
+        "normal": {
+          "frames": [0,1,2,3],
+          "next": "normal",
+          "frequency": 10,
+        },
+      }
+    },
+  }
 };
 
 // screen size
@@ -25,7 +44,7 @@ phina.define("MainScene", {
 
   init: function(options) {
     this.superInit(options);
-
+    
     // background
     this.bg = Sprite("bg").addChildTo(this);
     this.bg.origin.set(0, 0);
@@ -33,7 +52,9 @@ phina.define("MainScene", {
     // player
     this.player = Sprite('objects', 120, 120).addChildTo(this);
     this.player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT-60);
-    this.player.frameIndex = 0;
+    //  player animation
+    var anim = FrameAnimation('player_ss').attachTo(this.player);
+    anim.gotoAndPlay('normal');
   },
 
   // update
