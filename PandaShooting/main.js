@@ -8,7 +8,7 @@ phina.globalize();
 var ASSETS = {
   image: {
     bg: "http://jsrun.it/assets/a/G/5/Y/aG5YD.png",
-    objects: 'http://user-images.githubusercontent.com/39637599/40667194-7ee52abe-639c-11e8-82e0-bff84770db08.png',
+    objects: 'http://user-images.githubusercontent.com/39637599/40726302-6751e03a-6460-11e8-812f-5d2770abb494.png',
   },
 };
 
@@ -31,8 +31,8 @@ phina.define("MainScene", {
     this.bg.origin.set(0, 0);
     
     // player
-    this.player = Sprite('objects', 16, 16).addChildTo(this);
-    this.player.setPosition(400, 400);
+    this.player = Sprite('objects', 120, 120).addChildTo(this);
+    this.player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT-60);
     this.player.frameIndex = 0;
   },
 
@@ -46,17 +46,10 @@ phina.define("MainScene", {
         // move right
         if (diff < 0) {
           this.player.x += SPEED;
-          this.player.scaleX = -1;
         }
         // move left
         else {
           this.player.x -= SPEED;
-          this.player.scaleX = 1;
-        }
-
-        // animation
-        if (app.frame % 4 === 0) {
-          this.player.frameIndex = (this.player.frameIndex === 12) ? 13:12;
         }
       }
     }
