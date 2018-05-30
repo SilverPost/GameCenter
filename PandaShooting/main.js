@@ -8,13 +8,14 @@ phina.globalize();
 var ASSETS = {
   image: {
     bg: "http://jsrun.it/assets/a/G/5/Y/aG5YD.png",
-    objects: 'https://user-images.githubusercontent.com/39637599/40667194-7ee52abe-639c-11e8-82e0-bff84770db08.png',
+    objects: 'http://user-images.githubusercontent.com/39637599/40667194-7ee52abe-639c-11e8-82e0-bff84770db08.png',
   },
 };
 
 // screen size
 var SCREEN_WIDTH  = 465;
 var SCREEN_HEIGHT = 465;
+var SPEED         = 4;
 
 /*
  * main scene
@@ -30,7 +31,7 @@ phina.define("MainScene", {
     this.bg.origin.set(0, 0);
     
     // player
-    this.player = Sprite('objects', 32, 32).addChildTo(this);
+    this.player = Sprite('objects', 16, 16).addChildTo(this);
     this.player.setPosition(400, 400);
     this.player.frameIndex = 0;
   },
