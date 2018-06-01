@@ -74,10 +74,6 @@ phina.define("MainScene", {
         }
       }
     }
-    else {
-      // wait
-      this.player.frameIndex = 0;
-    }
   }
 });
 
