@@ -4,7 +4,6 @@
 
 phina.globalize();
 
-// images
 var ASSETS = {
   image: {
     bg: "http://jsrun.it/assets/a/G/5/Y/aG5YD.png",
@@ -41,7 +40,7 @@ var SPEED         = 4;
  */
 phina.define("MainScene", {
   superClass: 'DisplayScene',
-
+  
   init: function(options) {
     this.superInit(options);
     
@@ -60,7 +59,7 @@ phina.define("MainScene", {
   // update
   update: function(app) {
     var p = app.pointer;
-
+    
     if (p.getPointing()) {
       var x_diff = this.player.x - p.x;
       if (Math.abs(x_diff) > SPEED) {
@@ -95,8 +94,8 @@ phina.main(function() {
     height: SCREEN_HEIGHT,
     assets: ASSETS,
   });
-
+  
   app.enableStats();
-
+  
   app.run();
 });
