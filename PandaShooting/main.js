@@ -6,7 +6,7 @@ phina.globalize();
 
 var ASSETS = {
   image: {
-    bg: "http://jsrun.it/assets/a/G/5/Y/aG5YD.png",
+    bg: "http://user-images.githubusercontent.com/39637599/40866206-64f140f0-6637-11e8-9988-e6ed4cc6241f.png",
     objects: 'http://user-images.githubusercontent.com/39637599/40733177-030311ca-6470-11e8-9757-5783b9824fe8.png',
   },
   // animation
@@ -31,8 +31,8 @@ var ASSETS = {
 };
 
 // screen size
-var SCREEN_WIDTH  = 465;
-var SCREEN_HEIGHT = 465;
+var SCREEN_WIDTH  = 600;
+var SCREEN_HEIGHT = 960;
 var SPEED         = 4;
 
 /*
@@ -50,7 +50,7 @@ phina.define("MainScene", {
     
     // player
     this.player = Sprite('objects', 120, 120).addChildTo(this);
-    this.player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT-60);
+    this.player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT*0.9);
     //  player animation
     var anim = FrameAnimation('player_ss').attachTo(this.player);
     anim.gotoAndPlay('normal');
