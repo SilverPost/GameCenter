@@ -62,15 +62,22 @@ phina.define("MainScene", {
     var p = app.pointer;
 
     if (p.getPointing()) {
-      var diff = this.player.x - p.x;
-      if (Math.abs(diff) > SPEED) {
-        // move right
-        if (diff < 0) {
+      var x_diff = this.player.x - p.x;
+      if (Math.abs(x_diff) > SPEED) {
+        // move horizontal direction
+        if (x_diff < 0) {
           this.player.x += SPEED;
-        }
-        // move left
-        else {
+        } else {
           this.player.x -= SPEED;
+        }
+      }
+      var y_diff = this.player.y - p.y;
+      if (Math.abs(y_diff) > SPEED) {
+        // move vertical direction
+        if (y_diff < 0) {
+          this.player.y += SPEED;
+        } else {
+          this.player.y -= SPEED;
         }
       }
     }
