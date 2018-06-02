@@ -4,6 +4,12 @@
 
 phina.globalize();
 
+// size information
+var SCREEN_WIDTH  = 600;
+var SCREEN_HEIGHT = 960;
+var PLAYER_WIDTH  = 120;
+var PLAYER_HEIGHT = 120;
+
 var ASSETS = {
   image: {
     bg: "http://user-images.githubusercontent.com/39637599/40866206-64f140f0-6637-11e8-9988-e6ed4cc6241f.png",
@@ -14,8 +20,8 @@ var ASSETS = {
     "player_ss":
     {
       "frame": {
-        "width": 120,
-        "height": 120,
+        "width": PLAYER_WIDTH,
+        "height": PLAYER_HEIGHT,
         "cols": 4,
         "rows": 1,
       },
@@ -35,6 +41,32 @@ var player;
 var enemies = [];
 
 /*
+ * player's bullet
+ */
+phina.define('PlayerBullet',{
+  superClass : 'phina.display.CircleShape',
+  init: function(){
+    this.superInit({radius: 8, fill:'transparent', stroke:'white'});
+    this.setPosition(player.x, player.y-PLAYER_HEIGHT/2);
+  },
+  update : function(){
+    this.y -= 10;
+    if(this.y < -10){
+      this.remove();
+    }
+    var copied = enemies.clone();
+    copied.each( function(i) {
+      var enemy = i;
+      if (this.hitTestElement(enemy)){
+        this.remove();
+        enemy.remove();
+        enemies.erase(enemy);
+      }
+    },this);
+  }
+});
+
+/*
  * enemy
  */
 phina.define('Enemy',{
@@ -49,8 +81,7 @@ phina.define('Enemy',{
   }
 });
 
-var SCREEN_WIDTH  = 600;
-var SCREEN_HEIGHT = 960;
+// player's dafault speed
 var DEFAULT_SPEED = 8;
 
 /*
@@ -67,7 +98,7 @@ phina.define("MainScene", {
     this.bg.origin.set(0, 0);
     
     // player
-    player = Sprite('objects', 120, 120).addChildTo(this);
+    player = Sprite('objects', PLAYER_WIDTH, PLAYER_HEIGHT).addChildTo(this);
     player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT*0.8);
     //  player animation
     var anim = FrameAnimation('player_ss').attachTo(player);
@@ -96,6 +127,9 @@ phina.define("MainScene", {
         } else {
           player.y -= player_speed;
         }
+      }
+      if(app.frame % 10 === 0){
+        PlayerBullet().addChildTo(this);
       }
     }
     if(app.frame % 60 === 0){
