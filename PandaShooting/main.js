@@ -5,17 +5,21 @@
 phina.globalize();
 
 // size information
-var SCREEN_WIDTH  = 600;
-var SCREEN_HEIGHT = 960;
-var PLAYER_WIDTH  = 120;
-var PLAYER_HEIGHT = 120;
-var BULLET_SIZE   = 8;
-var ENEMY_SIZE    = 30;
+var SCREEN_WIDTH    = 600;
+var SCREEN_HEIGHT   = 960;
+var PLAYER_WIDTH    = 104;
+var PLAYER_HEIGHT   = 104;
+var BULLET_SIZE     = 8;
+var ENEMY_SIZE      = 30;
+var EXPLOSION_SIZE  = 80;
+
+var FPS = 30;
 
 var ASSETS = {
   image: {
     bg: "http://user-images.githubusercontent.com/39637599/40866206-64f140f0-6637-11e8-9988-e6ed4cc6241f.png",
-    objects: 'http://user-images.githubusercontent.com/39637599/40733177-030311ca-6470-11e8-9757-5783b9824fe8.png',
+    objects: 'http://user-images.githubusercontent.com/39637599/40872521-8008a498-668a-11e8-8a58-65ee832cf426.png',
+    explosion: 'http://user-images.githubusercontent.com/39637599/40873790-00bb5006-66a2-11e8-8c99-da36f29a586e.png',
   },
   // animation
   spritesheet: {
@@ -25,16 +29,36 @@ var ASSETS = {
         "width": PLAYER_WIDTH,
         "height": PLAYER_HEIGHT,
         "cols": 4,
-        "rows": 1,
+        "rows": 2,
       },
-      "animations" : {
+      "animations": {
         "normal": {
           "frames": [0,1,2,3],
           "next": "normal",
           "frequency": 10,
         },
+        "damage": {
+          "frames": [4,5,6,7],
+          "next": "normal",
+          "frequency": 10,
+        },
       }
     },
+    "explosion_ss":
+    {
+      "frame": {
+        "width": EXPLOSION_SIZE,
+        "height": EXPLOSION_SIZE,
+        "cols": 4,
+        "rows": 1,
+      },
+      "animations": {
+        "start": {
+          "frames": [0,1,2,3],
+          "frequency": 5,
+        },
+      },
+    }
   }
 };
 
@@ -51,7 +75,7 @@ phina.define('PlayerBullet',{
     this.superInit({radius: BULLET_SIZE, fill:'transparent', stroke:'white'});
     this.setPosition(player.x, player.y-PLAYER_HEIGHT/2);
   },
-  update : function(){
+  update: function(){
     this.y -= 10;
     if(this.y < -10){
       this.remove();
@@ -60,11 +84,14 @@ phina.define('PlayerBullet',{
     copied.each( function(i) {
       var enemy = i;
       if (this.hitTestElement(enemy)){
+        // explosion
+        Explosion(enemy.x, enemy.y).addChildTo(this.parent);
+        // remove
         this.remove();
         enemy.remove();
         enemies.erase(enemy);
       }
-    },this);
+    }, this);
   }
 });
 
@@ -84,7 +111,7 @@ phina.define('Enemy',{
     if(Math.random() < 0.01 && this.y < SCREEN_HEIGHT*0.7){
       EnemyBullet(this.x, this.y-ENEMY_SIZE/2, this.rotation - 90).addChildTo(this.parent);
     }
-    if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 <this.y){
+    if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 < this.y){
       this.remove();
     }
   }
@@ -101,13 +128,33 @@ phina.define('EnemyBullet',{
     this.setPosition(x, y);
     this.direction = direction * Math.DEG_TO_RAD;
   },
-  update : function(){
+  update: function(){
     this.x += Math.cos(this.direction) * 3;
     this.y += Math.sin(this.direction) * 3;
-    if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 <this.y){
+    if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 < this.y){
       this.remove();
     }
     if(this.hitTestElement(player)){
+      this.remove();
+      player.damage();
+    }
+  }
+});
+
+// explosion
+phina.define('Explosion',{
+  superClass : 'Sprite',
+  init : function(x, y){
+    this.superInit('explosion', EXPLOSION_SIZE, EXPLOSION_SIZE);
+    this.setPosition(x, y);
+    var anim = FrameAnimation('explosion_ss').attachTo(this) ;
+    anim.gotoAndPlay('start');
+    this.count = 0;
+  },
+  update: function(){
+    this.y += 10;
+    this.count += 1;
+    if(this.count > FPS){
       this.remove();
     }
   }
@@ -135,6 +182,10 @@ phina.define("MainScene", {
     //  player animation
     var anim = FrameAnimation('player_ss').attachTo(player);
     anim.gotoAndPlay('normal');
+    // damage
+    player.damage = function(){
+      player.remove();
+    };
   },
 
   // update
@@ -206,8 +257,6 @@ phina.define("MainScene", {
             y: SCREEN_HEIGHT*0.9,
             rotation: -360,
           },2000, 'easeInOutQubic')
-          break;
-        default:
           break;
       }
       enemy.addChildTo(this);
