@@ -270,7 +270,8 @@ phina.define("MainScene", {
 phina.main(function() {
   // create application
   var app = GameApp({
-    startLabel: 'main',
+    title: 'Panda Shooting',
+    startLabel: 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     assets: ASSETS,
