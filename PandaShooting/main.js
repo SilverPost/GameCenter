@@ -30,10 +30,28 @@ var ASSETS = {
   }
 };
 
-// screen size
+// object
+var player;
+var enemies = [];
+
+/*
+ * enemy
+ */
+phina.define('Enemy',{
+  superClass : 'phina.display.TriangleShape',
+  init: function(x, y){
+    this.superInit({radius: 30, fill: 'red'});
+    this.setPosition(x, y);
+    enemies.push(this);
+  },
+  update: function(){
+    var direction = Math.atan2(player.y - this.y , player.x - this.x) * Math.RAD_TO_DEG;
+  }
+});
+
 var SCREEN_WIDTH  = 600;
 var SCREEN_HEIGHT = 960;
-var SPEED         = 4;
+var DEFAULT_SPEED = 8;
 
 /*
  * main scene
@@ -49,36 +67,84 @@ phina.define("MainScene", {
     this.bg.origin.set(0, 0);
     
     // player
-    this.player = Sprite('objects', 120, 120).addChildTo(this);
-    this.player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT*0.9);
+    player = Sprite('objects', 120, 120).addChildTo(this);
+    player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT*0.8);
     //  player animation
-    var anim = FrameAnimation('player_ss').attachTo(this.player);
+    var anim = FrameAnimation('player_ss').attachTo(player);
     anim.gotoAndPlay('normal');
   },
 
   // update
   update: function(app) {
     var p = app.pointer;
-    
+    var player_speed = DEFAULT_SPEED;
     if (p.getPointing()) {
-      var x_diff = this.player.x - p.x;
-      if (Math.abs(x_diff) > SPEED) {
+      var x_diff = player.x - p.x;
+      if (Math.abs(x_diff) > player_speed) {
         // move horizontal direction
         if (x_diff < 0) {
-          this.player.x += SPEED;
+          player.x += player_speed;
         } else {
-          this.player.x -= SPEED;
+          player.x -= player_speed;
         }
       }
-      var y_diff = this.player.y - p.y;
-      if (Math.abs(y_diff) > SPEED) {
+      var y_diff = player.y - p.y;
+      if (Math.abs(y_diff) > player_speed) {
         // move vertical direction
         if (y_diff < 0) {
-          this.player.y += SPEED;
+          player.y += player_speed;
         } else {
-          this.player.y -= SPEED;
+          player.y -= player_speed;
         }
       }
+    }
+    if(app.frame % 60 === 0){
+      var enemy = Enemy(Math.randint(SCREEN_WIDTH*0.1, SCREEN_WIDTH*0.9), 0);
+      var pattern = Math.randint(0, 2);
+      switch (pattern){
+        case 0:
+          enemy.tweener
+          .to({
+            y: SCREEN_HEIGHT*0.5,
+            rotation: 360,
+          },2000, 'easeInOutQuint')
+          .wait(1000)
+          .to({
+            x: SCREEN_WIDTH*1.1,
+            y: SCREEN_HEIGHT*0.9,
+            rotation: -360,
+          },2000, 'easeInOutQuint')
+          break;
+        case 1:
+          enemy.tweener
+          .to({
+            y: SCREEN_HEIGHT*0.5,
+            rotation: 360,
+          },2000, 'easeInCirc')
+          .wait(1000)
+          .to({
+            x: SCREEN_WIDTH*0.7,
+            y: SCREEN_HEIGHT*1.1,
+            rotation: -360,
+          },2000, 'easeInCirc')
+          break;
+        case 2:
+          enemy.tweener
+          .to({
+            y: SCREEN_HEIGHT*0.5,
+            rotation: 360,
+          },2000, 'easeInOutQubic')
+          .wait(1000)
+          .to({
+            x: -SCREEN_WIDTH*0.1,
+            y: SCREEN_HEIGHT*0.9,
+            rotation: -360,
+          },2000, 'easeInOutQubic')
+          break;
+        default:
+          break;
+      }
+      enemy.addChildTo(this);
     }
   }
 });
