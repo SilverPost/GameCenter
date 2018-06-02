@@ -135,6 +135,28 @@ phina.define('EnemyBullet',{
       this.remove();
     }
     if(this.hitTestElement(player)){
+      // explosion
+      Explosion(player.x, player.y).addChildTo(this.parent);
+      this.remove();
+      player.remove();
+    }
+  }
+});
+
+// explosion
+phina.define('Explosion',{
+  superClass : 'Sprite',
+  init : function(x, y){
+    this.superInit('explosion', EXPLOSION_SIZE, EXPLOSION_SIZE);
+    this.setPosition(x, y);
+    var anim = FrameAnimation('explosion_ss').attachTo(this) ;
+    anim.gotoAndPlay('start');
+    this.count = 0;
+  },
+  update: function(){
+    this.y += 10;
+    this.count += 1;
+    if(this.count > FPS/2){
       this.remove();
       player.damage();
     }
@@ -180,12 +202,8 @@ phina.define("MainScene", {
     player = Sprite('objects', PLAYER_WIDTH, PLAYER_HEIGHT).addChildTo(this);
     player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT*0.8);
     //  player animation
-    var anim = FrameAnimation('player_ss').attachTo(player);
-    anim.gotoAndPlay('normal');
-    // damage
-    player.damage = function(){
-      player.remove();
-    };
+    var normal_anim = FrameAnimation('player_ss').attachTo(player);
+    normal_anim.gotoAndPlay('normal');
   },
 
   // update
