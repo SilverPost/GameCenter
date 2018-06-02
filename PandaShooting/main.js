@@ -9,6 +9,8 @@ var SCREEN_WIDTH  = 600;
 var SCREEN_HEIGHT = 960;
 var PLAYER_WIDTH  = 120;
 var PLAYER_HEIGHT = 120;
+var BULLET_SIZE   = 8;
+var ENEMY_SIZE    = 30;
 
 var ASSETS = {
   image: {
@@ -46,7 +48,7 @@ var enemies = [];
 phina.define('PlayerBullet',{
   superClass : 'phina.display.CircleShape',
   init: function(){
-    this.superInit({radius: 8, fill:'transparent', stroke:'white'});
+    this.superInit({radius: BULLET_SIZE, fill:'transparent', stroke:'white'});
     this.setPosition(player.x, player.y-PLAYER_HEIGHT/2);
   },
   update : function(){
@@ -72,12 +74,42 @@ phina.define('PlayerBullet',{
 phina.define('Enemy',{
   superClass : 'phina.display.TriangleShape',
   init: function(x, y){
-    this.superInit({radius: 30, fill: 'red'});
+    this.superInit({radius: ENEMY_SIZE, fill: 'red'});
     this.setPosition(x, y);
     enemies.push(this);
   },
   update: function(){
     var direction = Math.atan2(player.y - this.y , player.x - this.x) * Math.RAD_TO_DEG;
+    this.setRotation(direction + 90);
+    if(Math.random() < 0.01 && this.y < SCREEN_HEIGHT*0.7){
+      EnemyBullet(this.x, this.y-ENEMY_SIZE/2, this.rotation - 90).addChildTo(this.parent);
+    }
+    if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 <this.y){
+      this.remove();
+    }
+  }
+});
+
+/*
+ * enemy's bullet
+ */
+phina.define('EnemyBullet',{
+  superClass : 'phina.display.CircleShape',
+  direction :0,
+  init: function(x, y, direction){
+    this.superInit({radius: BULLET_SIZE, fill:'transparent', stroke:'red'});
+    this.setPosition(x, y);
+    this.direction = direction * Math.DEG_TO_RAD;
+  },
+  update : function(){
+    this.x += Math.cos(this.direction) * 3;
+    this.y += Math.sin(this.direction) * 3;
+    if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 <this.y){
+      this.remove();
+    }
+    if(this.hitTestElement(player)){
+      this.remove();
+    }
   }
 });
 
