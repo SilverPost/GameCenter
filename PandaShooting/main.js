@@ -286,6 +286,7 @@ phina.define("MainScene", {
       message: 'GAME OVER',
       url: SHARE_URL,
     });
+    SCORE = 0;
   },
 });
 
