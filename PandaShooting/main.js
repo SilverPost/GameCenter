@@ -14,6 +14,7 @@ var ENEMY_SIZE      = 30;
 var EXPLOSION_SIZE  = 80;
 
 var FPS = 30;
+var GIT_URL = "https://github.com/SilverPost/GameCenter";
 
 var ASSETS = {
   image: {
@@ -34,11 +35,6 @@ var ASSETS = {
       "animations": {
         "normal": {
           "frames": [0,1,2,3],
-          "next": "normal",
-          "frequency": 10,
-        },
-        "damage": {
-          "frames": [4,5,6,7],
           "next": "normal",
           "frequency": 10,
         },
@@ -129,16 +125,17 @@ phina.define('EnemyBullet',{
     this.direction = direction * Math.DEG_TO_RAD;
   },
   update: function(){
-    this.x += Math.cos(this.direction) * 3;
-    this.y += Math.sin(this.direction) * 3;
+    this.x += Math.cos(this.direction) * 5;
+    this.y += Math.sin(this.direction) * 5;
     if(this.x < -5 || SCREEN_WIDTH+5 <this.x || this.y < -5 || SCREEN_HEIGHT+5 < this.y){
       this.remove();
     }
-    if(this.hitTestElement(player)){
+    if(this.hitTestElement(player) && (player.isAlive == 1)){
       // explosion
       Explosion(player.x, player.y).addChildTo(this.parent);
       this.remove();
       player.remove();
+      player.isAlive = false;
     }
   }
 });
@@ -157,26 +154,6 @@ phina.define('Explosion',{
     this.y += 10;
     this.count += 1;
     if(this.count > FPS/2){
-      this.remove();
-      player.damage();
-    }
-  }
-});
-
-// explosion
-phina.define('Explosion',{
-  superClass : 'Sprite',
-  init : function(x, y){
-    this.superInit('explosion', EXPLOSION_SIZE, EXPLOSION_SIZE);
-    this.setPosition(x, y);
-    var anim = FrameAnimation('explosion_ss').attachTo(this) ;
-    anim.gotoAndPlay('start');
-    this.count = 0;
-  },
-  update: function(){
-    this.y += 10;
-    this.count += 1;
-    if(this.count > FPS){
       this.remove();
     }
   }
@@ -201,6 +178,7 @@ phina.define("MainScene", {
     // player
     player = Sprite('objects', PLAYER_WIDTH, PLAYER_HEIGHT).addChildTo(this);
     player.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT*0.8);
+    player.isAlive = true;
     //  player animation
     var normal_anim = FrameAnimation('player_ss').attachTo(player);
     normal_anim.gotoAndPlay('normal');
@@ -248,7 +226,7 @@ phina.define("MainScene", {
             x: SCREEN_WIDTH*1.1,
             y: SCREEN_HEIGHT*0.9,
             rotation: -360,
-          },2000, 'easeInOutQuint')
+          },2000, 'easeInOutQuint');
           break;
         case 1:
           enemy.tweener
@@ -261,7 +239,7 @@ phina.define("MainScene", {
             x: SCREEN_WIDTH*0.7,
             y: SCREEN_HEIGHT*1.1,
             rotation: -360,
-          },2000, 'easeInCirc')
+          },2000, 'easeInCirc');
           break;
         case 2:
           enemy.tweener
@@ -274,12 +252,24 @@ phina.define("MainScene", {
             x: -SCREEN_WIDTH*0.1,
             y: SCREEN_HEIGHT*0.9,
             rotation: -360,
-          },2000, 'easeInOutQubic')
+          },2000, 'easeInOutQubic');
           break;
       }
       enemy.addChildTo(this);
+      
+      // game over
+      if(player.isAlive === false){
+        this.gameover();
+      }
     }
-  }
+  },
+  
+  gameover: function() {
+    this.exit({
+      message: 'GAME OVER',
+      url: GIT_URL,
+    });
+  },
 });
 
 /*
