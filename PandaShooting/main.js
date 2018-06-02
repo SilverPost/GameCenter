@@ -14,7 +14,8 @@ var ENEMY_SIZE      = 30;
 var EXPLOSION_SIZE  = 80;
 
 var FPS = 30;
-var GIT_URL = "https://github.com/SilverPost/GameCenter";
+var SHARE_URL = "http://runstant.com/SilverPost/projects/fb70fc6c";
+var SCORE = 0;
 
 var ASSETS = {
   image: {
@@ -80,6 +81,9 @@ phina.define('PlayerBullet',{
     copied.each( function(i) {
       var enemy = i;
       if (this.hitTestElement(enemy)){
+        // score
+        SCORE += 100;
+        if(SCORE > 9999) SCORE = 9999;
         // explosion
         Explosion(enemy.x, enemy.y).addChildTo(this.parent);
         // remove
@@ -182,10 +186,22 @@ phina.define("MainScene", {
     //  player animation
     var normal_anim = FrameAnimation('player_ss').attachTo(player);
     normal_anim.gotoAndPlay('normal');
+    
+    // score
+    this.scoreLabel = Label({
+      text: 'SCORE : ' + SCORE,
+      fill: 'white',
+      fontSize: 36,
+    }).addChildTo(this);
+    this.scoreLabel.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.05);
   },
 
   // update
   update: function(app) {
+    // update score
+    this.scoreLabel.text = 'SCORE : ' + SCORE;
+    
+    // move player
     var p = app.pointer;
     var player_speed = DEFAULT_SPEED;
     if (p.getPointing()) {
@@ -266,8 +282,9 @@ phina.define("MainScene", {
   
   gameover: function() {
     this.exit({
+      score: SCORE,
       message: 'GAME OVER',
-      url: GIT_URL,
+      url: SHARE_URL,
     });
   },
 });
