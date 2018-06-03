@@ -18,6 +18,10 @@ var SHARE_URL = "http://runstant.com/SilverPost/projects/fb70fc6c";
 var SCORE = 0;
 
 var ASSETS = {
+  sound: {
+    'se_explosion': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaShooting/sound/se_maoudamashii_se_sound22.wav',
+    'bgm_main': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaShooting/sound/bgm_maoudamashii_8bit29.mp3',
+  },
   image: {
     bg: "http://user-images.githubusercontent.com/39637599/40866206-64f140f0-6637-11e8-9988-e6ed4cc6241f.png",
     objects: 'http://user-images.githubusercontent.com/39637599/40872521-8008a498-668a-11e8-8a58-65ee832cf426.png',
@@ -155,6 +159,7 @@ phina.define('Explosion',{
     this.count = 0;
   },
   update: function(){
+    SoundManager.play('se_explosion');
     this.y += 10;
     this.count += 1;
     if(this.count > FPS/2){
@@ -174,6 +179,9 @@ phina.define("MainScene", {
   
   init: function(options) {
     this.superInit(options);
+    
+    // bgm
+    SoundManager.playMusic('bgm_main');
     
     // background
     this.bg = Sprite("bg").addChildTo(this);
@@ -281,6 +289,7 @@ phina.define("MainScene", {
   },
   
   gameover: function() {
+    SoundManager.stopMusic('bgm_main');
     this.exit({
       score: SCORE,
       message: 'GAME OVER',
