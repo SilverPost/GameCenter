@@ -19,7 +19,7 @@ var SCORE = 0;
 
 var ASSETS = {
   sound: {
-    'se_explosion': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaShooting/sound/se_maoudamashii_se_sound22.wav',
+    'se_explosion': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaShooting/sound/se_maoudamashii_retro12.mp3',
     'bgm_main': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaShooting/sound/bgm_maoudamashii_8bit29.mp3',
   },
   image: {
@@ -157,9 +157,9 @@ phina.define('Explosion',{
     var anim = FrameAnimation('explosion_ss').attachTo(this) ;
     anim.gotoAndPlay('start');
     this.count = 0;
+    SoundManager.play('se_explosion');
   },
   update: function(){
-    SoundManager.play('se_explosion');
     this.y += 10;
     this.count += 1;
     if(this.count > FPS/2){
