@@ -195,6 +195,15 @@ phina.define("MainScene", {
     var normal_anim = FrameAnimation('player_ss').attachTo(player);
     normal_anim.gotoAndPlay('normal');
     
+     // copyright
+    var copyrightFontSise = 32;
+    var copyrightLavel = Label({
+      text: 'BGM/SE：魔王魂',
+      fill: 'white',
+      fontSize: copyrightFontSise,
+    }).addChildTo(this);
+    copyrightLavel.setPosition(SCREEN_WIDTH*0.76, SCREEN_HEIGHT-copyrightFontSise);
+
     // score
     this.scoreLabel = Label({
       text: 'SCORE : ' + SCORE,
