@@ -321,7 +321,8 @@ phina.main(function() {
     assets: ASSETS,
   });
   
-  app.enableStats();
+  // enable FPS
+//  app.enableStats();
   
   // a dummy function that sound(s) can play with smartphone(s)
   app.domElement.addEventListener('touchend', function dummy() {
