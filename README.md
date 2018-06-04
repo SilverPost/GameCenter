@@ -1,9 +1,9 @@
 # GameCenter
 
-**GameCenter** has some games created by Phina.js the web framework.
+**GameCenter** has some games created by [Phina.js] the web framework.
 You can play them with PCs and smartphones.
 
-All games are launching with Runstant or Runstant lite.
+All games are launching with [Runstant] or [Runstant lite].
 
 Games are composed of index.html, main.js, style.css, image(s) and sound(s).
 Copy and paste these files as below and click or tap the play button at the top of the screen.
