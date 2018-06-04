@@ -182,7 +182,7 @@ phina.define("MainScene", {
     
     // bgm
     SoundManager.playMusic('bgm_main');
-    
+
     // background
     this.bg = Sprite("bg").addChildTo(this);
     this.bg.origin.set(0, 0);
@@ -322,6 +322,13 @@ phina.main(function() {
   });
   
   app.enableStats();
+  
+  app.domElement.addEventListener('touchend', function dummy() {
+    var s = phina.asset.Sound();
+    s.loadFromBuffer();
+    s.play().stop();
+    app.domElement.removeEventListener('touchend', dummy);
+  });
   
   app.run();
 });
