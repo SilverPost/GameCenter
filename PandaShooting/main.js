@@ -323,6 +323,7 @@ phina.main(function() {
   
   app.enableStats();
   
+  // a dummy function that sound(s) can play with smartphone(s)
   app.domElement.addEventListener('touchend', function dummy() {
     var s = phina.asset.Sound();
     s.loadFromBuffer();
