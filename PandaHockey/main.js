@@ -9,10 +9,15 @@ var SCREEN_WIDTH    = 600;
 var SCREEN_HEIGHT   = 960;
 var MALLETTE_WIDTH  = 128;
 var MALLETTE_HEIGHT = 24;
-var PUCK_SIZE =32;
+var PUCK_SIZE       = 32;
 
 // common values
-var SPEED = 4;
+var MALLETTE_SPEED  = 8;
+var PUCK_SPEED      = 6;
+
+// objects
+var playerMallette;
+var enemyMallette;
 
 /*
  * mallete
@@ -24,7 +29,7 @@ phina.define("Mallette", {
     this.width = width;
     this.height = height;
     this.setPosition(x, y);
-    this.speed = SPEED;
+    this.speed = MALLETTE_SPEED;
   }
 });
 
@@ -60,6 +65,21 @@ phina.define("Puck", {
   init: function(){
     this.superInit({radius: PUCK_SIZE, fill:'green', stroke:'white'});
     this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
+    this.vx = PUCK_SPEED;
+    this.vy = PUCK_SPEED;
+  },
+  
+  update: function(){
+    this.x += this.vx;
+    this.y += this.vy;
+    // bounce off player's or enemy's mallete
+    if (this.hitTestElement(playerMallette) || this.hitTestElement(enemyMallette)) {
+      this.vy *= -1;
+    }
+    // bounce off on the left or right of the screen
+    if ((this.x < PUCK_SIZE/2) || (this.x > SCREEN_WIDTH-PUCK_SIZE/2)) {
+      this.vx *= -1;
+    }
   }
 });
 
@@ -76,10 +96,10 @@ phina.define("MainScene", {
     this.backgroundColor = 'skyBlue'; 
     
     // player
-    this.player = PlayerMallette().addChildTo(this);
+    playerMallette = PlayerMallette().addChildTo(this);
 
     // enemy
-    this.enemy = EnemyMallette().addChildTo(this);
+    enemyMallette = EnemyMallette().addChildTo(this);
     
     // puck
     this.puck = Puck().addChildTo(this);
@@ -89,17 +109,17 @@ phina.define("MainScene", {
     // move player
     var p = app.pointer;
     if (p.getPointing()) {
-      var x_diff = this.player.x - p.x;
-      if (Math.abs(x_diff) > this.player.speed) {
+      var x_diff = playerMallette.x - p.x;
+      if (Math.abs(x_diff) > playerMallette.speed) {
         if (x_diff < 0) {
-          this.player.x += this.player.speed;
+          playerMallette.x += playerMallette.speed;
         } else {
-          this.player.x -= this.player.speed;
+          playerMallette.x -= playerMallette.speed;
         }
-        if (this.player.x < this.player.width/2) {
-          this.player.x = this.player.width/2;
-        } else if (this.player.x > SCREEN_WIDTH-this.player.width/2) {
-          this.player.x = SCREEN_WIDTH-this.player.width/2;
+        if (playerMallette.x < playerMallette.width/2) {
+          playerMallette.x = playerMallette.width/2;
+        } else if (playerMallette.x > SCREEN_WIDTH-playerMallette.width/2) {
+          playerMallette.x = SCREEN_WIDTH-playerMallette.width/2;
         }
       }
     }
