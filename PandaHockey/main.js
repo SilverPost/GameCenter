@@ -9,6 +9,7 @@ var SCREEN_WIDTH    = 600;
 var SCREEN_HEIGHT   = 960;
 var MALLETTE_WIDTH  = 128;
 var MALLETTE_HEIGHT = 24;
+var PUCK_SIZE =32;
 
 // common values
 var SPEED = 4;
@@ -52,6 +53,17 @@ phina.define("EnemyMallette", {
 });
 
 /*
+ * puck
+ */
+phina.define("Puck", {
+  superClass : 'phina.display.CircleShape',
+  init: function(){
+    this.superInit({radius: PUCK_SIZE, fill:'green', stroke:'white'});
+    this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
+  }
+});
+
+/*
  * main scene
  */
 phina.define("MainScene", {
@@ -68,6 +80,9 @@ phina.define("MainScene", {
 
     // enemy
     this.enemy = EnemyMallette().addChildTo(this);
+    
+    // puck
+    this.puck = Puck().addChildTo(this);
   },
   
   update: function(app) {
