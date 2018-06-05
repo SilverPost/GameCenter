@@ -25,3 +25,12 @@ You can kill an enemy by manipulating the flying Panda.
 
 Panda moves to the position of tapping or clicking, and he has been shooting bullets during that time. When the bullet hits them, enemies are vanished.
 However, be careful to enemy's bullets. If the bullet(s) hit Panda, he is vanished and GAME OVER.
+
+## Copyright and License
+
+Copyright(c) 2018 SliverPost. All rights reserved.
+GameCenter is licensed under the Apache License version 2.0.
+
+BGM and sounds are downloaded by [maoudamashii].
+
+[maoudamashii]: https://maoudamashii.jokersounds.com/
