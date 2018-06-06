@@ -10,10 +10,15 @@ var SCREEN_HEIGHT   = 960;
 var MALLETTE_WIDTH  = 128;
 var MALLETTE_HEIGHT = 24;
 var PUCK_SIZE       = 32;
+var SCORE_FONTSIZE  = 32;
 
 // common values
 var MALLETTE_SPEED  = 8;
 var PUCK_SPEED      = 6;
+var PLAYER_POINT    = 0;
+var ENEMY_POINT     = 0;
+var VICTORY_POINT   = 1;
+var SHARE_URL = "http://";
 
 // objects
 var playerMallette;
@@ -62,14 +67,14 @@ phina.define("EnemyMallette", {
  */
 phina.define("Puck", {
   superClass : 'phina.display.CircleShape',
-  init: function(){
+  init: function() {
     this.superInit({radius: PUCK_SIZE, fill:'green', stroke:'white'});
     this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     this.vx = PUCK_SPEED;
     this.vy = PUCK_SPEED;
   },
   
-  update: function(){
+  update: function() {
     this.x += this.vx;
     this.y += this.vy;
     // bounce off player's or enemy's mallete
@@ -79,6 +84,18 @@ phina.define("Puck", {
     // bounce off on the left or right of the screen
     if ((this.x < PUCK_SIZE/2) || (this.x > SCREEN_WIDTH-PUCK_SIZE/2)) {
       this.vx *= -1;
+    }
+    
+    this.goal();
+  },
+  
+  goal: function() {
+    if (this.y === SCREEN_HEIGHT) {
+      // goal to the player side
+      ENEMY_POINT += 1;
+    } else if (this.y === 0) {
+      // goal to the enemy side
+      PLAYER_POINT += 1;
     }
   }
 });
@@ -94,15 +111,19 @@ phina.define("MainScene", {
     
     // background
     this.backgroundColor = 'skyBlue'; 
-    
     // player
     playerMallette = PlayerMallette().addChildTo(this);
-
     // enemy
     enemyMallette = EnemyMallette().addChildTo(this);
-    
     // puck
     this.puck = Puck().addChildTo(this);
+    // score
+    this.playerPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE,})
+    .addChildTo(this)
+    .setPosition(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.9);
+    this.enemyPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE,})
+    .addChildTo(this)
+    .setPosition(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.1);
   },
   
   update: function(app) {
@@ -123,8 +144,28 @@ phina.define("MainScene", {
         }
       }
     }
+    
+    // score
+    this.playerPoint.text = PLAYER_POINT;
+    this.enemyPoint.text = ENEMY_POINT;
+    // victory judge
+    if (PLAYER_POINT === VICTORY_POINT) {
+      this.gameover(PLAYER_POINT, 'You Win')
+    } else if (ENEMY_POINT === VICTORY_POINT) {
+      this.gameover(ENEMY_POINT, 'You Lose')
+    }
   },
-});
+  
+  gameover: function(score, message) {
+    this.exit({
+      score: score,
+      message: message,
+      url: SHARE_URL,
+    });
+    PLAYER_POINT = 0;
+    ENEMY_POINT = 0;
+  },
+ });
 
 /*
  * main function
