@@ -10,14 +10,14 @@ var SCREEN_HEIGHT   = 960;
 var MALLETTE_WIDTH  = 128;
 var MALLETTE_HEIGHT = 24;
 var PUCK_SIZE       = 32;
-var SCORE_FONTSIZE  = 32;
+var SCORE_FONTSIZE  = 128;
 
 // common values
 var MALLETTE_SPEED  = 8;
 var PUCK_SPEED      = 6;
 var PLAYER_POINT    = 0;
 var ENEMY_POINT     = 0;
-var VICTORY_POINT   = 1;
+var VICTORY_POINT   = 3;
 var SHARE_URL = "http://";
 
 // objects
@@ -93,9 +93,13 @@ phina.define("Puck", {
     if (this.y === SCREEN_HEIGHT) {
       // goal to the player side
       ENEMY_POINT += 1;
+      this.tweener.wait(500);
+      this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     } else if (this.y === 0) {
       // goal to the enemy side
       PLAYER_POINT += 1;
+      this.tweener.wait(500);
+      this.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.5);
     }
   }
 });
