@@ -68,7 +68,7 @@ phina.define("EnemyMallette", {
 phina.define("Puck", {
   superClass : 'phina.display.CircleShape',
   init: function() {
-    this.superInit({radius: PUCK_SIZE, fill:'green', stroke:'white'});
+    this.superInit({radius: PUCK_SIZE, fill:'white', stroke:'gray'});
     this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     this.vx = PUCK_SPEED;
     this.vy = PUCK_SPEED;
@@ -114,7 +114,7 @@ phina.define("MainScene", {
     this.superInit(options);
     
     // background
-    this.backgroundColor = 'skyBlue'; 
+    this.backgroundColor = 'green'; 
     // player
     playerMallette = PlayerMallette().addChildTo(this);
     // enemy
@@ -122,12 +122,12 @@ phina.define("MainScene", {
     // puck
     this.puck = Puck().addChildTo(this);
     // score
-    this.playerPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE,})
+    this.playerPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
-    .setPosition(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.9);
-    this.enemyPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE,})
+    .setPosition(SCREEN_WIDTH*0.2, SCREEN_HEIGHT*0.9);
+    this.enemyPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
-    .setPosition(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.1);
+    .setPosition(SCREEN_WIDTH*0.2, SCREEN_HEIGHT*0.1);
   },
   
   update: function(app) {
