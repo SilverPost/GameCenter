@@ -72,6 +72,7 @@ phina.define("Puck", {
     this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     this.vx = PUCK_SPEED;
     this.vy = PUCK_SPEED;
+    this.afterBounce = 0;
   },
   
   update: function() {
@@ -79,8 +80,12 @@ phina.define("Puck", {
     this.y += this.vy;
     // bounce off player's or enemy's mallete
     if (this.hitTestElement(playerMallette) || this.hitTestElement(enemyMallette)) {
-      this.vy *= -1;
+      if (this.afterBounce > 20) {
+        this.vy *= -1;
+        this.afterBounce = 0;
+      }
     }
+    this.afterBounce++;
     // bounce off on the left or right of the screen
     if ((this.x < PUCK_SIZE/2) || (this.x > SCREEN_WIDTH-PUCK_SIZE/2)) {
       this.vx *= -1;
