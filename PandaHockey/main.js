@@ -47,7 +47,27 @@ phina.define("PlayerMallette", {
     this.superInit(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.9, MALLETTE_WIDTH, MALLETTE_HEIGHT);
     this.fill = 'blue';
     this.stroke = 'white';
-  }
+  },
+  
+  update: function(app){
+    // move player
+    var p = app.pointer;
+    if (p.getPointing()) {
+      var x_diff = this.x - p.x;
+      if (Math.abs(x_diff) > this.speed) {
+        if (x_diff < 0) {
+          this.x += this.speed;
+        } else {
+          this.x -= this.speed;
+        }
+        if (this.x < this.width/2) {
+          this.x = this.width/2;
+        } else if (this.x > SCREEN_WIDTH-this.width/2) {
+          this.x = SCREEN_WIDTH-this.width/2;
+        }
+      }
+    }
+  },
 });
 
 /*
@@ -136,24 +156,6 @@ phina.define("MainScene", {
   },
   
   update: function(app) {
-    // move player
-    var p = app.pointer;
-    if (p.getPointing()) {
-      var x_diff = playerMallette.x - p.x;
-      if (Math.abs(x_diff) > playerMallette.speed) {
-        if (x_diff < 0) {
-          playerMallette.x += playerMallette.speed;
-        } else {
-          playerMallette.x -= playerMallette.speed;
-        }
-        if (playerMallette.x < playerMallette.width/2) {
-          playerMallette.x = playerMallette.width/2;
-        } else if (playerMallette.x > SCREEN_WIDTH-playerMallette.width/2) {
-          playerMallette.x = SCREEN_WIDTH-playerMallette.width/2;
-        }
-      }
-    }
-    
     // score
     this.playerPoint.text = PLAYER_POINT;
     this.enemyPoint.text = ENEMY_POINT;
