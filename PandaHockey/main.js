@@ -23,6 +23,7 @@ var SHARE_URL = "http://";
 // objects
 var playerMallette;
 var enemyMallette;
+var puck;
 
 /*
  * mallete
@@ -33,9 +34,18 @@ phina.define("Mallette", {
     this.superInit();
     this.width = width;
     this.height = height;
-    this.setPosition(x, y);
+    this.x = x;
+    this.y = y;
     this.speed = MALLETTE_SPEED;
-  }
+  },
+  
+  protectProtrusion: function(){
+    if (this.x < this.width/2) {
+      this.x = this.width/2;
+    } else if (this.x > SCREEN_WIDTH-this.width/2) {
+      this.x = SCREEN_WIDTH-this.width/2;
+    }
+  },
 });
 
 /*
@@ -60,13 +70,9 @@ phina.define("PlayerMallette", {
         } else {
           this.x -= this.speed;
         }
-        if (this.x < this.width/2) {
-          this.x = this.width/2;
-        } else if (this.x > SCREEN_WIDTH-this.width/2) {
-          this.x = SCREEN_WIDTH-this.width/2;
-        }
       }
     }
+    this.protectProtrusion();
   },
 });
 
@@ -79,7 +85,22 @@ phina.define("EnemyMallette", {
     this.superInit(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.1, MALLETTE_WIDTH, MALLETTE_HEIGHT);
     this.fill = 'red';
     this.stroke = 'white';
-  }
+  },
+  
+  update: function(app){
+    if(app.frame % 2 === 0){
+      // move enemy
+      var x_diff = this.x - puck.x;
+      if (Math.abs(x_diff) > this.speed) {
+        if (x_diff < 0) {
+          this.x += this.speed;
+        } else {
+          this.x -= this.speed;
+        }
+      }
+      this.protectProtrusion();
+    }
+  },
 });
 
 /*
@@ -110,7 +131,7 @@ phina.define("Puck", {
     if ((this.x < PUCK_SIZE/2) || (this.x > SCREEN_WIDTH-PUCK_SIZE/2)) {
       this.vx *= -1;
     }
-    
+    // goal judge
     this.goal();
   },
   
@@ -126,7 +147,7 @@ phina.define("Puck", {
       this.tweener.wait(500);
       this.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.5);
     }
-  }
+  },
 });
 
 /*
@@ -145,7 +166,7 @@ phina.define("MainScene", {
     // enemy
     enemyMallette = EnemyMallette().addChildTo(this);
     // puck
-    this.puck = Puck().addChildTo(this);
+    puck = Puck().addChildTo(this);
     // score
     this.playerPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
@@ -176,7 +197,7 @@ phina.define("MainScene", {
     PLAYER_POINT = 0;
     ENEMY_POINT = 0;
   },
- });
+});
 
 /*
  * main function
