@@ -13,8 +13,8 @@ var PUCK_SIZE       = 32;
 var SCORE_FONTSIZE  = 128;
 
 // common values
-var MALLETTE_SPEED  = 8;
-var PUCK_SPEED      = 6;
+var MALLETTE_SPEED  = 10;
+var PUCK_SPEED      = 10;
 var PLAYER_POINT    = 0;
 var ENEMY_POINT     = 0;
 var VICTORY_POINT   = 3;
