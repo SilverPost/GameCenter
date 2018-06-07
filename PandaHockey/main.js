@@ -20,6 +20,14 @@ var ENEMY_POINT     = 0;
 var VICTORY_POINT   = 3;
 var SHARE_URL = "http://";
 
+var ASSETS = {
+  image: {
+    'bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/background.png',
+    'bg_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/bg_frame.png',
+    'objects': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/sprite.png',
+  },
+};
+
 // objects
 var playerMallette;
 var enemyMallette;
@@ -160,7 +168,9 @@ phina.define("MainScene", {
     this.superInit(options);
     
     // background
-    this.backgroundColor = 'green'; 
+    this.bg = Sprite("bg").addChildTo(this);
+    this.bg.origin.set(0, 0);
+
     // player
     playerMallette = PlayerMallette().addChildTo(this);
     // enemy
@@ -174,6 +184,10 @@ phina.define("MainScene", {
     this.enemyPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
     .setPosition(SCREEN_WIDTH*0.2, SCREEN_HEIGHT*0.1);
+    
+    // background frame
+    var bg_frame = Sprite("bg_frame").addChildTo(this);
+    bg_frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
   },
   
   update: function(app) {
@@ -209,6 +223,7 @@ phina.main(function() {
     startLabel: 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    assets: ASSETS,
   });
   
   // enable FPS
