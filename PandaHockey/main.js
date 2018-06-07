@@ -182,15 +182,15 @@ phina.define("MainScene", {
     this.enemyPoint.text = ENEMY_POINT;
     // victory judge
     if (PLAYER_POINT === VICTORY_POINT) {
-      this.gameover(PLAYER_POINT, 'You Win')
+      this.gameover('You Win')
     } else if (ENEMY_POINT === VICTORY_POINT) {
-      this.gameover(ENEMY_POINT, 'You Lose')
+      this.gameover('You Lose')
     }
   },
   
-  gameover: function(score, message) {
+  gameover: function(message) {
     this.exit({
-      score: score,
+      score: PLAYER_POINT,
       message: message,
       url: SHARE_URL,
     });
