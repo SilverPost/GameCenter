@@ -115,9 +115,9 @@ phina.define("EnemyMallette", {
  * puck
  */
 phina.define("Puck", {
-  superClass : 'phina.display.CircleShape',
-  init: function() {
-    this.superInit({radius: PUCK_SIZE, fill:'white', stroke:'gray'});
+  superClass : 'Sprite',
+  init: function(options) {
+    this.superInit(options);
     this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     this.vx = PUCK_SPEED;
     this.vy = PUCK_SPEED;
@@ -127,6 +127,7 @@ phina.define("Puck", {
   update: function() {
     this.x += this.vx;
     this.y += this.vy;
+    this.rotation++;
     // bounce off player's or enemy's mallete
     if (this.hitTestElement(playerMallette) || this.hitTestElement(enemyMallette)) {
       if (this.afterBounce > 20) {
@@ -176,7 +177,7 @@ phina.define("MainScene", {
     // enemy
     enemyMallette = EnemyMallette().addChildTo(this);
     // puck
-    puck = Puck().addChildTo(this);
+    puck = Puck('objects').addChildTo(this);
     // score
     this.playerPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
