@@ -5,7 +5,7 @@
 phina.globalize();
 
 // size information
-var SCREEN_WIDTH  = 600;
+var SCREEN_WIDTH  = 720;
 var SCREEN_HEIGHT = 960;
 var BALL_SIZE     = 28;
 var PIN_SIZE      = 26;
@@ -22,11 +22,33 @@ phina.define("Box2dWall", {
     this.setPosition(x, y);
     this.width = width;
     this.height = height;
+    this.strokeWidth = 0;
     // create Box2d object
     layer.createBody({
       type: 'static', 
       shape: 'box',
     }).attachTo(this);
+  },
+});
+
+/*
+ * tilted wall
+ */
+phina.define("Box2dTiltedWall", {
+  superClass: "RectangleShape",
+  
+  init: function(layer, x, y, width, height, deg) {
+    this.superInit();
+    this.fill = 'brown';
+    this.setPosition(x, y);
+    this.width = width;
+    this.height = height;
+    this.strokeWidth = 0;
+    // create Box2d object
+    layer.createBody({
+      type: 'static', 
+      shape: 'box',
+    }).attachTo(this).body.SetAngle(Math.degToRad(deg));
   },
 });
 
@@ -41,6 +63,7 @@ phina.define("Box2dPin", {
     this.fill = color;
     this.setPosition(x, y);
     this.radius = size;
+    this.strokeWidth = 0;
     // create Box2d object
     layer.createBody({
       type: 'static', 
@@ -70,6 +93,7 @@ phina.define("MainScene", {
     // ball
     var ball = CircleShape().addChildTo(this);
     ball.radius = BALL_SIZE;
+    ball.strokeWidth = 0;
     ball.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.2);
     // create Box2d object
     this.layer.createBody({
@@ -81,22 +105,45 @@ phina.define("MainScene", {
     this.stage();
     
     // pins
-    var pin_x = [SCREEN_WIDTH*0.25, SCREEN_WIDTH*0.4, SCREEN_WIDTH*0.4, 
-                 SCREEN_WIDTH*0.6, SCREEN_WIDTH*0.75, SCREEN_WIDTH*0.7];
-    var pin_y = [SCREEN_HEIGHT*0.4, SCREEN_HEIGHT*0.5, SCREEN_HEIGHT*0.7,
-                 SCREEN_HEIGHT*0.55, SCREEN_HEIGHT*0.45, SCREEN_HEIGHT*0.75];
+    var pin_x = [SCREEN_WIDTH*0.20, SCREEN_WIDTH*0.35, SCREEN_WIDTH*0.25, 
+                 SCREEN_WIDTH*0.60, SCREEN_WIDTH*0.55, SCREEN_WIDTH*0.55];
+    var pin_y = [SCREEN_HEIGHT*0.30, SCREEN_HEIGHT*0.45, SCREEN_HEIGHT*0.65,
+                 SCREEN_HEIGHT*0.55, SCREEN_HEIGHT*0.30, SCREEN_HEIGHT*0.70];
+    var pin_c = ['yellow', 'blue', 'orange', 'green', 'white', 'pink'];
     for (var i = 0; i < pin_x.length; i++) {
-      Box2dPin(this.layer, 'yellow', pin_x[i], pin_y[i], PIN_SIZE).addChildTo(this);
+      Box2dPin(this.layer, pin_c[i], pin_x[i], pin_y[i], PIN_SIZE).addChildTo(this);
     }
   },
   
   stage: function() {
-    Box2dWall(this.layer, SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.025,
-                          SCREEN_WIDTH, SCREEN_HEIGHT*0.05).addChildTo(this);
+    // top wall
+    Box2dWall(this.layer, SCREEN_WIDTH*0.500, SCREEN_HEIGHT*0.025,
+                          SCREEN_WIDTH*1.000, SCREEN_HEIGHT*0.050).addChildTo(this);
+    // left wall
     Box2dWall(this.layer, SCREEN_WIDTH*0.025, SCREEN_HEIGHT*0.525,
-                          SCREEN_WIDTH*0.05, SCREEN_HEIGHT*0.95).addChildTo(this);
+                          SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.950).addChildTo(this);
+    // right wall
     Box2dWall(this.layer, SCREEN_WIDTH*0.975, SCREEN_HEIGHT*0.525,
-                          SCREEN_WIDTH*0.05, SCREEN_HEIGHT*0.95).addChildTo(this);
+                          SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.950).addChildTo(this);
+    // bottom walls
+    Box2dWall(this.layer, SCREEN_WIDTH*0.175, SCREEN_HEIGHT*0.950,
+                          SCREEN_WIDTH*0.250, SCREEN_HEIGHT*0.200).addChildTo(this);
+    Box2dWall(this.layer, SCREEN_WIDTH*0.625, SCREEN_HEIGHT*0.950,
+                          SCREEN_WIDTH*0.250, SCREEN_HEIGHT*0.200).addChildTo(this);
+    Box2dWall(this.layer, SCREEN_WIDTH*0.850, SCREEN_HEIGHT*0.950,
+                          SCREEN_WIDTH*0.200, SCREEN_HEIGHT*0.200).addChildTo(this);
+    // spring wall
+    Box2dWall(this.layer, SCREEN_WIDTH*0.775, SCREEN_HEIGHT*0.650,
+                          SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.700).addChildTo(this);
+    // slope
+    Box2dTiltedWall(this.layer, SCREEN_WIDTH*0.150, SCREEN_HEIGHT*0.075,
+                                SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.225, 60).addChildTo(this);
+    Box2dTiltedWall(this.layer, SCREEN_WIDTH*0.825, SCREEN_HEIGHT*0.075,
+                                SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.225, 120).addChildTo(this);
+    Box2dTiltedWall(this.layer, SCREEN_WIDTH*0.150, SCREEN_HEIGHT*0.810,
+                                SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.225, 120).addChildTo(this);
+    Box2dTiltedWall(this.layer, SCREEN_WIDTH*0.650, SCREEN_HEIGHT*0.810,
+                                SCREEN_WIDTH*0.050, SCREEN_HEIGHT*0.225, 60).addChildTo(this);
   },
 });
 
