@@ -7,8 +7,29 @@ phina.globalize();
 // size information
 var SCREEN_WIDTH  = 600;
 var SCREEN_HEIGHT = 960;
-var BALL_SIZE     = 32;
+var BALL_SIZE     = 28;
 var PIN_SIZE      = 26;
+
+/*
+ * pins
+ */
+phina.define("Pin", {
+  superClass: "CircleShape",
+  
+  init: function(layer, color, x, y, size) {
+    this.superInit();
+    this.fill = color;
+    this.setPosition(x, y);
+    this.radius = size;
+    // to show Box2d debug menu
+    this.alpha = 0.5;
+    // create Box2d object
+    layer.createBody({
+      type: 'static', 
+      shape: 'circle',
+    }).attachTo(this);
+  },
+});
 
 /*
  * main scene
@@ -31,7 +52,7 @@ phina.define("MainScene", {
     // ball
     var ball = CircleShape().addChildTo(this);
     ball.radius = BALL_SIZE;
-    ball.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.3);
+    ball.setPosition(SCREEN_WIDTH*0.3, PIN_SIZE/2);
     // to show Box2d debug menu
     ball.alpha = 0.5;
     // create Box2d object
@@ -40,18 +61,14 @@ phina.define("MainScene", {
       shape: 'circle',
     }).attachTo(ball);
     
-    // pin
-    var pin = CircleShape().addChildTo(this);
-    pin.fill = 'yellow'
-    pin.radius = PIN_SIZE;
-    pin.setPosition(SCREEN_WIDTH*0.28, SCREEN_HEIGHT*0.5);
-    // to show Box2d debug menu
-    pin.alpha = 0.5;
-    // create Box2d object
-    layer.createBody({
-      type: 'static', 
-      shape: 'circle',
-    }).attachTo(pin);
+    // Pins
+    var pin_x = [SCREEN_WIDTH*0.25, SCREEN_WIDTH*0.4, SCREEN_WIDTH*0.4, 
+                 SCREEN_WIDTH*0.6, SCREEN_WIDTH*0.75, SCREEN_WIDTH*0.7];
+    var pin_y = [SCREEN_HEIGHT*0.4, SCREEN_HEIGHT*0.5, SCREEN_HEIGHT*0.7,
+                 SCREEN_HEIGHT*0.55, SCREEN_HEIGHT*0.45, SCREEN_HEIGHT*0.75];
+    for (var i = 0; i < pin_x.length; i++) {
+      Pin(layer, 'yellow', pin_x[i], pin_y[i], PIN_SIZE).addChildTo(this);
+    }
   },
 });
 
