@@ -8,9 +8,9 @@ All games are launching with [Runstant] or [Runstant lite].
 Games are composed of index.html, main.js, style.css, image(s) and sound(s).
 Copy and paste these files as below and click or tap the play button at the top of the screen.
 
-- index.html into "HTML(HTML)"
-- style.css into "STYLE(CSS)"
-- main.js into "SCRIPT(JAVASCRIPT)"
+- Put index.html in "HTML(HTML)".
+- Put style.css into "STYLE(CSS)".
+- Put main.js into "SCRIPT(JAVASCRIPT)".
 - There is no need to insert image(s) and sound(s).
 
 [Phina.js]: http://phinajs.com/
@@ -25,6 +25,16 @@ You can kill an enemy by manipulating the flying Panda.
 
 Panda moves to the position of tapping or clicking, and he has been shooting bullets during that time. When the bullet hits them, enemies are vanished.
 However, be careful to enemy's bullets. If the bullet(s) hit Panda, he is vanished and GAME OVER.
+
+## PandaHockey
+
+**Panda Hockey** is a hockey game playing with CPU.
+
+You move the bar at the bottom end of the screen left and right to hit the ball.
+And the CPU also moves the bar at the right end to hit it.
+
+If the ball arrives at your side, if you can not return it, the opponent gains 1 point.
+Those who earn 3 points earn will win.
 
 ## Copyright and License
 
