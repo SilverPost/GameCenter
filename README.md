@@ -9,8 +9,8 @@ Games are composed of index.html, main.js, style.css, image(s) and sound(s).
 Copy and paste these files as below and click or tap the play button at the top of the screen.
 
 - Put index.html in "HTML(HTML)".
-- Put style.css into "STYLE(CSS)".
-- Put main.js into "SCRIPT(JAVASCRIPT)".
+- Put style.css in "STYLE(CSS)".
+- Put main.js in "SCRIPT(JAVASCRIPT)".
 - There is no need to insert image(s) and sound(s).
 
 [Phina.js]: http://phinajs.com/
