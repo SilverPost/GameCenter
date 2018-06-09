@@ -96,7 +96,7 @@ phina.define("EnemyMallette", {
   },
   
   update: function(app){
-    if(app.frame % 2 === 0){
+    if(app.frame % 2 == 0){
       // move enemy
       var x_diff = this.x - puck.x;
       if (Math.abs(x_diff) > this.speed) {
@@ -145,12 +145,12 @@ phina.define("Puck", {
   },
   
   goal: function() {
-    if (this.y === SCREEN_HEIGHT) {
+    if (this.y == SCREEN_HEIGHT) {
       // goal to the player side
       ENEMY_POINT += 1;
       this.tweener.wait(500);
       this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
-    } else if (this.y === 0) {
+    } else if (this.y == 0) {
       // goal to the enemy side
       PLAYER_POINT += 1;
       this.tweener.wait(500);
@@ -196,9 +196,9 @@ phina.define("MainScene", {
     this.playerPoint.text = PLAYER_POINT;
     this.enemyPoint.text = ENEMY_POINT;
     // victory judge
-    if (PLAYER_POINT === VICTORY_POINT) {
+    if (PLAYER_POINT == VICTORY_POINT) {
       this.gameover('You Win')
-    } else if (ENEMY_POINT === VICTORY_POINT) {
+    } else if (ENEMY_POINT == VICTORY_POINT) {
       this.gameover('You Lose')
     }
   },

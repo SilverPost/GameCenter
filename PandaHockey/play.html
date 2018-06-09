@@ -48,6 +48,14 @@ var ENEMY_POINT     = 0;
 var VICTORY_POINT   = 3;
 var SHARE_URL = "http://";
 
+var ASSETS = {
+  image: {
+    'bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/background.png',
+    'bg_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/bg_frame.png',
+    'objects': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/sprite.png',
+  },
+};
+
 // objects
 var playerMallette;
 var enemyMallette;
@@ -116,7 +124,7 @@ phina.define("EnemyMallette", {
   },
   
   update: function(app){
-    if(app.frame % 2 === 0){
+    if(app.frame % 2 == 0){
       // move enemy
       var x_diff = this.x - puck.x;
       if (Math.abs(x_diff) > this.speed) {
@@ -135,9 +143,9 @@ phina.define("EnemyMallette", {
  * puck
  */
 phina.define("Puck", {
-  superClass : 'phina.display.CircleShape',
-  init: function() {
-    this.superInit({radius: PUCK_SIZE, fill:'white', stroke:'gray'});
+  superClass : 'Sprite',
+  init: function(options) {
+    this.superInit(options);
     this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     this.vx = PUCK_SPEED;
     this.vy = PUCK_SPEED;
@@ -147,6 +155,7 @@ phina.define("Puck", {
   update: function() {
     this.x += this.vx;
     this.y += this.vy;
+    this.rotation++;
     // bounce off player's or enemy's mallete
     if (this.hitTestElement(playerMallette) || this.hitTestElement(enemyMallette)) {
       if (this.afterBounce > 20) {
@@ -164,12 +173,12 @@ phina.define("Puck", {
   },
   
   goal: function() {
-    if (this.y === SCREEN_HEIGHT) {
+    if (this.y == SCREEN_HEIGHT) {
       // goal to the player side
       ENEMY_POINT += 1;
       this.tweener.wait(500);
       this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
-    } else if (this.y === 0) {
+    } else if (this.y == 0) {
       // goal to the enemy side
       PLAYER_POINT += 1;
       this.tweener.wait(500);
@@ -188,13 +197,15 @@ phina.define("MainScene", {
     this.superInit(options);
     
     // background
-    this.backgroundColor = 'green'; 
+    this.bg = Sprite("bg").addChildTo(this);
+    this.bg.origin.set(0, 0);
+
     // player
     playerMallette = PlayerMallette().addChildTo(this);
     // enemy
     enemyMallette = EnemyMallette().addChildTo(this);
     // puck
-    puck = Puck().addChildTo(this);
+    puck = Puck('objects').addChildTo(this);
     // score
     this.playerPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
@@ -202,6 +213,10 @@ phina.define("MainScene", {
     this.enemyPoint = Label({text: PLAYER_POINT, fontSize: SCORE_FONTSIZE, fill: 'white',})
     .addChildTo(this)
     .setPosition(SCREEN_WIDTH*0.2, SCREEN_HEIGHT*0.1);
+    
+    // background frame
+    var bg_frame = Sprite("bg_frame").addChildTo(this);
+    bg_frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
   },
   
   update: function(app) {
@@ -209,9 +224,9 @@ phina.define("MainScene", {
     this.playerPoint.text = PLAYER_POINT;
     this.enemyPoint.text = ENEMY_POINT;
     // victory judge
-    if (PLAYER_POINT === VICTORY_POINT) {
+    if (PLAYER_POINT == VICTORY_POINT) {
       this.gameover('You Win')
-    } else if (ENEMY_POINT === VICTORY_POINT) {
+    } else if (ENEMY_POINT == VICTORY_POINT) {
       this.gameover('You Lose')
     }
   },
@@ -237,6 +252,7 @@ phina.main(function() {
     startLabel: 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    assets: ASSETS,
   });
   
   // enable FPS
