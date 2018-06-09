@@ -28,7 +28,7 @@ However, be careful to enemy's bullets. If the bullet(s) hit Panda, he is vanish
 
 ## PandaHockey
 
-**Panda Hockey** is a hockey game playing with CPU.
+**PandaHockey** is a hockey game playing with CPU.
 
 You move the bar at the bottom end of the screen left and right to hit the ball.
 And the CPU also moves the bar at the right end to hit it.
