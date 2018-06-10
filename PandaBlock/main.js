@@ -48,18 +48,24 @@ phina.define("Block", {
     this.stroke = 'black';
     this.strokeWidth = 3;
     this.cornerRadius = CORNER_RADIUS;
+    this.afterBounce = 0;
   },
   
   update: function() {
     if (this.hitTestElement(ball)) {
+      // do not baounce immediately after bounce
+      if (this.afterBounce > 20) {
+        ball.vy *= -1;
+        this.afterBounce = 0;
+      }
       // fadeout block
-      this.breaking();
+      this.fadeout();
       // bounce off ball
-      ball.vy *= -1;
      }
+    this.afterBounce++;
   },
   
-  breaking: function() {
+  fadeout: function() {
     this.tweener
     .by({
       alpha: -1,
