@@ -18,13 +18,8 @@ var CORNER_RADIUS     = 10;
 var PLAYER_BAR_SPEED  = 10;
 var BALL_SPEED        = 10;
 var BLOCK_SCORE       = 100;
-var SCORE_MAX_LIMIT   = 99999;
 var SCORE             = 0;
-
-// common information
-var colors = ["silver", "gray", "white", "maroon", "red",
-              "purple", "fuchsia", "green", "lime", "olive",
-              "yellow", "blue", "teal", "aqua"];
+var SHARE_URL         = "http://"
 
 // common information
 var colors = ["silver", "gray", "white", "maroon", "red",
@@ -42,50 +37,6 @@ var ASSETS = {
 var playerBar;
 var ball;
 var scoreLabel;
-
-/*
- * block
- */
-phina.define("Block", {
-  superClass : 'RectangleShape',
-  init: function (x, y, color) {
-    this.superInit();
-    this.setPosition(x, y);
-    this.width = BLOCK_WIDTH;
-    this.height = BLOCK_HEIGHT;
-    this.fill = color;
-    this.stroke = 'black';
-    this.strokeWidth = 3;
-    this.cornerRadius = CORNER_RADIUS;
-    this.afterBounce = 0;
-  },
-  
-  update: function() {
-    if (this.hitTestElement(ball)) {
-      // do not baounce immediately after bounce
-      if (this.afterBounce > 20) {
-        ball.vy *= -1;
-        this.afterBounce = 0;
-        // fadeout block
-        this.fadeout();
-      }
-    }
-    this.afterBounce++;
-  },
-  
-  fadeout: function() {
-    // add score
-    SCORE += BLOCK_SCORE;
-    this.tweener
-    .by({
-      alpha: -1,
-      y: 50,
-    })
-    .call(function() {
-      this.remove();
-    }, this);
-  },
-});
 
 /*
  * block
@@ -203,15 +154,6 @@ phina.define("Ball", {
     } else if (this.y < BALL_SIZE/2) {
       this.vy *= -1;
     }
-    // drop judge
-    this.drop();
-  },
-  
-  drop: function() {
-    if (this.y == SCREEN_HEIGHT) {
-      // drop the bottom side
-      this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
-    }
   },
 });
 
@@ -238,6 +180,7 @@ phina.define("MainScene", {
     bg_frame.scaleX = 1.2;
     
     // score
+    SCORE = 0;
     scoreLabel = Label({
       text: 'SCORE : ' + SCORE,
       fill: 'white',
@@ -252,27 +195,23 @@ phina.define("MainScene", {
   update: function(app) {
     // score
     scoreLabel.text = 'SCORE : ' + SCORE;
+    // re blocks
+    if (SCORE >= 1200) {
+      this.gameover("Congratulations!!");
+    }
+    // drop ball
+    if (ball.y == SCREEN_HEIGHT) {
+      this.gameover("GAME OVER!!");
+    }
   },
   
-  blocks: function() {
-    // 1st line
-    var block_y = 150;
-    Block(150, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(300, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(450, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(600, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    // 2nd line
-    block_y = 230;
-    Block(100, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(250, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(400, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(550, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    // 3rd line
-    block_y = 310;
-    Block(150, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(300, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(450, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
-    Block(600, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+  gameover: function(message) {
+    this.exit({
+      score: SCORE,
+      message: message,
+      url: SHARE_URL,
+    });
+    SCORE = 0;
   },
   
   blocks: function() {
