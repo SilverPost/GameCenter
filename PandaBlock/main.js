@@ -1,5 +1,5 @@
 /*
- * Panda Block Breaking
+ * Panda Block
  */
 
 phina.globalize();
@@ -20,7 +20,6 @@ var BALL_SPEED        = 10;
 
 var ASSETS = {
   image: {
-    'bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/background.png',
     'bg_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/bg_frame.png',
     'objects': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockey/image/sprite.png',
   },
@@ -126,9 +125,8 @@ phina.define("MainScene", {
     this.superInit(options);
     
     // background
-    this.bg = Sprite("bg").addChildTo(this);
-    this.bg.origin.set(0, 0);
-
+    this.backgroundColor = 'black';
+    
     // player
     playerBar = PlayerBar().addChildTo(this);
     // ball
@@ -149,7 +147,7 @@ phina.define("MainScene", {
 phina.main(function() {
   // create application
   var app = GameApp({
-    title: 'Panda Block Breaking',
+    title: 'Panda Block',
     startLabel: 'title',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
