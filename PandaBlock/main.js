@@ -5,18 +5,23 @@
 phina.globalize();
 
 // size information
-var SCREEN_WIDTH      = 600;
+var SCREEN_WIDTH      = 720;
 var SCREEN_HEIGHT     = 960;
 var PLAYER_BAR_WIDTH  = 128;
 var PLAYER_BAR_HEIGHT = 48;
 var BALL_SIZE         = 24;
-var BLOCK_WIDTH       = 128;
-var BLOCK_HEIGHT      = 24;
+var BLOCK_WIDTH       = 140;
+var BLOCK_HEIGHT      = 60;
 var CORNER_RADIUS     = 10;
 
 // common values
 var PLAYER_BAR_SPEED  = 10;
 var BALL_SPEED        = 10;
+
+// common information
+var colors = ["silver", "gray", "white", "maroon", "red",
+              "purple", "fuchsia", "green", "lime", "olive",
+              "yellow", "blue", "teal", "aqua"];
 
 var ASSETS = {
   image: {
@@ -30,11 +35,31 @@ var playerBar;
 var ball;
 
 /*
+ * block
+ */
+phina.define("Block", {
+  superClass : 'RectangleShape',
+  init: function (x, y, color) {
+    this.superInit();
+    this.setPosition(x, y);
+    this.width = BLOCK_WIDTH;
+    this.height = BLOCK_HEIGHT;
+    this.fill = color;
+    this.stroke = 'black';
+    this.strokeWidth = 3;
+    this.cornerRadius = CORNER_RADIUS;
+  },
+  update: function() {
+    
+  }
+});
+
+/*
  * player's bar
  */
 phina.define("PlayerBar", {
   superClass : 'RectangleShape',
-  init: function(){
+  init: function() {
     this.superInit();
     this.width = PLAYER_BAR_WIDTH;
     this.height = PLAYER_BAR_HEIGHT;
@@ -109,7 +134,6 @@ phina.define("Ball", {
   drop: function() {
     if (this.y == SCREEN_HEIGHT) {
       // drop the bottom side
-      this.tweener.wait(3000);
       this.setPosition(SCREEN_WIDTH*0.3, SCREEN_HEIGHT*0.5);
     }
   },
@@ -135,9 +159,34 @@ phina.define("MainScene", {
     // background frame
     var bg_frame = Sprite("bg_frame").addChildTo(this);
     bg_frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    bg_frame.scaleX = 1.2;
+    
+    // blocks
+    this.blocks();
   },
   
   update: function(app) {
+  },
+  
+  blocks: function() {
+    // 1st line
+    var block_y = 150;
+    Block(150, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(300, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(450, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(600, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    // 2nd line
+    block_y = 230;
+    Block(100, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(250, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(400, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(550, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    // 3rd line
+    block_y = 310;
+    Block(150, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(300, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(450, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
+    Block(600, block_y, colors[Math.randint(0, 13)]).addChildTo(this);
   },
 });
 
@@ -149,6 +198,7 @@ phina.main(function() {
   var app = GameApp({
     title: 'Panda Block',
     startLabel: 'title',
+    backgroundColor: 'black',
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
     assets: ASSETS,
