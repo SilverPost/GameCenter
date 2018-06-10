@@ -48,19 +48,27 @@ phina.define("Block", {
     this.stroke = 'black';
     this.strokeWidth = 3;
     this.cornerRadius = CORNER_RADIUS;
-    this.afterBounce = 0;
   },
+  
   update: function() {
-    // bounce off ball
     if (this.hitTestElement(ball)) {
-      // do not baounce immediately after bounce
-      if (this.afterBounce > 20) {
-        ball.vy *= -1;
-        this.afterBounce = 0;
-      }
-    }
-    this.afterBounce++;
-  }
+      // fadeout block
+      this.breaking();
+      // bounce off ball
+      ball.vy *= -1;
+     }
+  },
+  
+  breaking: function() {
+    this.tweener
+    .by({
+      alpha: -1,
+      y: 50,
+    })
+    .call(function() {
+      this.remove();
+    }, this);
+  },
 });
 
 /*
