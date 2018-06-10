@@ -79,6 +79,8 @@ phina.define("Block", {
     .by({
       alpha: -1,
       y: 50,
+      scaleX: -0.5,
+      scaleY: -0.5,
     })
     .call(function() {
       this.remove();
