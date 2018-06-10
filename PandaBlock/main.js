@@ -53,6 +53,7 @@ phina.define("Block", {
     this.strokeWidth = 3;
     this.cornerRadius = CORNER_RADIUS;
     this.afterBounce = 0;
+    this.fadeOutNow = false;
   },
   
   update: function() {
@@ -61,15 +62,19 @@ phina.define("Block", {
       if (this.afterBounce > 20) {
         ball.vy *= -1;
         this.afterBounce = 0;
+        // fadeout block
+        this.fadeout();
       }
-      // fadeout block
-      this.fadeout();
-      // bounce off ball
-     }
+    }
     this.afterBounce++;
   },
   
   fadeout: function() {
+    if (this.fadeOutNow === false) {
+      // add score
+      SCORE += BLOCK_SCORE;
+    }
+    this.fadeOutNow = true;
     this.tweener
     .by({
       alpha: -1,
