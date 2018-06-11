@@ -5,8 +5,8 @@
 phina.globalize();
 
 // size information
-var SCREEN_WIDTH      = 720;
-var SCREEN_HEIGHT     = 960;
+var SCREEN_WIDTH      = 1280; // 32*40
+var SCREEN_HEIGHT     = 640;  // 32*20
 
 /*
  * main scene
@@ -39,7 +39,7 @@ phina.main(function() {
   });
   
   // enable FPS
-  app.enableStats();
+//  app.enableStats();
   
   app.run();
 });
