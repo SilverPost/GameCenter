@@ -7,14 +7,14 @@ phina.globalize();
 // size information
 var SCREEN_WIDTH  = 1280; // 32*40
 var SCREEN_HEIGHT = 640;  // 32*20
-var CELL_SIZE     = 32;
+var BLOCK_SIZE     = 32;
 
 var ASSETS = {
   image: {
     mountain: "https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/image/sprite_mountain.png",
   },
   text: {
-    mountain: "https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/stage/mountain.txt",
+    mountain: "https://raw.githubusercontent.com/SilverPost/GameCenter/c5afd673c66311666b8321065d1a45bc58bf3403/PandaRunners/stage/mountain.txt",
   },
 };
 
@@ -26,10 +26,10 @@ phina.define("Stage", {
   init: function() {
     this.superInit();
   },
-  load: function(stageName) {
-    stageText = AssetManager.get('text', stageName).data;
-    blocks = this.blocksWithStageText(stageText);
-    this.layoutBlocks(blocks);
+  load: function(stageName, group) {
+    var stageText = AssetManager.get('text', stageName).data;
+    var blocks = this.blocksWithStageText(stageText);
+    this.layout(stageName, blocks, group);
   },
   blocksWithStageText: function(stageText) {
     var blockLine = stageText.split('\n');
@@ -39,27 +39,15 @@ phina.define("Stage", {
     }
     return blocks;
   },
-  layoutBlocks: function(blocks) {
-    var block;
-    var x;
-    var y;
+  layout: function(stageName, blocks, group) {
     for (var i = 0; i < blocks.length; i++) {
       for (var j = 0; j < blocks[i].length; j++) {
-        switch (blocks[i][j]) {
-          case '1':
-            block = Sprite('mountain', CELL_SIZE, CELL_SIZE).addChildTo(this.parent);
-            x = j*CELL_SIZE+CELL_SIZE/2;
-            y = i*CELL_SIZE+CELL_SIZE/2;
-            block.setPosition(x, y);
-            break;
-          case '2':
-            block = Sprite('mountain', CELL_SIZE*2, CELL_SIZE).addChildTo(this.parent);
-            x = j*CELL_SIZE+CELL_SIZE/2;
-            y = i*CELL_SIZE+CELL_SIZE/2;
-            block.setPosition(x, y);
-            break;
-          default:
-            break;
+        if(blocks[i][j] !== ' ') {
+          var block = Sprite(stageName, BLOCK_SIZE, BLOCK_SIZE).addChildTo(group);
+          var x = j*BLOCK_SIZE+BLOCK_SIZE/2;
+          var y = i*BLOCK_SIZE+BLOCK_SIZE/2;
+          block.setPosition(x, y);
+          block.frameIndex = Number(blocks[i][j])-1;
         }
       }
     }
@@ -74,8 +62,8 @@ phina.define("MainScene", {
   
   init: function(options) {
     this.superInit(options);
-    this.stage = Stage();
-    this.stage.load('mountain');
+    this.blockGroup = DisplayElement().addChildTo(this);
+    Stage().load('mountain', this.blockGroup);
   },
   
   update: function(app) {
