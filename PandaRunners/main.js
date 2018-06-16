@@ -51,7 +51,7 @@ phina.define("Player1", {
     this.superInit();
   },
   load: function(group) {
-    this.superMethod('load', 0, BLOCK_SIZE*5, BLOCK_SIZE*13, group);
+    this.superMethod('load', 0, BLOCK_SIZE, BLOCK_SIZE*13, group);
   },
 });
 
@@ -111,6 +111,7 @@ phina.define("MainScene", {
       if (this.player1.isOnFloor) {
         this.player1.physical.velocity.y = -JUMP_POWOR;
         this.player1.physical.gravity.y = GRAVITY;
+        this.player1.isOnFloor = false;
 //        player1.anim.gotoAndPlay('jump');
       }
     };
