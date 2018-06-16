@@ -18,7 +18,7 @@ var CAHRA_VX    = 2;
 var ASSETS = {
   image: {
     'mountain': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/image/sprite_mountain.png',
-    'character': 'https://rawgit.com/phi-jp/phina.js/develop/assets/images/tomapiko_ss.png',
+    'character': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/image/sprite_panda.png',
   },
   text: {
     'mountain': 'https://raw.githubusercontent.com/SilverPost/GameCenter/c5afd673c66311666b8321065d1a45bc58bf3403/PandaRunners/stage/mountain.txt',
