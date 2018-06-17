@@ -34,6 +34,7 @@ phina.define("Character", {
     this.superInit('character', CHARA_SIZE, CHARA_SIZE);
     this.physical.force(CAHRA_VX, 0);
     this.isOnFloor = true;
+    this.jumpCount = 0;
   },
   load: function(frameIndex, start_x, start_y, group) {
     this.addChildTo(group);
@@ -108,23 +109,28 @@ phina.define("MainScene", {
     Stage().load('mountain', this.blockGroup);
     
     this.onpointend = function() {
-      if (this.player1.isOnFloor) {
+      if (this.player1.isOnFloor === true) {
         this.player1.physical.velocity.y = -JUMP_POWOR;
         this.player1.physical.gravity.y = GRAVITY;
         this.player1.isOnFloor = false;
+        this.player1.jumpCount = 0;
 //        player1.anim.gotoAndPlay('jump');
       }
     };
   },
   update: function(app) {
+    if(this.player1.isOnFloor === false) {
+      this.player1.jumpCount++;
+    }
     this.xCollisionWith2Groups(this.charaGroup, this.blockGroup);
     this.yCollisionWith2Groups(this.charaGroup, this.blockGroup);
   },
   xCollisionWith2Groups: function(attacks, defences) {
     attacks.children.some( function(attack) {
-      var newRect = Rect(attack.left+1, attack.top, attack.width, attack.height);
+      attack.collider.setSize(1, 1);
+      attack.collider.offset(attack.width/2, 0);
       defences.children.some( function(defence) {
-        if(Collision.testRectRect(newRect, defence)) {
+        if(attack.collider.hitTest(defence.collider)){
           attack.right = defence.left;
           attack.physical.velocity.x = 0;
         } else {
@@ -135,9 +141,10 @@ phina.define("MainScene", {
   },
   yCollisionWith2Groups: function(attacks, defences) {
     attacks.children.some( function(attack) {
-      var newRect = Rect(attack.left, attack.top-1, attack.width, attack.height);
+      attack.collider.setSize(1, 1);
+      attack.collider.offset(0, attack.height/2);
       defences.children.some( function(defence) {
-        if(Collision.testRectRect(newRect, defence)) {
+        if(attack.collider.hitTest(defence.collider) && (attack.jumpCount > 3)){
           attack.bottom = defence.top;
           attack.physical.velocity.y = 0;
           attack.physical.gravity.y = 0;
