@@ -17,7 +17,7 @@ var STAGE_VX    = 10;
 
 var ASSETS = {
   image: {
-    'mountain': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/image/sprite_mountain.png',
+    'mountain': 'https://raw.githubusercontent.com/SilverPost/GameCenter/a4659455fde5b1663cbdd02304b71d23559ad4cb/PandaRunners/image/stage_mountain.png',
     'character': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/image/sprite_panda.png',
   },
   text: {
