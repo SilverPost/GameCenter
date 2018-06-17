@@ -113,7 +113,6 @@ phina.define("MainScene", {
         this.player1.physical.velocity.y = -JUMP_POWOR;
         this.player1.physical.gravity.y = GRAVITY;
         this.player1.isOnFloor = false;
-        this.player1.jumpCount = 0;
 //        player1.anim.gotoAndPlay('jump');
       }
     };
@@ -149,6 +148,7 @@ phina.define("MainScene", {
           attack.physical.velocity.y = 0;
           attack.physical.gravity.y = 0;
           attack.isOnFloor = true;
+          attack.jumpCount = 0;
         }
       });
     });
