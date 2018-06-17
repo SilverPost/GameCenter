@@ -13,7 +13,7 @@ var CHARA_SIZE    = 64; // 32*2
 // common values
 var JUMP_POWOR  = 10;
 var GRAVITY     = 0.5;
-var CAHRA_VX    = 2;
+var STAGE_VX    = 10;
 
 var ASSETS = {
   image: {
@@ -32,7 +32,6 @@ phina.define("Character", {
   superClass: 'Sprite',
   init: function() {
     this.superInit('character', CHARA_SIZE, CHARA_SIZE);
-    this.physical.force(CAHRA_VX, 0);
     this.isOnFloor = true;
     this.jumpCount = 0;
   },
@@ -52,7 +51,7 @@ phina.define("Player1", {
     this.superInit();
   },
   load: function(group) {
-    this.superMethod('load', 0, BLOCK_SIZE, BLOCK_SIZE*13, group);
+    this.superMethod('load', 0, BLOCK_SIZE*10, BLOCK_SIZE*13, group);
   },
 });
 
@@ -86,6 +85,7 @@ phina.define("Stage", {
           var y = i*BLOCK_SIZE+BLOCK_SIZE/2;
           block.setPosition(x, y);
           block.frameIndex = Number(blocks[i][j])-1;
+          block.physical.velocity.x = -STAGE_VX;
         }
       }
     }
@@ -131,19 +131,17 @@ phina.define("MainScene", {
       defences.children.some( function(defence) {
         if(attack.collider.hitTest(defence.collider)){
           attack.right = defence.left;
-          attack.physical.velocity.x = 0;
-        } else {
-          attack.physical.velocity.x = CAHRA_VX;
         }
       });
     });
   },
   yCollisionWith2Groups: function(attacks, defences) {
     attacks.children.some( function(attack) {
+      attack.collider.show();
       attack.collider.setSize(1, 1);
       attack.collider.offset(0, attack.height/2);
       defences.children.some( function(defence) {
-        if(attack.collider.hitTest(defence.collider) && (attack.jumpCount > 3)){
+        if((attack.collider.hitTest(defence.collider)) && (attack.jumpCount > 3)) {
           attack.bottom = defence.top;
           attack.physical.velocity.y = 0;
           attack.physical.gravity.y = 0;
