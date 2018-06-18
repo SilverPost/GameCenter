@@ -40,6 +40,21 @@ phina.define("Character", {
     this.setPosition(start_x, start_y);
     this.frameIndex = frameIndex;
   },
+  isAdjacent: function(block) {
+    if(block.x < (this.left - block.width)) {
+      return false;
+    }
+    if((this.right + block.width) < block.x) {
+      return false;
+    }
+    if(block.y < (this.top - block.height)) {
+      return false;
+    }
+    if((this.bottom + block.height) < block.y) {
+      return false;
+    }
+    return true;
+  },
 });
 
 /*
@@ -129,8 +144,10 @@ phina.define("MainScene", {
       attack.collider.setSize(1, 1);
       attack.collider.offset(attack.width/2, 0);
       defences.children.some( function(defence) {
-        if(attack.collider.hitTest(defence.collider)){
-          attack.right = defence.left;
+        if(attack.isAdjacent(defence)){
+          if(attack.collider.hitTest(defence.collider)){
+            attack.right = defence.left;
+          }
         }
       });
     });
@@ -141,12 +158,14 @@ phina.define("MainScene", {
       attack.collider.setSize(1, 1);
       attack.collider.offset(0, attack.height/2);
       defences.children.some( function(defence) {
-        if((attack.collider.hitTest(defence.collider)) && (attack.jumpCount > 3)) {
-          attack.bottom = defence.top;
-          attack.physical.velocity.y = 0;
-          attack.physical.gravity.y = 0;
-          attack.isOnFloor = true;
-          attack.jumpCount = 0;
+        if(attack.isAdjacent(defence) === true){
+          if((attack.collider.hitTest(defence.collider)) && (attack.jumpCount > 3)) {
+            attack.bottom = defence.top;
+            attack.physical.velocity.y = 0;
+            attack.physical.gravity.y = 0;
+            attack.isOnFloor = true;
+            attack.jumpCount = 0;
+          }
         }
       });
     });
