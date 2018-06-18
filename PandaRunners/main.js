@@ -21,7 +21,7 @@ var ASSETS = {
     'character': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/image/sprite_panda.png',
   },
   text: {
-    'mountain': 'https://raw.githubusercontent.com/SilverPost/GameCenter/c5afd673c66311666b8321065d1a45bc58bf3403/PandaRunners/stage/mountain.txt',
+    'mountain': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaRunners/stage/mountain.txt',
   },
 };
 
@@ -165,9 +165,13 @@ phina.define("MainScene", {
             attack.physical.gravity.y = 0;
             attack.isOnFloor = true;
             attack.jumpCount = 0;
+            return true;
           }
         }
       });
+      if(attack.jumpCount === 1) {
+        attack.physical.gravity.y = GRAVITY;
+      }
     });
   },
 });
