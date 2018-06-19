@@ -33,7 +33,11 @@ phina.define("TitleScene", {
     }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
   },
   update: function() {
-    
+    this.logo.tweener
+      .scaleTo(0.31, 500)
+      .scaleTo(0.29, 1000)
+      .scaleTo(0.30, 500)
+      .play();
   },
   onpointstart: function() {
     this.exit();  
