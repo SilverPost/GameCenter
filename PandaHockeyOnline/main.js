@@ -8,6 +8,12 @@ phina.globalize();
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 
+var ASSETS = {
+  image: {
+    'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
+  },
+};
+
 /*
  * title scene
  */
@@ -15,12 +21,19 @@ phina.define("TitleScene", {
   superClass: "DisplayScene",
   init: function() {
     this.superInit();
-    this.backgroundColor = 'black';
+    this.backgroundColor = 'skyblue';
+    this.logo = Sprite('logo').addChildTo(this);
+    this.logo.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.3);
+    this.logo.scaleX = 0.3;
+    this.logo.scaleY = 0.3;
     Label({
       text: 'tap to start',
       fontSize: 48,
-      fill: 'white',
-    }).addChildTo(this).setPosition(this.gridX.center(), this.gridY.center());
+      fill: 'black',
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
+  },
+  update: function() {
+    
   },
   onpointstart: function() {
     this.exit();  
@@ -54,6 +67,7 @@ phina.main(function() {
   var app = GameApp({
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
+    assets: ASSETS,
     startLabel: 'title',
     scenes: [
       {
