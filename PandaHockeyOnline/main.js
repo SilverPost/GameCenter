@@ -53,7 +53,8 @@ phina.define("GameScene", {
   superClass: "DisplayScene",
   init: function(options) {
     this.superInit(options);
-    this.backgroundColor = 'white';
+    this.floorGroup = DisplayElement().addChildTo(this);
+    this.floor = Floor(this.floorGroup);
     this.tableGroup = DisplayElement().addChildTo(this);
     this.table = HockeyTable(this.tableGroup);
   },
@@ -65,10 +66,31 @@ phina.define("GameScene", {
 phina.define("HockeyTable", {
   superClass: "RectangleShape",
   init: function(group) {
+    this.superInit();
     this.background = Sprite('stage_bg').addChildTo(group);
     this.background.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.frame = Sprite('stage_frame').addChildTo(group);
     this.frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+  },
+});
+
+/*
+ * floor design
+ */
+phina.define("Floor", {
+  superClass: "RectangleShape",
+  init: function(group) {
+    this.superInit();
+    this.fill = '#add8e6';
+    this.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    this.width = SCREEN_WIDTH;
+    this.height = SCREEN_HEIGHT;
+    this.addChildTo(group);
+    this.line = RectangleShape().addChildTo(group);
+    this.line.fill = '#000080';
+    this.line.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    this.line.width = SCREEN_WIDTH;
+    this.line.height = 10;
   },
 });
 
