@@ -11,6 +11,8 @@ var SCREEN_HEIGHT = 960;
 var ASSETS = {
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
+    'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_background.png',
+    'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
   },
 };
 
@@ -51,15 +53,22 @@ phina.define("GameScene", {
   superClass: "DisplayScene",
   init: function(options) {
     this.superInit(options);
-    this.backgroundColor = 'brown';
-    Label({
-      text: 'tap to exit',
-      fontSize: 48,
-      fill: 'white',
-    }).addChildTo(this).setPosition(this.gridX.center(), this.gridY.center());
+    this.backgroundColor = 'white';
+    this.tableGroup = DisplayElement().addChildTo(this);
+    this.table = HockeyTable(this.tableGroup);
   },
-  onpointstart: function() {
-    this.exit();  
+});
+
+/*
+ * hockey table
+ */
+phina.define("HockeyTable", {
+  superClass: "RectangleShape",
+  init: function(group) {
+    this.background = Sprite('stage_bg').addChildTo(group);
+    this.background.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    this.frame = Sprite('stage_frame').addChildTo(group);
+    this.frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
   },
 });
 
