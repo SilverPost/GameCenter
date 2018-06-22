@@ -9,6 +9,9 @@ var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 var PANDA_SIZE    = 200;
 
+// value information
+var PANDA_SPEED   = 6;
+
 var ASSETS = {
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
@@ -47,7 +50,7 @@ phina.define("TitleScene", {
     this.exit();  
   },
 });
- 
+
 /*
  * game scene
  */
@@ -60,10 +63,10 @@ phina.define("GameScene", {
     this.tableGroup = DisplayElement().addChildTo(this);
     this.table = HockeyTable(this.tableGroup);
     this.pandaGroup = DisplayElement().addChildTo(this);
-    this.player = Panda();
-    var table_bg = this.table.background;
-    this.player.loading(3, SCREEN_WIDTH/2, table_bg.bottom, this.pandaGroup);
+    this.player = Player();
+    this.player.loading(this.table.background, this.pandaGroup);
     this.enemy = Panda();
+    var table_bg = this.table.background;
     this.enemy.loading(0, SCREEN_WIDTH/2, table_bg.top, this.pandaGroup);
   },
 });
@@ -116,6 +119,33 @@ phina.define("Panda", {
     this.frameIndex = frameIndex;
   },
 });
+
+/*
+ * player
+ */
+phina.define("Player", {
+  superClass: "Panda",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(table_bg, group){
+    this.superMethod('loading', 3, SCREEN_WIDTH/2, table_bg.bottom, group);
+  },
+  update: function(app){
+    // move player
+    var p = app.pointer;
+    if (p.getPointing()) {
+      var x_diff = this.x - p.x;
+      if (Math.abs(x_diff) > PANDA_SPEED) {
+        if (x_diff < 0) {
+          this.x += PANDA_SPEED;
+        } else {
+          this.x -= PANDA_SPEED;
+        }
+      }
+    }
+  },
+})
 
 /*
  * main function
