@@ -7,6 +7,7 @@ phina.globalize();
 // size information
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
+var PANDA_SIZE    = 200;
 
 var ASSETS = {
   image: {
@@ -58,6 +59,12 @@ phina.define("GameScene", {
     this.floor = Floor(this.floorGroup);
     this.tableGroup = DisplayElement().addChildTo(this);
     this.table = HockeyTable(this.tableGroup);
+    this.pandaGroup = DisplayElement().addChildTo(this);
+    this.player = Panda();
+    var table_bg = this.table.background;
+    this.player.loading(3, SCREEN_WIDTH/2, table_bg.bottom, this.pandaGroup);
+    this.enemy = Panda();
+    this.enemy.loading(0, SCREEN_WIDTH/2, table_bg.top, this.pandaGroup);
   },
 });
 
@@ -92,6 +99,21 @@ phina.define("Floor", {
     this.line.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.line.width = SCREEN_WIDTH;
     this.line.height = 10;
+  },
+});
+
+/*
+ * panda
+ */
+phina.define("Panda", {
+  superClass: "Sprite",
+  init: function() {
+    this.superInit('panda', PANDA_SIZE, PANDA_SIZE);
+  },
+  loading: function(frameIndex, start_x, start_y, group) {
+    this.addChildTo(group);
+    this.setPosition(start_x, start_y);
+    this.frameIndex = frameIndex;
   },
 });
 
