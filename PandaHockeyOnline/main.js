@@ -66,8 +66,10 @@ phina.define("GameScene", {
     this.player = Player();
     this.player.loading(this.table.background, this.pandaGroup);
     this.enemy = Panda();
-    var table_bg = this.table.background;
-    this.enemy.loading(0, SCREEN_WIDTH/2, table_bg.top, this.pandaGroup);
+    this.enemy.loading(0, SCREEN_WIDTH/2, this.table.background.top, this.pandaGroup);
+  },
+  update: function() {
+    this.player.superMethod('protectProtrusion', this.table.background);
   },
 });
 
@@ -118,6 +120,13 @@ phina.define("Panda", {
     this.setPosition(start_x, start_y);
     this.frameIndex = frameIndex;
   },
+  protectProtrusion: function(table_bg){
+    if (this.x < (table_bg.left+this.width/3)) {
+      this.x = table_bg.left+this.width/3;
+    } else if (this.x > (table_bg.right-this.width/3)) {
+      this.x = table_bg.right-this.width/3;
+    }
+  },
 });
 
 /*
@@ -132,7 +141,6 @@ phina.define("Player", {
     this.superMethod('loading', 3, SCREEN_WIDTH/2, table_bg.bottom, group);
   },
   update: function(app){
-    // move player
     var p = app.pointer;
     if (p.getPointing()) {
       var x_diff = this.x - p.x;
