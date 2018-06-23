@@ -70,6 +70,7 @@ phina.define("GameScene", {
   },
   update: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
+    this.enemy.protectProtrusion(this.table.background);
   },
 });
 
