@@ -17,7 +17,6 @@ var ASSETS = {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
     'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_background.png',
     'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
-    'floor': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/floor.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
   },
 };
@@ -93,18 +92,35 @@ phina.define("HockeyTable", {
  * floor design
  */
 phina.define("Floor", {
-  superClass: "Sprite",
+  superClass: "RectangleShape",
   init: function(group) {
-    this.superInit('floor');
+    this.superInit();
+    this.fill = '#afeeee';
     this.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.width = SCREEN_WIDTH;
     this.height = SCREEN_HEIGHT;
     this.addChildTo(group);
+    
+    for (var i=0; i<5; i++) {
+      for (var j=0; j<8; j++) {
+        this.addDiamond(128*i+64, 128*j+64, 90, group);
+      }
+    }
+    
     this.line = RectangleShape().addChildTo(group);
     this.line.fill = '#000080';
     this.line.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.line.width = SCREEN_WIDTH;
     this.line.height = 10;
+  },
+  addDiamond: function(x, y, size, group) {
+    var rectangle = RectangleShape().addChildTo(group);
+    rectangle.fill = '#87cefa';
+    rectangle.setPosition(x, y);
+    rectangle.width = size;
+    rectangle.height = size;
+    rectangle.rotation = 45;
+    rectangle.stroke = null;
   },
 });
 
