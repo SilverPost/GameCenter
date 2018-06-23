@@ -17,6 +17,7 @@ var ASSETS = {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
     'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_background.png',
     'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
+    'floor': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/floor.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
   },
 };
@@ -92,10 +93,9 @@ phina.define("HockeyTable", {
  * floor design
  */
 phina.define("Floor", {
-  superClass: "RectangleShape",
+  superClass: "Sprite",
   init: function(group) {
-    this.superInit();
-    this.fill = '#add8e6';
+    this.superInit('floor');
     this.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.width = SCREEN_WIDTH;
     this.height = SCREEN_HEIGHT;
