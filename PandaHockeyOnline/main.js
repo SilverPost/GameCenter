@@ -267,13 +267,13 @@ phina.define("Puck", {
     }
   },
   isAtFrame: function(x, y) {
-    if(x < this.range_left) {
+    if((x < this.range_left) && (this.physical.velocity.x < 0)) {
       return 'left';
-    } else if(this.range_right < x) {
+    } else if((x > this.range_right) && (this.physical.velocity.x > 0)) {
       return 'right';
-    } else if(y < this.range_top) {
+    } else if((y < this.range_top) && (this.physical.velocity.y < 0)) {
       return 'top';
-    } else if(y > this.range_bottom){
+    } else if((y > this.range_bottom) && (this.physical.velocity.y > 0)){
       return 'bottom';
     }
     return null;
