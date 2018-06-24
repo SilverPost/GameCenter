@@ -12,6 +12,8 @@ var PUCK_SIZE     = 70;
 
 // value information
 var PANDA_SPEED   = 6;
+var PUCK_SPEED_X  = 8;
+var PUCK_SPEED_Y  = 8;
 
 var ASSETS = {
   image: {
@@ -89,16 +91,16 @@ phina.define("GameScene", {
     // table
     this.tableGroup = DisplayElement().addChildTo(this);
     this.table = HockeyTable(this.tableGroup);
+    // puck
+    this.puckGroup = DisplayElement().addChildTo(this);
+    this.puck = Puck();
+    this.puck.loading(this.table.background, this.puckGroup);
     // panda
     this.pandaGroup = DisplayElement().addChildTo(this);
     this.player = Player();
     this.player.loading(this.table.background, this.pandaGroup);
     this.enemy = Enemy();
     this.enemy.loading(this.table.background, this.pandaGroup);
-    // puck
-    this.puckGroup = DisplayElement().addChildTo(this);
-    this.puck = Puck();
-    this.puck.loading(this.table.background, this.puckGroup);
   },
   update: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
@@ -241,8 +243,40 @@ phina.define("Puck", {
     this.width = PUCK_SIZE;
     this.height = PUCK_SIZE;
     this.frameIndex = 0;
+    // movement range
+    this.range_left = table_bg.left*1.1+this.width*0.8;
+    this.range_right = table_bg.right*0.9-this.width*0.1;
+    this.range_top = table_bg.top*1.06+this.height*0.8;
+    this.range_bottom = table_bg.bottom*0.94-this.height*0.09;
+    // default speed
+    this.physical.velocity.x = PUCK_SPEED_X;
+    this.physical.velocity.y = PUCK_SPEED_Y;
   },
   update: function() {
+    // bounce at frame
+    switch (this.isAtFrame(this.x, this.y)) {
+      case 'left':
+      case 'right':
+        this.physical.velocity.x *= -1;
+        break;
+      case 'top':
+      case 'bottom':
+        this.physical.velocity.y *= -1;
+        break;
+      default:
+    }
+  },
+  isAtFrame: function(x, y) {
+    if(x < this.range_left) {
+      return 'left';
+    } else if(this.range_right < x) {
+      return 'right';
+    } else if(y < this.range_top) {
+      return 'top';
+    } else if(y > this.range_bottom){
+      return 'bottom';
+    }
+    return null;
   },
 });
 
