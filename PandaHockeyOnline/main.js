@@ -19,6 +19,29 @@ var ASSETS = {
     'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
   },
+  spritesheet: {
+    "panda_ss":
+    {
+      "frame": {
+        "width": PANDA_SIZE,
+        "height": PANDA_SIZE,
+        "cols": 3,
+        "rows": 2,
+      },
+      "animations" : {
+        "stand_player": {
+          "frames": [3, 4, 5],
+          "next": "stand_player",
+          "frequency": 6,
+        },
+        "stand_enemy": {
+          "frames": [0, 1, 2],
+          "next": "stand_enemy",
+          "frequency": 6,
+        },
+      },
+    },
+  },
 };
 
 /*
@@ -65,12 +88,12 @@ phina.define("GameScene", {
     this.pandaGroup = DisplayElement().addChildTo(this);
     this.player = Player();
     this.player.loading(this.table.background, this.pandaGroup);
-    this.enemy = Panda();
-    this.enemy.loading(0, SCREEN_WIDTH/2, this.table.background.top, this.pandaGroup);
+    this.enemy = Enemy();
+    this.enemy.loading(this.table.background, this.pandaGroup);
   },
   update: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
-    this.enemy.protectProtrusion(this.table.background);
+    this.enemy.superMethod('protectProtrusion', this.table.background);
   },
 });
 
@@ -157,8 +180,12 @@ phina.define("Player", {
   },
   loading: function(table_bg, group){
     this.superMethod('loading', 3, SCREEN_WIDTH/2, table_bg.bottom, group);
+    // animate
+    var anim = FrameAnimation('panda_ss').attachTo(this);
+    anim.gotoAndPlay('stand_player');
   },
   update: function(app){
+    // move
     var p = app.pointer;
     if (p.getPointing()) {
       var x_diff = this.x - p.x;
@@ -171,7 +198,23 @@ phina.define("Player", {
       }
     }
   },
-})
+});
+
+/*
+ * enemy
+ */
+phina.define("Enemy", {
+  superClass: "Panda",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(table_bg, group) {
+    this.superMethod('loading', 0, SCREEN_WIDTH/2, table_bg.top, group);
+    // animate
+    var anim = FrameAnimation('panda_ss').attachTo(this);
+    anim.gotoAndPlay('stand_enemy');
+  },
+});
 
 /*
  * main function
