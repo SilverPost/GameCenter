@@ -8,6 +8,7 @@ phina.globalize();
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 var PANDA_SIZE    = 200;
+var PUCK_SIZE     = 70;
 
 // value information
 var PANDA_SPEED   = 6;
@@ -18,6 +19,7 @@ var ASSETS = {
     'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_background.png',
     'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
+    'puck': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/puck.png',
   },
   spritesheet: {
     "panda_ss":
@@ -81,15 +83,22 @@ phina.define("GameScene", {
   superClass: "DisplayScene",
   init: function(options) {
     this.superInit(options);
+    // floor
     this.floorGroup = DisplayElement().addChildTo(this);
     this.floor = Floor(this.floorGroup);
+    // table
     this.tableGroup = DisplayElement().addChildTo(this);
     this.table = HockeyTable(this.tableGroup);
+    // panda
     this.pandaGroup = DisplayElement().addChildTo(this);
     this.player = Player();
     this.player.loading(this.table.background, this.pandaGroup);
     this.enemy = Enemy();
     this.enemy.loading(this.table.background, this.pandaGroup);
+    // puck
+    this.puckGroup = DisplayElement().addChildTo(this);
+    this.puck = Puck();
+    this.puck.loading(this.table.background, this.puckGroup);
   },
   update: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
@@ -213,6 +222,27 @@ phina.define("Enemy", {
     // animate
     var anim = FrameAnimation('panda_ss').attachTo(this);
     anim.gotoAndPlay('stand_enemy');
+  },
+});
+
+/*
+ * puck
+ */
+phina.define("Puck", {
+  superClass : 'Sprite',
+  init: function() {
+    this.superInit('puck');
+  },
+  loading: function(table_bg, group) {
+    this.addChildTo(group);
+    var x = table_bg.left + table_bg.width*0.3;
+    var y = table_bg.top + table_bg.height*0.5;
+    this.setPosition(x, y);
+    this.width = PUCK_SIZE;
+    this.height = PUCK_SIZE;
+    this.frameIndex = 0;
+  },
+  update: function() {
   },
 });
 
