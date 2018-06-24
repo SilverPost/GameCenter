@@ -127,14 +127,24 @@ phina.define("GameScene", {
     var y_diff = malletY - puck.y;
     if(x_diff > 0) {
       if(y_diff > 0) {
-        puck.physical.velocity.x *= -1;
-        puck.physical.velocity.y *= -1;
+        if(puck.physical.velocity.x > 0) {
+          puck.physical.velocity.x *= -1;
+          puck.physical.velocity.y *= -1;
+        }
       } else {
-        puck.physical.velocity.y *= -1;
+        if(puck.physical.velocity.y < 0) {
+          puck.physical.velocity.y *= -1;
+        }
       }
     } else {
       if(y_diff > 0) {
-        puck.physical.velocity.y *= -1;
+        if(puck.physical.velocity.y > 0) {
+          puck.physical.velocity.y *= -1;
+        }
+      } else {
+        if(puck.physical.velocity.x < 0) {
+          puck.physical.velocity.x *= -1;
+        }
       }
     }
   },
