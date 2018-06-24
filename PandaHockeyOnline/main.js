@@ -9,6 +9,7 @@ var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 var PANDA_SIZE    = 200;
 var PUCK_SIZE     = 70;
+var MALLETE_SIZE  = 30;
 
 // value information
 var PANDA_SPEED   = 6;
@@ -171,6 +172,14 @@ phina.define("Panda", {
     this.addChildTo(group);
     this.setPosition(start_x, start_y);
     this.frameIndex = frameIndex;
+    // circle for collision
+    this.mallete = CircleShape({
+      x: 0,
+      y: 0,
+      radius: MALLETE_SIZE,
+      fill: 'yellow',
+    }).addChildTo(group);
+    this.mallete.alpha = 0.5;
   },
   protectProtrusion: function(table_bg){
     if (this.x < (table_bg.left+this.width/3)) {
@@ -208,6 +217,14 @@ phina.define("Player", {
         }
       }
     }
+    // circle for collision
+    this.mallete.setPosition(this.malletPositionX(), this.malletPositionY());
+  },
+  malletPositionX: function() {
+    return this.left+this.width*0.54;
+  },
+  malletPositionY: function() {
+    return this.top+this.height*0.2;
   },
 });
 
@@ -224,6 +241,16 @@ phina.define("Enemy", {
     // animate
     var anim = FrameAnimation('panda_ss').attachTo(this);
     anim.gotoAndPlay('stand_enemy');
+  },
+  update: function() {
+    // circle for collision
+    this.mallete.setPosition(this.malletPositionX(), this.malletPositionY());
+  },
+  malletPositionX: function() {
+    return this.left+this.width*0.54;
+  },
+  malletPositionY: function() {
+    return this.bottom-this.height*0.2;
   },
 });
 
