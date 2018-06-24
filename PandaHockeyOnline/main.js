@@ -247,7 +247,7 @@ phina.define("Puck", {
     this.range_left = table_bg.left*1.1+this.width*0.8;
     this.range_right = table_bg.right*0.9-this.width*0.1;
     this.range_top = table_bg.top*1.06+this.height*0.8;
-    this.range_bottom = table_bg.bottom*0.94-this.height*0.09;
+    this.range_bottom = table_bg.bottom*0.94-this.height*0.08;
     // default speed
     this.physical.velocity.x = PUCK_SPEED_X;
     this.physical.velocity.y = PUCK_SPEED_Y;
