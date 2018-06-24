@@ -95,7 +95,7 @@ phina.define("Floor", {
   superClass: "RectangleShape",
   init: function(group) {
     this.superInit();
-    this.fill = '#afeeee';
+    this.fill = '#add8e6';
     this.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.width = SCREEN_WIDTH;
     this.height = SCREEN_HEIGHT;
@@ -115,7 +115,8 @@ phina.define("Floor", {
   },
   addDiamond: function(x, y, size, group) {
     var rectangle = RectangleShape().addChildTo(group);
-    rectangle.fill = '#87cefa';
+    rectangle.fill = 'white';
+    rectangle.alpha = 0.5;
     rectangle.setPosition(x, y);
     rectangle.width = size;
     rectangle.height = size;
