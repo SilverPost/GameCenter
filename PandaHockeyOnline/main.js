@@ -104,8 +104,39 @@ phina.define("GameScene", {
     this.enemy.loading(this.table.background, this.pandaGroup);
   },
   update: function() {
+    this.protectProtrusion();
+    this.bounceAtMalletesWhenTheyHitsPuck();
+  },
+  protectProtrusion: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
     this.enemy.superMethod('protectProtrusion', this.table.background);
+  },
+  bounceAtMalletesWhenTheyHitsPuck: function() {
+    var puck = this.puck;
+    var self = this;
+    this.pandaGroup.children.each(function(panda) {
+      var c1 = Circle(puck.x, puck.y, PUCK_SIZE/2);
+      var c2 = Circle(panda.malletPositionX(), panda.malletPositionY(), MALLETE_SIZE);
+      if (Collision.testCircleCircle(c1, c2)) {
+        self.bounceAtMalletes(puck, panda.malletPositionX(), panda.malletPositionY());
+      }
+    });
+  },
+  bounceAtMalletes: function(puck, malletX, malletY) {
+    var x_diff = malletX - puck.x;
+    var y_diff = malletY - puck.y;
+    if(x_diff > 0) {
+      if(y_diff > 0) {
+        puck.physical.velocity.x *= -1;
+        puck.physical.velocity.y *= -1;
+      } else {
+        puck.physical.velocity.y *= -1;
+      }
+    } else {
+      if(y_diff > 0) {
+        puck.physical.velocity.y *= -1;
+      }
+    }
   },
 });
 
@@ -167,19 +198,13 @@ phina.define("Panda", {
   superClass: "Sprite",
   init: function() {
     this.superInit('panda', PANDA_SIZE, PANDA_SIZE);
+    // circle for collision
+    this.mallete = Circle(0, 0, MALLETE_SIZE);
   },
   loading: function(frameIndex, start_x, start_y, group) {
     this.addChildTo(group);
     this.setPosition(start_x, start_y);
     this.frameIndex = frameIndex;
-    // circle for collision
-    this.mallete = CircleShape({
-      x: 0,
-      y: 0,
-      radius: MALLETE_SIZE,
-      fill: 'yellow',
-    }).addChildTo(group);
-    this.mallete.alpha = 0.5;
   },
   protectProtrusion: function(table_bg){
     if (this.x < (table_bg.left+this.width/3)) {
@@ -217,8 +242,6 @@ phina.define("Player", {
         }
       }
     }
-    // circle for collision
-    this.mallete.setPosition(this.malletPositionX(), this.malletPositionY());
   },
   malletPositionX: function() {
     return this.left+this.width*0.54;
@@ -241,10 +264,6 @@ phina.define("Enemy", {
     // animate
     var anim = FrameAnimation('panda_ss').attachTo(this);
     anim.gotoAndPlay('stand_enemy');
-  },
-  update: function() {
-    // circle for collision
-    this.mallete.setPosition(this.malletPositionX(), this.malletPositionY());
   },
   malletPositionX: function() {
     return this.left+this.width*0.54;
@@ -278,6 +297,8 @@ phina.define("Puck", {
     // default speed
     this.physical.velocity.x = PUCK_SPEED_X;
     this.physical.velocity.y = PUCK_SPEED_Y;
+    // circle for collision
+    this.circle = Circle(0, 0, PUCK_SIZE/2);
   },
   update: function() {
     // bounce at frame
