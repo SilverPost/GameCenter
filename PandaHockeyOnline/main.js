@@ -4,6 +4,9 @@
 
 phina.globalize();
 
+/*
+ * global variables
+ */
 // size information
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
