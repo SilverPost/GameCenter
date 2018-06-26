@@ -166,10 +166,10 @@ phina.define("HockeyTable", {
     this.frame = Sprite('stage_frame').addChildTo(group);
     this.frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.player_goal = Sprite('goal').addChildTo(group);
-    this.player_goal.setPosition(SCREEN_WIDTH*0.5, this.background.bottom-14);
+    this.player_goal.setPosition(SCREEN_WIDTH*0.5, this.background.bottom);
     this.player_goal.scaleX = 0.7;
     this.enemy_goal = Sprite('goal').addChildTo(group);
-    this.enemy_goal.setPosition(SCREEN_WIDTH*0.5, this.background.top+30);
+    this.enemy_goal.setPosition(SCREEN_WIDTH*0.5, this.background.top+20);
     this.enemy_goal.scaleX = 0.7;
   },
 });
