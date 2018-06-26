@@ -26,6 +26,7 @@ var ASSETS = {
     'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
     'puck': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/puck.png',
+    'goal': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/goal.png',
   },
   spritesheet: {
     "panda_ss":
@@ -164,6 +165,12 @@ phina.define("HockeyTable", {
     this.background.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.frame = Sprite('stage_frame').addChildTo(group);
     this.frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    this.player_goal = Sprite('goal').addChildTo(group);
+    this.player_goal.setPosition(SCREEN_WIDTH*0.5, this.background.bottom-14);
+    this.player_goal.scaleX = 0.7;
+    this.enemy_goal = Sprite('goal').addChildTo(group);
+    this.enemy_goal.setPosition(SCREEN_WIDTH*0.5, this.background.top+30);
+    this.enemy_goal.scaleX = 0.7;
   },
 });
 
