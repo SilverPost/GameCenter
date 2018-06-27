@@ -345,7 +345,7 @@ phina.define("Puck", {
         break;
       case 'top':
       case 'bottom':
-        this.physical.velocity.y *= -1;
+        this.tweener.fadeOut(200).play();
         break;
       default:
     }
