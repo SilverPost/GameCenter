@@ -20,6 +20,9 @@ var PUCK_SPEED_X  = 8;
 var PUCK_SPEED_Y  = 8;
 
 var ASSETS = {
+  sound: {
+    'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/bgm.mp3',
+  },
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
     'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_background.png',
@@ -90,6 +93,8 @@ phina.define("GameScene", {
   superClass: "DisplayScene",
   init: function(options) {
     this.superInit(options);
+    // bgm
+    SoundManager.playMusic('bgm');
     // floor
     this.floorGroup = DisplayElement().addChildTo(this);
     this.floor = Floor(this.floorGroup);
@@ -388,6 +393,14 @@ phina.main(function() {
     ]
   });
   
+  // a dummy function that sound(s) can play with smartphone(s)
+  app.domElement.addEventListener('touchend', function dummy() {
+    var s = phina.asset.Sound();
+    s.loadFromBuffer();
+    s.play().stop();
+    app.domElement.removeEventListener('touchend', dummy);
+  });
+
   // enable FPS
   app.enableStats();
   
