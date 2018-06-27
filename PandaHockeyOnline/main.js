@@ -96,16 +96,23 @@ phina.define("GameScene", {
     // table
     this.tableGroup = DisplayElement().addChildTo(this);
     this.table = HockeyTable(this.tableGroup);
+    var table_bg = this.table.background;
     // puck
     this.puckGroup = DisplayElement().addChildTo(this);
     this.puck = Puck();
-    this.puck.loading(this.table.background, this.puckGroup);
+    this.puck.loading(table_bg, this.puckGroup);
+    // goal line
+    this.goalGroup = DisplayElement().addChildTo(this);
+    this.playerGoal = GoalLine(this.goalGroup);
+    this.playerGoal.loading(SCREEN_WIDTH*0.5, table_bg.bottom);
+    this.enemyGoal = GoalLine(this.goalGroup);
+    this.enemyGoal.loading(SCREEN_WIDTH*0.5, table_bg.top+20);
     // panda
     this.pandaGroup = DisplayElement().addChildTo(this);
     this.player = Player();
-    this.player.loading(this.table.background, this.pandaGroup);
+    this.player.loading(table_bg, this.pandaGroup);
     this.enemy = Enemy();
-    this.enemy.loading(this.table.background, this.pandaGroup);
+    this.enemy.loading(table_bg, this.pandaGroup);
   },
   update: function() {
     this.protectProtrusion();
@@ -165,12 +172,21 @@ phina.define("HockeyTable", {
     this.background.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
     this.frame = Sprite('stage_frame').addChildTo(group);
     this.frame.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
-    this.player_goal = Sprite('goal').addChildTo(group);
-    this.player_goal.setPosition(SCREEN_WIDTH*0.5, this.background.bottom);
-    this.player_goal.scaleX = 0.7;
-    this.enemy_goal = Sprite('goal').addChildTo(group);
-    this.enemy_goal.setPosition(SCREEN_WIDTH*0.5, this.background.top+20);
-    this.enemy_goal.scaleX = 0.7;
+  },
+});
+
+/*
+ * goal line
+ */
+phina.define("GoalLine", {
+  superClass: "Sprite",
+  init: function(group) {
+    this.superInit('goal');
+    this.addChildTo(group);
+    this.scaleX = 0.7;
+  },
+  loading: function(x, y) {
+    this.setPosition(x, y);
   },
 });
 
