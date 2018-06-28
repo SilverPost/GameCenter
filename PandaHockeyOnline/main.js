@@ -338,8 +338,6 @@ phina.define("Puck", {
     // default speed
     this.physical.velocity.x = PUCK_SPEED_X;
     this.physical.velocity.y = PUCK_SPEED_Y;
-    // circle for collision
-    this.circle = Circle(0, 0, PUCK_SIZE/2);
   },
   update: function() {
     // bounce at frame
