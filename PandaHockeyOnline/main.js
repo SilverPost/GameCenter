@@ -287,8 +287,6 @@ phina.define("Panda", {
   superClass: "Sprite",
   init: function() {
     this.superInit('panda', PANDA_SIZE, PANDA_SIZE);
-    // circle for collision
-    this.mallete = Circle(0, 0, MALLETE_SIZE);
   },
   loading: function(frameIndex, start_x, start_y, group) {
     this.addChildTo(group);
