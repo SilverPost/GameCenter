@@ -13,6 +13,7 @@ var SCREEN_HEIGHT = 960;
 var PANDA_SIZE    = 200;
 var PUCK_SIZE     = 70;
 var MALLETE_SIZE  = 30;
+var EFFECT_SIZE   = 66;
 
 // value information
 var PANDA_SPEED   = 6;
@@ -30,6 +31,7 @@ var ASSETS = {
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
     'puck': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/puck.png',
     'goal': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/goal.png',
+    'effect': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/effect.png',
   },
   spritesheet: {
     "panda_ss":
@@ -49,6 +51,21 @@ var ASSETS = {
         "stand_enemy": {
           "frames": [0, 1, 2],
           "next": "stand_enemy",
+          "frequency": 6,
+        },
+      },
+    },
+    "effect_ss":
+    {
+      "frame": {
+        "width": EFFECT_SIZE,
+        "height": EFFECT_SIZE,
+        "cols": 8,
+        "rows": 1,
+      },
+      "animations" : {
+        "bounce": {
+          "frames": [0, 1, 2, 3, 4, 5, 6, 7],
           "frequency": 6,
         },
       },
@@ -118,6 +135,9 @@ phina.define("GameScene", {
     this.player.loading(table_bg, this.pandaGroup);
     this.enemy = Enemy();
     this.enemy.loading(table_bg, this.pandaGroup);
+    // bounce effect
+    this.effectGroup = DisplayElement().addChildTo(this);
+    this.bounceEffect = BounceEffect(this.effectGroup);
   },
   update: function() {
     this.protectProtrusion();
@@ -146,23 +166,51 @@ phina.define("GameScene", {
         if(puck.physical.velocity.x > 0) {
           puck.physical.velocity.x *= -1;
           puck.physical.velocity.y *= -1;
+          this.bounceEffect.bounce(puck.right, puck.bottom);
         }
       } else {
         if(puck.physical.velocity.y < 0) {
           puck.physical.velocity.y *= -1;
+          this.bounceEffect.bounce(puck.right, puck.top);
         }
       }
     } else {
       if(y_diff > 0) {
         if(puck.physical.velocity.y > 0) {
           puck.physical.velocity.y *= -1;
+          this.bounceEffect.bounce(puck.left, puck.bottom);
         }
       } else {
         if(puck.physical.velocity.x < 0) {
           puck.physical.velocity.x *= -1;
+          this.bounceEffect.bounce(puck.left, puck.top);
         }
       }
     }
+  },
+});
+
+/*
+ * bounce effect
+ */
+phina.define("BounceEffect", {
+  superClass: "Sprite",
+  init: function(group) {
+    this.superInit('effect');
+    this.width = EFFECT_SIZE;
+    this.height = EFFECT_SIZE;
+    this.addChildTo(group);
+    this.alpha = 0;
+  },
+  bounce: function(x, y) {
+    this.setPosition(x, y);
+    this.tweener.fadeIn(10)
+    .scaleTo(3, 200)
+    .play();
+    // animate
+    var anim = FrameAnimation('effect_ss').attachTo(this);
+    anim.gotoAndPlay('bounce');
+    this.tweener.fadeOut(100).play();
   },
 });
 
