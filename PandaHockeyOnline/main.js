@@ -210,7 +210,7 @@ phina.define("BounceEffect", {
     // animate
     var anim = FrameAnimation('effect_ss').attachTo(this);
     anim.gotoAndPlay('bounce');
-    this.tweener.fadeOut(100).play();
+    this.tweener.fadeOut(500).play();
   },
 });
 
