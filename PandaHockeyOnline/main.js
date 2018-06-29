@@ -384,13 +384,19 @@ phina.define("Puck", {
     // default speed
     this.physical.velocity.x = PUCK_SPEED_X;
     this.physical.velocity.y = PUCK_SPEED_Y;
+    // bounce effect
+    this.bounceEffect = BounceEffect(group);
   },
   update: function() {
     // bounce at frame
     switch (this.isAtFrame(this.x, this.y)) {
       case 'left':
+        this.physical.velocity.x *= -1;
+        this.bounceEffect.bounce(this.left);
+        break;
       case 'right':
         this.physical.velocity.x *= -1;
+        this.bounceEffect.bounce(this.right);
         break;
       case 'top':
       case 'bottom':
