@@ -23,6 +23,8 @@ var PUCK_SPEED_Y  = 8;
 var ASSETS = {
   sound: {
     'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/bgm.mp3',
+    'wall': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/wall.mp3',
+    'mallette': 'https://github.com/SilverPost/GameCenter/blob/master/PandaHockeyOnline/sound/mullete.mp3',
   },
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
