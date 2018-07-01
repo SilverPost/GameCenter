@@ -236,7 +236,7 @@ phina.define("GoalLine", {
   init: function(group) {
     this.superInit('goal');
     this.addChildTo(group);
-    this.scaleX = 0.7;
+    this.scaleX = 0.76;
   },
   loading: function(x, y) {
     this.setPosition(x, y);
