@@ -111,7 +111,7 @@ phina.define("GameScene", {
   init: function(options) {
     this.superInit(options);
     // bgm
-    SoundManager.playMusic('bgm');
+//    SoundManager.playMusic('bgm');
     // floor
     this.floorGroup = DisplayElement().addChildTo(this);
     this.floor = Floor(this.floorGroup);
@@ -205,12 +205,12 @@ phina.define("BounceEffect", {
   bounce: function(x, y) {
     this.setPosition(x, y);
     this.tweener.fadeIn(10)
-    .scaleTo(3, 200)
+    .scaleTo(2, 200)
     .play();
     // animate
     var anim = FrameAnimation('effect_ss').attachTo(this);
     anim.gotoAndPlay('bounce');
-    this.tweener.fadeOut(500).play();
+    this.tweener.fadeOut(300).play();
   },
 });
 
@@ -392,11 +392,11 @@ phina.define("Puck", {
     switch (this.isAtFrame(this.x, this.y)) {
       case 'left':
         this.physical.velocity.x *= -1;
-        this.bounceEffect.bounce(this.left);
+        this.bounceEffect.bounce(this.left, this.y);
         break;
       case 'right':
         this.physical.velocity.x *= -1;
-        this.bounceEffect.bounce(this.right);
+        this.bounceEffect.bounce(this.right, this.y);
         break;
       case 'top':
       case 'bottom':
