@@ -111,7 +111,7 @@ phina.define("GameScene", {
   init: function(options) {
     this.superInit(options);
     // bgm
-//    SoundManager.playMusic('bgm');
+    SoundManager.playMusic('bgm');
     // floor
     this.floorGroup = DisplayElement().addChildTo(this);
     this.floor = Floor(this.floorGroup);
