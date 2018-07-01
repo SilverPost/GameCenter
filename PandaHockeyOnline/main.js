@@ -12,7 +12,7 @@ var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 var PANDA_SIZE    = 200;
 var PUCK_SIZE     = 70;
-var MALLETE_SIZE  = 30;
+var MALLETTE_SIZE = 30;
 var EFFECT_SIZE   = 66;
 
 // value information
@@ -24,7 +24,7 @@ var ASSETS = {
   sound: {
     'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/bgm.mp3',
     'wall': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/wall.mp3',
-    'mallette': 'https://github.com/SilverPost/GameCenter/blob/master/PandaHockeyOnline/sound/mullete.mp3',
+    'mallette': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/mullette.mp3',
   },
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
@@ -143,26 +143,26 @@ phina.define("GameScene", {
   },
   update: function() {
     this.protectProtrusion();
-    this.bounceAtMalletesWhenTheyHitsPuck();
+    this.bounceAtMallettesWhenTheyHitsPuck();
   },
   protectProtrusion: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
     this.enemy.superMethod('protectProtrusion', this.table.background);
   },
-  bounceAtMalletesWhenTheyHitsPuck: function() {
+  bounceAtMallettesWhenTheyHitsPuck: function() {
     var puck = this.puck;
     var self = this;
     this.pandaGroup.children.each(function(panda) {
       var c1 = Circle(puck.x, puck.y, PUCK_SIZE/2);
-      var c2 = Circle(panda.malletPositionX(), panda.malletPositionY(), MALLETE_SIZE);
+      var c2 = Circle(panda.mallettePositionX(), panda.mallettePositionY(), MALLETTE_SIZE);
       if (Collision.testCircleCircle(c1, c2)) {
-        self.bounceAtMalletes(puck, panda.malletPositionX(), panda.malletPositionY());
+        self.bounceAtMallettes(puck, panda.mallettePositionX(), panda.mallettePositionY());
       }
     });
   },
-  bounceAtMalletes: function(puck, malletX, malletY) {
-    var x_diff = malletX - puck.x;
-    var y_diff = malletY - puck.y;
+  bounceAtMallettes: function(puck, malletteX, malletteY) {
+    var x_diff = malletteX - puck.x;
+    var y_diff = malletteY - puck.y;
     if(x_diff > 0) {
       if(y_diff > 0) {
         if(puck.physical.velocity.x > 0) {
@@ -332,10 +332,10 @@ phina.define("Player", {
       }
     }
   },
-  malletPositionX: function() {
+  mallettePositionX: function() {
     return this.left+this.width*0.54;
   },
-  malletPositionY: function() {
+  mallettePositionY: function() {
     return this.top+this.height*0.2;
   },
 });
@@ -354,10 +354,10 @@ phina.define("Enemy", {
     var anim = FrameAnimation('panda_ss').attachTo(this);
     anim.gotoAndPlay('stand_enemy');
   },
-  malletPositionX: function() {
+  mallettePositionX: function() {
     return this.left+this.width*0.54;
   },
-  malletPositionY: function() {
+  mallettePositionY: function() {
     return this.bottom-this.height*0.2;
   },
 });
