@@ -24,7 +24,7 @@ var ASSETS = {
   sound: {
     'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/bgm.mp3',
     'wall': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/wall.mp3',
-    'mallette': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/mullette.mp3',
+    'mallette': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/mallette.mp3',
   },
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
@@ -189,6 +189,7 @@ phina.define("GameScene", {
         }
       }
     }
+    SoundManager.play('mallette');
   },
 });
 
@@ -395,10 +396,12 @@ phina.define("Puck", {
       case 'left':
         this.physical.velocity.x *= -1;
         this.bounceEffect.bounce(this.left, this.y);
+        SoundManager.play('wall');
         break;
       case 'right':
         this.physical.velocity.x *= -1;
         this.bounceEffect.bounce(this.right, this.y);
+        SoundManager.play('wall');
         break;
       case 'top':
       case 'bottom':
