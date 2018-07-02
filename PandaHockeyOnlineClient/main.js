@@ -22,18 +22,18 @@ var PUCK_SPEED_Y  = 8;
 
 var ASSETS = {
   sound: {
-    'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/bgm.mp3',
-    'wall': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/wall.mp3',
-    'mallette': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/sound/mallette.mp3',
+    'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/sound/bgm.mp3',
+    'wall': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/sound/wall.mp3',
+    'mallette': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/sound/mallette.mp3',
   },
   image: {
-    'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/logo.png',
-    'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_background.png',
-    'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/stage_frame.png',
-    'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/panda.png',
-    'puck': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/puck.png',
-    'goal': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/goal.png',
-    'effect': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnline/image/effect.png',
+    'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/logo.png',
+    'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/stage_background.png',
+    'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/stage_frame.png',
+    'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/panda.png',
+    'puck': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/puck.png',
+    'goal': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/goal.png',
+    'effect': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/effect.png',
   },
   spritesheet: {
     "panda_ss":
@@ -113,7 +113,7 @@ phina.define("GameScene", {
   init: function(options) {
     this.superInit(options);
     // bgm
-    SoundManager.playMusic('bgm');
+//    SoundManager.playMusic('bgm');
     // floor
     this.floorGroup = DisplayElement().addChildTo(this);
     this.floor = Floor(this.floorGroup);
