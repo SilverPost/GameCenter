@@ -26,6 +26,10 @@ You can kill an enemy by manipulating the flying Panda.
 Panda moves to the position of tapping or clicking, and he has been shooting bullets during that time. When the bullet hits them, enemies are vanished.
 However, be careful to enemy's bullets. If the bullet(s) hit Panda, he is vanished and GAME OVER.
 
+The BGM and sounds are created by [maoudamashii] in this game.
+
+[maoudamashii]: https://maoudamashii.jokersounds.com/
+
 ## PandaHockey
 
 **PandaHockey** is a hockey game playing with CPU.
