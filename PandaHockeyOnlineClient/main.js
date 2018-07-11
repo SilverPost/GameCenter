@@ -8,12 +8,14 @@ phina.globalize();
  * global variables
  */
 // size information
-var SCREEN_WIDTH  = 640;
-var SCREEN_HEIGHT = 960;
-var PANDA_SIZE    = 200;
-var PUCK_SIZE     = 70;
-var MALLETTE_SIZE = 30;
-var EFFECT_SIZE   = 66;
+var SCREEN_WIDTH        = 640;
+var SCREEN_HEIGHT       = 960;
+var PANDA_SIZE          = 200;
+var PUCK_SIZE           = 70;
+var MALLETTE_SIZE       = 30;
+var EFFECT_SIZE         = 66;
+var TITLE_PANDA_WIDTH   = 288;
+var TITLE_PANDA_HEIGHT  = 263;
 
 // value information
 var PANDA_SPEED   = 6;
@@ -28,6 +30,7 @@ var ASSETS = {
   },
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/logo.png',
+    'title': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/title_panda.png',
     'stage_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/stage_background.png',
     'stage_frame': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/stage_frame.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/panda.png',
@@ -72,6 +75,21 @@ var ASSETS = {
         },
       },
     },
+    "title_panda_ss":
+    {
+      "frame": {
+        "width": TITLE_PANDA_WIDTH,
+        "height": TITLE_PANDA_HEIGHT,
+        "cols": 2,
+        "rows": 1,
+      },
+      "animations" : {
+        "sit": {
+          "frames": [0, 1],
+          "frequency": 1,
+        },
+      },
+    },
   },
 };
 
@@ -87,11 +105,20 @@ phina.define("TitleScene", {
     this.logo.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.3);
     this.logo.scaleX = 0.3;
     this.logo.scaleY = 0.3;
+    this.panda = Sprite('title').addChildTo(this);
+    this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
+    this.panda.width = TITLE_PANDA_WIDTH;
+    this.panda.height = TITLE_PANDA_HEIGHT;
+    this.panda.scaleX = 2;
+    this.panda.scaleY = 2;
+    this.panda.frameIndex = 0;
+    var anim = FrameAnimation('title_panda_ss').attachTo(this.panda);
+    anim.gotoAndPlay('sit');
     Label({
       text: 'tap to start',
       fontSize: 48,
       fill: 'black',
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
   },
   update: function() {
     this.logo.tweener
