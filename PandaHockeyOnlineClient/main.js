@@ -86,7 +86,7 @@ var ASSETS = {
       "animations" : {
         "sit": {
           "frames": [0, 1],
-          "frequency": 1,
+          "frequency": 10,
         },
       },
     },
@@ -114,18 +114,22 @@ phina.define("TitleScene", {
     this.panda.frameIndex = 0;
     var anim = FrameAnimation('title_panda_ss').attachTo(this.panda);
     anim.gotoAndPlay('sit');
+    this.panda.rotation = 10;
     Label({
       text: 'tap to start',
       fontSize: 48,
       fill: 'black',
     }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
   },
-  update: function() {
+  update: function(app) {
     this.logo.tweener
       .scaleTo(0.31, 500)
       .scaleTo(0.29, 1000)
       .scaleTo(0.30, 500)
       .play();
+    if(app.frame % 30 === 0) {
+      this.panda.rotation *= -1;
+    }
   },
   onpointstart: function() {
     this.exit();  
