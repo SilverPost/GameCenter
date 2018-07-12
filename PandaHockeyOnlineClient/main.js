@@ -14,8 +14,8 @@ var PANDA_SIZE          = 200;
 var PUCK_SIZE           = 70;
 var MALLETTE_SIZE       = 30;
 var EFFECT_SIZE         = 66;
-var TITLE_PANDA_WIDTH   = 288;
-var TITLE_PANDA_HEIGHT  = 263;
+var TITLE_PANDA_WIDTH   = 1222;
+var TITLE_PANDA_HEIGHT  = 1151;
 
 // value information
 var PANDA_SPEED   = 6;
@@ -75,21 +75,6 @@ var ASSETS = {
         },
       },
     },
-    "title_panda_ss":
-    {
-      "frame": {
-        "width": TITLE_PANDA_WIDTH,
-        "height": TITLE_PANDA_HEIGHT,
-        "cols": 2,
-        "rows": 1,
-      },
-      "animations" : {
-        "sit": {
-          "frames": [0, 1],
-          "frequency": 10,
-        },
-      },
-    },
   },
 };
 
@@ -109,17 +94,14 @@ phina.define("TitleScene", {
     this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
     this.panda.width = TITLE_PANDA_WIDTH;
     this.panda.height = TITLE_PANDA_HEIGHT;
-    this.panda.scaleX = 2;
-    this.panda.scaleY = 2;
-    this.panda.frameIndex = 0;
-    var anim = FrameAnimation('title_panda_ss').attachTo(this.panda);
-    anim.gotoAndPlay('sit');
+    this.panda.scaleX = 0.5;
+    this.panda.scaleY = 0.5;
     this.panda.rotation = 10;
     Label({
       text: 'tap to start',
       fontSize: 48,
       fill: 'black',
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.46);
   },
   update: function(app) {
     this.logo.tweener
