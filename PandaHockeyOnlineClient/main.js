@@ -85,11 +85,16 @@ phina.define("TitleScene", {
   superClass: "DisplayScene",
   init: function() {
     this.superInit();
+    // bgm
+    SoundManager.playMusic('bgm');
+    // bg
     this.backgroundColor = 'skyblue';
+    // logo
     this.logo = Sprite('logo').addChildTo(this);
     this.logo.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.3);
     this.logo.scaleX = 0.3;
     this.logo.scaleY = 0.3;
+    // panda
     this.panda = Sprite('title').addChildTo(this);
     this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
     this.panda.width = TITLE_PANDA_WIDTH;
@@ -97,6 +102,7 @@ phina.define("TitleScene", {
     this.panda.scaleX = 0.5;
     this.panda.scaleY = 0.5;
     this.panda.rotation = 10;
+    // string
     Label({
       text: 'tap to start',
       fontSize: 48,
@@ -114,6 +120,7 @@ phina.define("TitleScene", {
     }
   },
   onpointstart: function() {
+    SoundManager.stopMusic('bgm');
     this.exit();  
   },
 });
