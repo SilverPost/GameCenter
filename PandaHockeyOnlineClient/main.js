@@ -91,7 +91,7 @@ phina.define("TitleScene", {
     this.backgroundColor = 'skyblue';
     // logo
     this.logo = Sprite('logo').addChildTo(this);
-    this.logo.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.3);
+    this.logo.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.2);
     this.logo.scaleX = 0.3;
     this.logo.scaleY = 0.3;
     // panda
@@ -107,7 +107,7 @@ phina.define("TitleScene", {
       text: 'tap to start',
       fontSize: 48,
       fill: 'black',
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.46);
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
   },
   update: function(app) {
     this.logo.tweener
