@@ -304,7 +304,7 @@ phina.define("Floor", {
 });
 
 /*
- * panda
+ * panda (mixin class)
  */
 phina.define("Panda", {
   superClass: "Sprite",
