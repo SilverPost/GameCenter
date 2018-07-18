@@ -14,6 +14,7 @@ var PANDA_SIZE          = 200;
 var PUCK_SIZE           = 70;
 var MALLETTE_SIZE       = 30;
 var EFFECT_SIZE         = 66;
+var SCORE_SIZE          = 80;
 var TITLE_PANDA_WIDTH   = 1222;
 var TITLE_PANDA_HEIGHT  = 1151;
 
@@ -37,6 +38,7 @@ var ASSETS = {
     'puck': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/puck.png',
     'goal': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/goal.png',
     'effect': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/effect.png',
+    'score': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaHockeyOnlineClient/image/score.png',
   },
   spritesheet: {
     "panda_ss":
@@ -160,6 +162,10 @@ phina.define("GameScene", {
     // bounce effect
     this.effectGroup = DisplayElement().addChildTo(this);
     this.bounceEffect = BounceEffect(this.effectGroup);
+    // score
+    this.scoreGroup = DisplayElement().addChildTo(this);
+    this.score = Score(this.scoreGroup);
+    this.score.loading(table_bg);
   },
   update: function() {
     this.protectProtrusion();
@@ -210,6 +216,42 @@ phina.define("GameScene", {
       }
     }
     SoundManager.play('mallette');
+  },
+});
+
+/*
+ * score
+ */
+phina.define("Score", {
+  superClass: "RectangleShape",
+  init: function(group) {
+    this.superInit();
+    // scores
+    this.playerScore = 0;
+    this.enemyScore = 0;
+    // number images
+    this.playerScoreSprite = ScoreSprite();
+    this.playerScoreSprite.addChildTo(group);
+    this.enemyScoreSprite = ScoreSprite();
+    this.enemyScoreSprite.addChildTo(group);
+  },
+  loading: function(table_bg) {
+    this.playerScoreSprite.loading(table_bg.left/2, table_bg.top/2);
+    this.enemyScoreSprite.loading((table_bg.right+SCREEN_WIDTH)/2, (table_bg.bottom+SCREEN_HEIGHT)/2);
+  },
+});
+
+phina.define("ScoreSprite", {
+  superClass: "Sprite",
+  init: function() {
+    this.superInit('score');
+    this.width = SCORE_SIZE;
+    this.height = SCORE_SIZE;
+    this.frameIndex = 0;
+  },
+  loading: function(x, y) {
+    this.x = x;
+    this.y = y;
   },
 });
 
