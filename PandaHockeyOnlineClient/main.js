@@ -175,6 +175,9 @@ phina.define("GameScene", {
     this.player.superMethod('protectProtrusion', this.table.background);
     this.enemy.superMethod('protectProtrusion', this.table.background);
   },
+  goal: function() {
+    
+  },
   bounceAtMallettesWhenTheyHitsPuck: function() {
     var puck = this.puck;
     var self = this;
@@ -346,7 +349,7 @@ phina.define("Floor", {
 });
 
 /*
- * panda (mixin class)
+ * panda
  */
 phina.define("Panda", {
   superClass: "Sprite",
@@ -363,6 +366,16 @@ phina.define("Panda", {
       this.x = table_bg.left+this.width/3;
     } else if (this.x > (table_bg.right-this.width/3)) {
       this.x = table_bg.right-this.width/3;
+    }
+  },
+  movingTo: function(x) {
+    var x_diff = this.x - x;
+    if (Math.abs(x_diff) > PANDA_SPEED) {
+      if (x_diff < 0) {
+        this.x += PANDA_SPEED;
+      } else {
+        this.x -= PANDA_SPEED;
+      }
     }
   },
 });
@@ -385,14 +398,7 @@ phina.define("Player", {
     // move
     var p = app.pointer;
     if (p.getPointing()) {
-      var x_diff = this.x - p.x;
-      if (Math.abs(x_diff) > PANDA_SPEED) {
-        if (x_diff < 0) {
-          this.x += PANDA_SPEED;
-        } else {
-          this.x -= PANDA_SPEED;
-        }
-      }
+      this.superMethod('movingTo', p.x);
     }
   },
   mallettePositionX: function() {
