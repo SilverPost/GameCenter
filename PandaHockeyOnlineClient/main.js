@@ -176,7 +176,13 @@ phina.define("GameScene", {
     this.enemy.superMethod('protectProtrusion', this.table.background);
   },
   goal: function() {
-    
+    this.puckGroup.children.each(function(puck) {
+      if(puck.y > this.playerGoal.y) {
+        
+      } else if(puck.y < this.enemyGoal.y) {
+          
+      }
+    });
   },
   bounceAtMallettesWhenTheyHitsPuck: function() {
     var puck = this.puck;
