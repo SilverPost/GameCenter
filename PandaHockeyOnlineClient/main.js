@@ -170,17 +170,20 @@ phina.define("GameScene", {
   update: function() {
     this.protectProtrusion();
     this.bounceAtMallettesWhenTheyHitsPuck();
+    this.goal();
   },
   protectProtrusion: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
     this.enemy.superMethod('protectProtrusion', this.table.background);
   },
   goal: function() {
+    var self = this;
     this.puckGroup.children.each(function(puck) {
-      if(puck.y > this.playerGoal.y) {
-        
-      } else if(puck.y < this.enemyGoal.y) {
-          
+      if((puck.y > self.playerGoal.y) && (puck.y > 0)) {
+        self.score.enemyScore++;
+      }
+      if((puck.y < self.enemyGoal.y) && (puck.y > 0)) {
+        self.score.playerScore++;
       }
     });
   },
@@ -243,6 +246,10 @@ phina.define("Score", {
     this.playerScoreSprite.addChildTo(group);
     this.enemyScoreSprite = ScoreSprite();
     this.enemyScoreSprite.addChildTo(group);
+  },
+  update: function() {
+    this.playerScoreSprite.frameIndex = (this.playerScore > 5) ? 5 : this.playerScore;
+    this.enemyScoreSprite.frameIndex = (this.enemyScore > 5) ? 5 : this.enemyScore;
   },
   loading: function(table_bg) {
     this.playerScoreSprite.loading(table_bg.left/2, table_bg.top/2);
