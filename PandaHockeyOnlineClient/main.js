@@ -171,7 +171,6 @@ phina.define("GameScene", {
     this.protectProtrusion();
     this.bounceAtMallettesWhenTheyHitsPuck();
     this.goal();
-    this.updateScore();
   },
   protectProtrusion: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
@@ -181,15 +180,15 @@ phina.define("GameScene", {
     var self = this;
     this.puckGroup.children.each(function(puck) {
       if((puck.y > self.playerGoal.y) && (puck.y !== 0)) {
-        self.score.playerScore = (self.score.playerScore >= 5) ? 5 : self.score.playerScore + 1;
+        self.updateScore(self.score.playerScore, self.score.playerScoreSprite);
       } else if((puck.y < self.enemyGoal.y) && (puck.y !== 0)) {
-        self.score.enemyScore = (self.score.enemyScore >= 5) ? 5 : self.score.enemyScore + 1;
+        self.updateScore(self.score.enemyScore, self.score.enemyScoreSprite);
       }
     });
   },
-  updateScore: function() {
-    this.score.playerScoreSprite.frameIndex = this.score.playerScore;
-    this.score.enemyScoreSprite.frameIndex = this.score.enemyScore;
+  updateScore: function(score, scoreSprite) {
+    score = (score >= 5) ? 5 : score + 1;
+    scoreSprite.frameIndex = score;
   },
   bounceAtMallettesWhenTheyHitsPuck: function() {
     var puck = this.puck;
