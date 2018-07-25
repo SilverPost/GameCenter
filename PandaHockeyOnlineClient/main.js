@@ -22,6 +22,7 @@ var TITLE_PANDA_HEIGHT  = 1151;
 var PANDA_SPEED   = 6;
 var PUCK_SPEED_X  = 8;
 var PUCK_SPEED_Y  = 8;
+var MAX_SCORE     = 5;
 
 var ASSETS = {
   sound: {
@@ -187,7 +188,7 @@ phina.define("GameScene", {
     });
   },
   updateScore: function(score, scoreSprite) {
-    score = (score >= 5) ? 5 : score + 1;
+    score = (score >= MAX_SCORE) ? MAX_SCORE : score + 1;
     scoreSprite.frameIndex = score;
   },
   bounceAtMallettesWhenTheyHitsPuck: function() {
