@@ -171,6 +171,7 @@ phina.define("GameScene", {
     this.protectProtrusion();
     this.bounceAtMallettesWhenTheyHitsPuck();
     this.goal();
+    this.updateScore();
   },
   protectProtrusion: function() {
     this.player.superMethod('protectProtrusion', this.table.background);
@@ -179,13 +180,16 @@ phina.define("GameScene", {
   goal: function() {
     var self = this;
     this.puckGroup.children.each(function(puck) {
-      if((puck.y > self.playerGoal.y) && (puck.y > 0)) {
-        self.score.enemyScore++;
-      }
-      if((puck.y < self.enemyGoal.y) && (puck.y > 0)) {
-        self.score.playerScore++;
+      if((puck.y > self.playerGoal.y) && (puck.y !== 0)) {
+        self.score.playerScore = (self.score.playerScore >= 5) ? 5 : self.score.playerScore + 1;
+      } else if((puck.y < self.enemyGoal.y) && (puck.y !== 0)) {
+        self.score.enemyScore = (self.score.enemyScore >= 5) ? 5 : self.score.enemyScore + 1;
       }
     });
+  },
+  updateScore: function() {
+    this.score.playerScoreSprite.frameIndex = this.score.playerScore;
+    this.score.enemyScoreSprite.frameIndex = this.score.enemyScore;
   },
   bounceAtMallettesWhenTheyHitsPuck: function() {
     var puck = this.puck;
@@ -246,10 +250,6 @@ phina.define("Score", {
     this.playerScoreSprite.addChildTo(group);
     this.enemyScoreSprite = ScoreSprite();
     this.enemyScoreSprite.addChildTo(group);
-  },
-  update: function() {
-    this.playerScoreSprite.frameIndex = (this.playerScore > 5) ? 5 : this.playerScore;
-    this.enemyScoreSprite.frameIndex = (this.enemyScore > 5) ? 5 : this.enemyScore;
   },
   loading: function(table_bg) {
     this.playerScoreSprite.loading(table_bg.left/2, table_bg.top/2);
