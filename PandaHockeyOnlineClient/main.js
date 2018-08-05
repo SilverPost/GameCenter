@@ -182,10 +182,18 @@ phina.define("GameScene", {
     this.puckGroup.children.each(function(puck) {
       if((puck.y > self.playerGoal.y) && (puck.y !== 0)) {
         self.updateScore(self.score.playerScore, self.score.playerScoreSprite);
+        self.nextGame(puck);
       } else if((puck.y < self.enemyGoal.y) && (puck.y !== 0)) {
         self.updateScore(self.score.enemyScore, self.score.enemyScoreSprite);
+        self.nextGame(puck);
       }
     });
+  },
+  nextGame: function(puck) {
+    puck.tweener.fadeIn(200).play();
+    var table_bg = this.table.background;
+    puck.x = table_bg.left + table_bg.width*0.3;
+    puck.y = table_bg.top + table_bg.height*0.5;
   },
   updateScore: function(score, scoreSprite) {
     score = (score >= MAX_SCORE) ? MAX_SCORE : score + 1;
