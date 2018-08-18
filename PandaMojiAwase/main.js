@@ -9,6 +9,16 @@ var SCREEN_WIDTH  = 960;
 var SCREEN_HEIGHT = 1280;
 
 /*
+ * title scene
+ */
+phina.define("TitleScene", {
+  superClass: "DisplayScene",
+  init: function() {
+    this.superInit();
+  },
+});
+
+/*
  * main function
  */
 phina.main(function() {
