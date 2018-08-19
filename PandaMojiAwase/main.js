@@ -19,6 +19,16 @@ phina.define("TitleScene", {
 });
 
 /*
+ * game scene
+ */
+phina.define("Gamecene", {
+  superClass: "DisplayScene",
+  init: function() {
+    this.superInit();
+  },
+});
+
+/*
  * main function
  */
 phina.main(function() {
