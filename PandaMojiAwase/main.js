@@ -5,8 +5,8 @@
 phina.globalize();
 
 // size information
-var SCREEN_WIDTH  = 960;
-var SCREEN_HEIGHT = 1280;
+var SCREEN_WIDTH  = 640;
+var SCREEN_HEIGHT = 1136;
 
 var ASSETS = {
   image: {
@@ -27,6 +27,15 @@ phina.define("TitleScene", {
   superClass: "DisplayScene",
   init: function() {
     this.superInit();
+    this.backgroundColor = 'skyblue';
+    var tap = Label({
+      text: 'ここをおしてね',
+      fontSize: 48,
+      fill: 'blue',
+    }).addChildTo(this).setPosition(this.gridX.center(), this.gridY.center());
+  },
+  onpointstart: function() {
+    this.exit();  
   },
 });
 
