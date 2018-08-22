@@ -7,9 +7,12 @@ phina.globalize();
 // size information
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 1136;
+var TITLE_PANDA_WIDTH   = 611;
+var TITLE_PANDA_HEIGHT  = 575;
 
 var ASSETS = {
   image: {
+    'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_panda.png',
     '50on': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/50on.png',
     'hayabusa': 'http://www.shinkalion.com/wp/wp-content/themes/shinkalion/image/anime/shinkarion/e5/img.png',
     'komachi': 'http://www.shinkalion.com/wp/wp-content/themes/shinkalion/image/anime/shinkarion/e6/img.png',
@@ -28,11 +31,23 @@ phina.define("TitleScene", {
   init: function() {
     this.superInit();
     this.backgroundColor = 'skyblue';
-    var tap = Label({
+
+    this.panda = Sprite('panda').addChildTo(this);
+    this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.7);
+    this.panda.width = TITLE_PANDA_WIDTH;
+    this.panda.height = TITLE_PANDA_HEIGHT;
+    this.panda.rotation = 10;
+    
+    Label({
       text: 'ここをおしてね',
       fontSize: 48,
-      fill: 'blue',
-    }).addChildTo(this).setPosition(this.gridX.center(), this.gridY.center());
+      fill: 'black',
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
+  },
+  update: function(app) {
+    if(app.frame % 30 === 0) {
+      this.panda.rotation *= -1;
+    }
   },
   onpointstart: function() {
     this.exit();  
