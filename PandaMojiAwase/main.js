@@ -16,7 +16,7 @@ var ASSETS = {
     'kagayaki': 'http://www.shinkalion.com/wp/wp-content/themes/shinkalion/image/anime/shinkarion/e7/img.png',
     'subaru': 'http://car-moby.jp/wp-content/uploads/2016/11/30b08ed771414ef523728b9bbb52116e.jpg',
     'honda': 'http://car-moby.jp/wp-content/uploads/2016/11/3b01fa6d218455c3e18ad496c02a9db8.jpg',
-    'mazda': 'http://car-moby.jp/media?id=237008&post=60984&num=8',
+    'mazda': 'http://car-moby.jp/wp-content/uploads/2016/11/d1d04c3bdb21d5208ad03ca11e1c90461.jpg',
   },
 };
 
