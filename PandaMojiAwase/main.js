@@ -8,6 +8,12 @@ phina.globalize();
 var SCREEN_WIDTH  = 960;
 var SCREEN_HEIGHT = 1280;
 
+var ASSETS = {
+  image: {
+    '50on': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/50on.png',
+  },
+};
+
 /*
  * title scene
  */
@@ -36,7 +42,7 @@ phina.main(function() {
   var app = GameApp({
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT,
-//    assets: ASSETS,
+    assets: ASSETS,
     startLabel: 'title',
     scenes: [
       {
