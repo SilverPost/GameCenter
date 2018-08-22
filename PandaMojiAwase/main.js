@@ -11,6 +11,12 @@ var SCREEN_HEIGHT = 1280;
 var ASSETS = {
   image: {
     '50on': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/50on.png',
+    'hayabusa': 'http://www.shinkalion.com/wp/wp-content/themes/shinkalion/image/anime/shinkarion/e5/img.png',
+    'komachi': 'http://www.shinkalion.com/wp/wp-content/themes/shinkalion/image/anime/shinkarion/e6/img.png',
+    'kagayaki': 'http://www.shinkalion.com/wp/wp-content/themes/shinkalion/image/anime/shinkarion/e7/img.png',
+    'subaru': 'http://car-moby.jp/wp-content/uploads/2016/11/30b08ed771414ef523728b9bbb52116e.jpg',
+    'honda': 'http://car-moby.jp/wp-content/uploads/2016/11/3b01fa6d218455c3e18ad496c02a9db8.jpg',
+    'mazda': 'http://car-moby.jp/media?id=237008&post=60984&num=8',
   },
 };
 
