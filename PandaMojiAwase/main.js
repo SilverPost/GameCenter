@@ -61,8 +61,22 @@ phina.define("Gamecene", {
   superClass: "DisplayScene",
   init: function() {
     this.superInit();
+    
   },
 });
+
+/*
+ * question
+ */
+phina.define("Question", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+  },
+  loading: function() {
+    
+  },
+})
 
 /*
  * main function
