@@ -63,21 +63,28 @@ phina.define("GameScene", {
     this.superInit();
     this.backgroundColor = "skyblue";
     // background
-    this.imageArea = RectangleShape().addChildTo(this);
-    this.imageArea.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.2);
-    this.imageArea.width = SCREEN_WIDTH;
-    this.imageArea.height = SCREEN_HEIGHT*0.4;
-    this.imageArea.fill = "#f5f5f5";
-    this.displayArea = RectangleShape().addChildTo(this);
-    this.displayArea.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
-    this.displayArea.width = SCREEN_WIDTH;
-    this.displayArea.height = SCREEN_HEIGHT*0.2;
-    this.displayArea.fill = "#f5f5f5";
-    this.inputArea = RectangleShape().addChildTo(this);
-    this.inputArea.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.8);
-    this.inputArea.width = SCREEN_WIDTH;
-    this.inputArea.height = SCREEN_HEIGHT*0.4;
-    this.inputArea.fill = "#f5f5f5";
+    this.imageArea = BackgroundArea().addChildTo(this);
+    this.imageArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.2, SCREEN_WIDTH, SCREEN_HEIGHT*0.4);
+    this.displayArea = BackgroundArea().addChildTo(this);
+    this.displayArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, SCREEN_WIDTH,SCREEN_HEIGHT*0.2);
+    this.inputArea = BackgroundArea().addChildTo(this);
+    this.inputArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.8, SCREEN_WIDTH, SCREEN_HEIGHT*0.4);
+  },
+});
+
+/*
+ * background of area
+ */
+phina.define("BackgroundArea", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(x, y, width, height) {
+    this.setPosition(x, y);
+    this.width = width;
+    this.height = height;
+    this.fill = '#f5f5f5';
   },
 });
 
