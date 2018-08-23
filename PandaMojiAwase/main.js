@@ -6,7 +6,7 @@ phina.globalize();
 
 // size information
 var SCREEN_WIDTH  = 640;
-var SCREEN_HEIGHT = 1136;
+var SCREEN_HEIGHT = 960;
 var TITLE_PANDA_WIDTH   = 611;
 var TITLE_PANDA_HEIGHT  = 575;
 
@@ -33,7 +33,7 @@ phina.define("TitleScene", {
     this.backgroundColor = 'skyblue';
 
     this.panda = Sprite('panda').addChildTo(this);
-    this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.7);
+    this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
     this.panda.width = TITLE_PANDA_WIDTH;
     this.panda.height = TITLE_PANDA_HEIGHT;
     this.panda.rotation = 10;
@@ -57,19 +57,35 @@ phina.define("TitleScene", {
 /*
  * game scene
  */
-phina.define("Gamecene", {
+phina.define("GameScene", {
   superClass: "DisplayScene",
   init: function() {
     this.superInit();
-    
+    this.backgroundColor = "skyblue";
+    // background
+    this.imageArea = RectangleShape().addChildTo(this);
+    this.imageArea.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.2);
+    this.imageArea.width = SCREEN_WIDTH;
+    this.imageArea.height = SCREEN_HEIGHT*0.4;
+    this.imageArea.fill = "#f5f5f5";
+    this.displayArea = RectangleShape().addChildTo(this);
+    this.displayArea.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    this.displayArea.width = SCREEN_WIDTH;
+    this.displayArea.height = SCREEN_HEIGHT*0.2;
+    this.displayArea.fill = "#f5f5f5";
+    this.inputArea = RectangleShape().addChildTo(this);
+    this.inputArea.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.8);
+    this.inputArea.width = SCREEN_WIDTH;
+    this.inputArea.height = SCREEN_HEIGHT*0.4;
+    this.inputArea.fill = "#f5f5f5";
   },
 });
 
 /*
- * question
+ * question images
  */
-phina.define("Question", {
-  superClass: "RectangleShape",
+phina.define("QuestionImage", {
+  superClass: "Sprite",
   init: function() {
     this.superInit();
   },
