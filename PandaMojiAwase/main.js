@@ -9,6 +9,8 @@ var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
 var TITLE_PANDA_WIDTH   = 611;
 var TITLE_PANDA_HEIGHT  = 575;
+var QUESTION_IMAGE_WIDTH   = 288;
+var QUESTION_IMAGE_HEIGHT  = 216;
 
 var ASSETS = {
   image: {
@@ -16,6 +18,19 @@ var ASSETS = {
     '50on': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/50on.png',
     'question': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/questions.png',
   },
+  spritesheet: {
+    'question_ss':
+    {
+      "frame": {
+        "width": QUESTION_IMAGE_WIDTH,
+        "height": QUESTION_IMAGE_HEIGHT,
+        "cols": 4,
+        "rows": 2,
+      },
+      "animations" : {
+      }
+    },
+  }
 };
 
 /*
@@ -64,6 +79,10 @@ phina.define("GameScene", {
     this.displayArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, SCREEN_WIDTH,SCREEN_HEIGHT*0.2);
     this.inputArea = BackgroundArea().addChildTo(this);
     this.inputArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.8, SCREEN_WIDTH, SCREEN_HEIGHT*0.4);
+    // question image
+    this.question_image = QuestionImage().addChildTo(this);
+    this.question_image.loading(this.imageArea);
+    this.question_image.frameIndex = 0;
   },
 });
 
@@ -89,10 +108,14 @@ phina.define("BackgroundArea", {
 phina.define("QuestionImage", {
   superClass: "Sprite",
   init: function() {
-    this.superInit();
+    this.superInit('question');
   },
-  loading: function() {
-    
+  loading: function(imageArea) {
+    this.setPosition(imageArea.x, imageArea.y);
+    this.width = QUESTION_IMAGE_WIDTH;
+    this.height = QUESTION_IMAGE_HEIGHT;
+    var ss = FrameAnimation('question_ss');
+    ss.attachTo(this);
   },
 })
 
