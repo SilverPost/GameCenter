@@ -11,6 +11,9 @@ var TITLE_PANDA_WIDTH   = 611;
 var TITLE_PANDA_HEIGHT  = 575;
 var QUESTION_IMAGE_WIDTH   = 288;
 var QUESTION_IMAGE_HEIGHT  = 216;
+var LETTER_RECT_WIDTH = 120;
+var LETTER_RECT_HEIGHT = 120;
+var LETTER_FONT_SIE = 64;
 
 // answer information
 var ANSWER_SET = [
@@ -89,6 +92,10 @@ phina.define("GameScene", {
     this.question_image = QuestionImage().addChildTo(this);
     this.question_image.loading(this.imageArea);
     this.question_image.showing(0); // for unit test
+    // display letter(s)
+    this.displayLettersGroup = DisplayElement().addChildTo(this);
+    this.displayLetters = DisplayLetters(this.displayLettersGroup);
+    this.displayLetters.loading(this.displayLettersGroup, this.displayArea);
   },
 });
 
@@ -116,8 +123,8 @@ phina.define("QuestionImage", {
   init: function() {
     this.superInit('question');
   },
-  loading: function(imageArea) {
-    this.setPosition(imageArea.x, imageArea.y);
+  loading: function(area) {
+    this.setPosition(area.x, area.y);
     this.width = QUESTION_IMAGE_WIDTH;
     this.height = QUESTION_IMAGE_HEIGHT;
     var ss = FrameAnimation('question_ss');
@@ -130,6 +137,50 @@ phina.define("QuestionImage", {
     var tween2 = Tweener().scaleTo(1.6, 1000);
     tween1.attachTo(this);
     tween2.attachTo(this);
+  },
+});
+
+/*
+ * letters inputed by user(s)
+ */
+phina.define("DisplayLetters", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(group, area) {
+    this.letters = [];
+    this.letter = DisplayLetter();
+    this.letter.loading(group, "？", area.x, area.y);
+  },
+});
+
+phina.define("DisplayLetter", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(group, letter, x, y) {
+    this.rect = this.rect(x, y);
+    this.rect.addChildTo(group);
+    this.letter = this.letter(letter, x, y);
+    this.letter.addChildTo(group);
+  },
+  rect: function(x, y) {
+    var rect = RectangleShape();
+    rect.setPosition(x, y);
+    rect.width = LETTER_RECT_WIDTH;
+    rect.height = LETTER_RECT_HEIGHT;
+    rect.fill = 'skyblue';
+    return rect;
+  },
+  letter: function(letter, x, y) {
+    var label = Label({
+      text:letter,
+      fontSize:LETTER_FONT_SIE,
+    });
+    label.setPosition(x, y);
+    return label;
   },
 });
 
