@@ -12,6 +12,12 @@ var TITLE_PANDA_HEIGHT  = 575;
 var QUESTION_IMAGE_WIDTH   = 288;
 var QUESTION_IMAGE_HEIGHT  = 216;
 
+// answer information
+var ANSWER_SET = [
+  ['はやぶさ'], ['こまち'], ['かがやき'], ['つばさ'], 
+  ['とよた'], ['ほんだ'], ['すばる'], ['まつだ']
+];
+
 var ASSETS = {
   image: {
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_panda.png',
