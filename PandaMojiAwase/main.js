@@ -82,7 +82,7 @@ phina.define("GameScene", {
     // question image
     this.question_image = QuestionImage().addChildTo(this);
     this.question_image.loading(this.imageArea);
-    this.question_image.frameIndex = 0;
+    this.question_image.showing(0); // for unit test
   },
 });
 
@@ -116,8 +116,16 @@ phina.define("QuestionImage", {
     this.height = QUESTION_IMAGE_HEIGHT;
     var ss = FrameAnimation('question_ss');
     ss.attachTo(this);
+    this.alpha = 0;
   },
-})
+  showing: function(index) {
+    this.frameIndex = index;
+    var tween1 = Tweener().fadeIn(1000);
+    var tween2 = Tweener().scaleTo(1.6, 1000);
+    tween1.attachTo(this);
+    tween2.attachTo(this);
+  },
+});
 
 /*
  * main function
