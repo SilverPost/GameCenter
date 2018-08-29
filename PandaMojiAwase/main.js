@@ -76,7 +76,8 @@ phina.define("TitleScene", {
     }
   },
   onpointstart: function() {
-    this.exit();  
+    SoundManager.play('ok');
+    this.exit();
   },
 });
 
