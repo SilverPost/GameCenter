@@ -55,6 +55,8 @@ phina.define("TitleScene", {
   init: function() {
     this.superInit();
     this.backgroundColor = 'skyblue';
+    
+    SoundManager.playMusic('bgm');
 
     this.panda = Sprite('panda').addChildTo(this);
     this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
