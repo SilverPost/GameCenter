@@ -17,8 +17,8 @@ var LETTER_FONT_SIE = 64;
 
 // answer information
 var ANSWER_SET = [
-  ['はやぶさ'], ['こまち'], ['かがやき'], ['つばさ'], 
-  ['とよた'], ['ほんだ'], ['すばる'], ['まつだ']
+  'はやぶさ', 'こまち', 'かがやき', 'つばさ', 
+  'とよた', 'ほんだ', 'すばる', 'まつだ'
 ];
 
 var ASSETS = {
@@ -100,7 +100,7 @@ phina.define("GameScene", {
     // display letter(s)
     this.displayLettersGroup = DisplayElement().addChildTo(this);
     this.displayLetters = DisplayLetters(this.displayLettersGroup);
-    this.displayLetters.loading(this.displayLettersGroup, this.displayArea);
+    this.displayLetters.loading(this.displayLettersGroup, this.displayArea, 0);
   },
 });
 
@@ -153,10 +153,15 @@ phina.define("DisplayLetters", {
   init: function() {
     this.superInit();
   },
-  loading: function(group, area) {
+  loading: function(group, area, index) {
+    var letter_num = ANSWER_SET[index].length;
     this.letters = [];
-    this.letter = DisplayLetter();
-    this.letter.loading(group, "？", area.x, area.y);
+    var x = area.left + area.width/letter_num/2;
+    for(var i=0; i<letter_num; i++) {
+      this.letters[i]  = DisplayLetter();
+      this.letters[i].loading(group, "？", x, area.y);
+      x += area.width/letter_num;
+    }
   },
 });
 
