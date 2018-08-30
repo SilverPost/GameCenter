@@ -13,7 +13,7 @@ var QUESTION_IMAGE_WIDTH   = 288;
 var QUESTION_IMAGE_HEIGHT  = 216;
 var LETTER_RECT_WIDTH = 120;
 var LETTER_RECT_HEIGHT = 120;
-var LETTER_FONT_SIE = 64;
+var LETTER_FONT_SIZE = 64;
 
 // answer information
 var ANSWER_SET = [
@@ -190,7 +190,7 @@ phina.define("DisplayLetter", {
   letter: function(letter, x, y) {
     var label = Label({
       text:letter,
-      fontSize:LETTER_FONT_SIE,
+      fontSize:LETTER_FONT_SIZE,
     });
     label.setPosition(x, y);
     return label;
