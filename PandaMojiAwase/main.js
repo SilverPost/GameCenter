@@ -57,7 +57,8 @@ phina.define("TitleScene", {
     this.backgroundColor = 'skyblue';
     
     SoundManager.playMusic('bgm');
-
+    SoundManager.setVolumeMusic(0.5);
+    
     this.panda = Sprite('panda').addChildTo(this);
     this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
     this.panda.width = TITLE_PANDA_WIDTH;
