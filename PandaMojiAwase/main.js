@@ -89,6 +89,8 @@ phina.define("GameScene", {
   init: function() {
     this.superInit();
     this.backgroundColor = "skyblue";
+    // question index
+    this.questionIndex = this.question_index();
     // background
     this.imageArea = BackgroundArea().addChildTo(this);
     this.imageArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.2, SCREEN_WIDTH, SCREEN_HEIGHT*0.4);
@@ -99,11 +101,18 @@ phina.define("GameScene", {
     // question image
     this.question_image = QuestionImage().addChildTo(this);
     this.question_image.loading(this.imageArea);
-    this.question_image.showing(0); // for unit test
+    this.question_image.showing(this.questionIndex);
     // display letter(s)
     this.displayLettersGroup = DisplayElement().addChildTo(this);
-    this.displayLetters = DisplayLetters(this.displayLettersGroup);
-    this.displayLetters.loading(this.displayLettersGroup, this.displayArea, 0);
+    this.displayLetters = DisplayLetters();
+    this.displayLetters.loading(this.displayLettersGroup, this.displayArea, this.questionIndex);
+    // input letter(s)
+    this.inputLettersGroup = DisplayElement().addChildTo(this);
+    this.inputLetters = InputLetters();
+    this.inputLetters.loading(this.inputLettersGroup, this.inputArea, this.questionIndex);
+  },
+  question_index: function() {
+    return Math.randint(0, ANSWER_SET.length-1);
   },
 });
 
@@ -149,6 +158,38 @@ phina.define("QuestionImage", {
 });
 
 /*
+ * letter panel
+ */
+phina.define("LetterPanel", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(group, letter, color, x, y) {
+    this.rect = this.rect(color, x, y);
+    this.rect.addChildTo(group);
+    this.letter = this.letter(letter, x, y);
+    this.letter.addChildTo(group);
+  },
+  rect: function(color, x, y) {
+    var rect = RectangleShape();
+    rect.setPosition(x, y);
+    rect.width = LETTER_RECT_WIDTH;
+    rect.height = LETTER_RECT_HEIGHT;
+    rect.fill = color;
+    return rect;
+  },
+  letter: function(letter, x, y) {
+    var label = Label({
+      text:letter,
+      fontSize:LETTER_FONT_SIZE,
+    });
+    label.setPosition(x, y);
+    return label;
+  },
+});
+
+/*
  * letters inputed by user(s)
  */
 phina.define("DisplayLetters", {
@@ -161,39 +202,51 @@ phina.define("DisplayLetters", {
     this.letters = [];
     var x = area.left + area.width/letter_num/2;
     for(var i=0; i<letter_num; i++) {
-      this.letters[i]  = DisplayLetter();
-      this.letters[i].loading(group, "？", x, area.y);
+      this.letters[i] = LetterPanel();
+      this.letters[i].loading(group, "？", '#c1cfff', x, area.y);
       x += area.width/letter_num;
     }
   },
 });
 
-phina.define("DisplayLetter", {
+/*
+ * panels to input answer letter(s)
+ */
+phina.define("InputLetters", {
   superClass: "RectangleShape",
   init: function() {
     this.superInit();
   },
-  loading: function(group, letter, x, y) {
-    this.rect = this.rect(x, y);
-    this.rect.addChildTo(group);
-    this.letter = this.letter(letter, x, y);
-    this.letter.addChildTo(group);
-  },
-  rect: function(x, y) {
-    var rect = RectangleShape();
-    rect.setPosition(x, y);
-    rect.width = LETTER_RECT_WIDTH;
-    rect.height = LETTER_RECT_HEIGHT;
-    rect.fill = 'skyblue';
-    return rect;
-  },
-  letter: function(letter, x, y) {
-    var label = Label({
-      text:letter,
-      fontSize:LETTER_FONT_SIZE,
-    });
-    label.setPosition(x, y);
-    return label;
+  loading: function(group, area, index) {
+    var cols = 4;
+    var rows = 2;
+    this.panels = [];
+
+    var x = area.left + area.width/cols/2;
+    var y = area.top + area.height/rows/2;
+    for(var i=0; i<rows; i++) {
+      for(var j=0; j<cols; j++) {
+        this.panels[j] = [];
+        this.panels[j][i] = LetterPanel();
+        this.panels[j][i].loading(group, "？", '#dbffe5', x, y);
+        x += area.width/rows/2;
+      }
+      x = area.left + area.width/cols/2;
+      y += area.height/rows;
+    }
+    
+/*    var x = area.left + area.width/(cols+1);
+    var y = area.top + area.height/(rows+1);
+    for(var i=0; i<rows; i++) {
+      for(var j=0; j<cols; j++) {
+        this.panels[j] = [];
+        this.panels[j][i] = LetterPanel();
+        this.panels[j][i].loading(group, "？", x, y);
+        x += area.width/(cols+1);
+      }
+      x = area.left + area.width/(cols+1);
+      y += area.height/(rows+1);
+    }*/
   },
 });
 
