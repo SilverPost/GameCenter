@@ -15,6 +15,13 @@ var LETTER_RECT_WIDTH = 120;
 var LETTER_RECT_HEIGHT = 120;
 var LETTER_FONT_SIZE = 64;
 
+// value information
+var TEXT_COLOR_TAPPED = 'lightgray';
+var TEXT_COLOR_UNTAPPED = 'black';
+var INPUT_RECT_COLOR_TAPPED = 'gray';
+var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
+var DISPLAY_RECT_COLOR = "#c1cfff";
+
 // answer information
 var ANSWER_SET = [
   'はやぶさ', 'こまち', 'かがやき', 'つばさ', 
@@ -204,7 +211,7 @@ phina.define("DisplayLetters", {
     var x = area.left + area.width/letter_num/2;
     for(var i=0; i<letter_num; i++) {
       this.letters[i] = LetterPanel();
-      this.letters[i].loading(group, "？", '#c1cfff', x, area.y);
+      this.letters[i].loading(group, "？", DISPLAY_RECT_COLOR, x, area.y);
       x += area.width/letter_num;
     }
   },
@@ -213,6 +220,46 @@ phina.define("DisplayLetters", {
 /*
  * panels to input answer letter(s)
  */
+phina.define("InputLetter", {
+  superClass: "LetterPanel",
+  init: function() {
+    this.superInit();
+    this.isTapped = false;
+  },
+  tap_action: function(group) {
+    this.inputButton = InputButton(this.rect.width, this.rect.height,
+                                   this.rect.x, this.rect.y).addChildTo(group);
+    var self = this;
+    this.inputButton.onpointend = function() {
+      self.tapped(self);
+    };
+  },
+  tapped: function(self) {
+      console.log('tapped');
+      self.rect.fill = INPUT_RECT_COLOR_TAPPED;
+      self.letter.fill = TEXT_COLOR_TAPPED;
+  },
+  untapped: function(self) {
+      console.log('untapped');
+      self.rect.fill = INPUT_RECT_COLOR_UNTAPPED;
+      self.letter.fill = TEXT_COLOR_UNTAPPED;
+  },
+});
+
+phina.define("InputButton", {
+  superClass: "Button",
+  init: function(w, h, x, y) {
+    this.superInit({
+      width: w,
+      height: h,
+      text: '',
+      strokeWidth: 0,
+    });
+    this.setPosition(x, y);
+    this.fill = 'transparent'
+  }
+});
+
 phina.define("InputLetters", {
   superClass: "RectangleShape",
   init: function() {
@@ -228,8 +275,9 @@ phina.define("InputLetters", {
     for(var i=0; i<rows; i++) {
       for(var j=0; j<cols; j++) {
         this.panels[j] = [];
-        this.panels[j][i] = LetterPanel();
-        this.panels[j][i].loading(group, "？", '#dbffe5', x, y);
+        this.panels[j][i] = InputLetter();
+        this.panels[j][i].loading(group, "？", INPUT_RECT_COLOR_UNTAPPED, x, y);
+        this.panels[j][i].tap_action(group);
         x += area.width/rows/2;
       }
       x = area.left + area.width/cols/2;
