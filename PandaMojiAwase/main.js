@@ -32,7 +32,8 @@ var ASSETS = {
   sound: {
     'bgm': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/sound/bgm.mp3',
     'ok': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/sound/correct.mp3',
-    'ng': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/sound/blip.mp3',
+    'ng': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/sound/boo.mp3',
+    'input': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/sound/input.mp3',
   },
   image: {
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_panda.png',
