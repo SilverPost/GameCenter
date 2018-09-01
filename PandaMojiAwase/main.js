@@ -235,19 +235,6 @@ phina.define("InputLetters", {
       x = area.left + area.width/cols/2;
       y += area.height/rows;
     }
-    
-/*    var x = area.left + area.width/(cols+1);
-    var y = area.top + area.height/(rows+1);
-    for(var i=0; i<rows; i++) {
-      for(var j=0; j<cols; j++) {
-        this.panels[j] = [];
-        this.panels[j][i] = LetterPanel();
-        this.panels[j][i].loading(group, "？", x, y);
-        x += area.width/(cols+1);
-      }
-      x = area.left + area.width/(cols+1);
-      y += area.height/(rows+1);
-    }*/
   },
 });
 
