@@ -32,7 +32,6 @@ var HIRAGANA = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', '
                 'ど', 'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 
                 'ぽ', 'ゃ', 'ゅ', 'ょ', 'っ'];
 
-
 // answer information
 var ANSWER_SET = [
   'はやぶさ', 'こまち', 'かがやき', 'つばさ', 
@@ -236,6 +235,9 @@ phina.define("InputLetter", {
   superClass: "LetterPanel",
   init: function() {
     this.superInit();
+  },
+  loading: function(group, letter, color, x, y) {
+    this.superMethod('loading', group, letter, color, x, y);
     this.isTapped = false;
   },
   tap_action: function(group) {
@@ -247,14 +249,13 @@ phina.define("InputLetter", {
     };
   },
   tapped: function(self) {
-      console.log('tapped');
-      self.rect.fill = INPUT_RECT_COLOR_TAPPED;
-      self.letter.fill = TEXT_COLOR_TAPPED;
+    SoundManager.play('input');
+    self.rect.fill = INPUT_RECT_COLOR_TAPPED;
+    self.letter.fill = TEXT_COLOR_TAPPED;
   },
   untapped: function(self) {
-      console.log('untapped');
-      self.rect.fill = INPUT_RECT_COLOR_UNTAPPED;
-      self.letter.fill = TEXT_COLOR_UNTAPPED;
+    self.rect.fill = INPUT_RECT_COLOR_UNTAPPED;
+    self.letter.fill = TEXT_COLOR_UNTAPPED;
   },
 });
 
@@ -268,8 +269,8 @@ phina.define("InputButton", {
       strokeWidth: 0,
     });
     this.setPosition(x, y);
-    this.fill = 'transparent'
-  }
+    this.fill = 'transparent';
+  },
 });
 
 phina.define("InputLetters", {
@@ -281,20 +282,52 @@ phina.define("InputLetters", {
     var cols = 4;
     var rows = 2;
     this.panels = [];
-
+    this.already_set_answer = [];
+    for(var j=0; j<cols; j++) {
+      this.panels[j] = [];
+      this.already_set_answer[j] = [];
+    }
+    this.answer_letters = ANSWER_SET[index].split('');
+    
     var x = area.left + area.width/cols/2;
     var y = area.top + area.height/rows/2;
     for(var i=0; i<rows; i++) {
       for(var j=0; j<cols; j++) {
-        this.panels[j] = [];
         this.panels[j][i] = InputLetter();
-        this.panels[j][i].loading(group, "？", INPUT_RECT_COLOR_UNTAPPED, x, y);
+        this.panels[j][i].loading(group, this.random_hiragana(), 
+                                  INPUT_RECT_COLOR_UNTAPPED, x, y);
         this.panels[j][i].tap_action(group);
         x += area.width/rows/2;
       }
       x = area.left + area.width/cols/2;
       y += area.height/rows;
     }
+    this.set_answer_letters(index, cols, rows);
+  },
+  random_hiragana: function() {
+    return HIRAGANA[Math.randint(0, HIRAGANA.length-1)];
+  },
+  set_answer_letters: function(index, cols, rows) {
+    for(var i=0; i<rows; i++) {
+      for(var j=0; j<cols; j++) {
+        this.already_set_answer[j][i] = false;
+      }
+    }
+    for(var k=0; k<this.answer_letters.length; k++) {
+      this.set_answer_letter(k, cols, rows);
+    }
+  },
+  set_answer_letter: function(k, cols, rows) {
+    var j_index = Math.randint(0, cols-1);
+    var i_index = Math.randint(0, rows-1);
+    console.log(i_index, j_index);
+    console.log(this.already_set_answer[j_index][i_index]);
+    if(this.already_set_answer[j_index][i_index] == true) {
+      this.set_answer_letter(k, cols, rows);
+      return;
+    }
+    this.panels[j_index][i_index].letter.text = this.answer_letters[k];
+    this.already_set_answer[j_index][i_index] = true;
   },
 });
 
