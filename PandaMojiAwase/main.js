@@ -320,8 +320,6 @@ phina.define("InputLetters", {
   set_answer_letter: function(k, cols, rows) {
     var j_index = Math.randint(0, cols-1);
     var i_index = Math.randint(0, rows-1);
-    console.log(i_index, j_index);
-    console.log(this.already_set_answer[j_index][i_index]);
     if(this.already_set_answer[j_index][i_index] == true) {
       this.set_answer_letter(k, cols, rows);
       return;
