@@ -137,6 +137,9 @@ phina.define("GameScene", {
     return Math.randint(0, ANSWER_SET.length-1);
   },
   update: function() {
+    this.update_display_letters();
+  },
+  update_display_letters: function() {
     for(var i=0; i<DISPLAY_LETTERS.length; i++) {
       this.displayLetters.insertLetter(i, DISPLAY_LETTERS[i]);
     }
