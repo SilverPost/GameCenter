@@ -21,6 +21,8 @@ var TEXT_COLOR_UNTAPPED = 'black';
 var INPUT_RECT_COLOR_TAPPED = 'gray';
 var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
 var DISPLAY_RECT_COLOR = "#c1cfff";
+var INPUT_PANEL_COLS = 4;
+var INPUT_PANEL_ROWS = 2;
 
 // hiragana list
 var HIRAGANA = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 
@@ -37,6 +39,7 @@ var ANSWER_SET = [
   'はやぶさ', 'こまち', 'かがやき', 'つばさ', 
   'とよた', 'ほんだ', 'すばる', 'まつだ'
 ];
+var DISPLAY_LETTERS = [];
 
 var ASSETS = {
   sound: {
@@ -133,6 +136,11 @@ phina.define("GameScene", {
   question_index: function() {
     return Math.randint(0, ANSWER_SET.length-1);
   },
+  update: function() {
+    for(var i=0; i<DISPLAY_LETTERS.length; i++) {
+      this.displayLetters.insertLetter(i, DISPLAY_LETTERS[i]);
+    }
+  },
 });
 
 /*
@@ -216,15 +224,19 @@ phina.define("DisplayLetters", {
   init: function() {
     this.superInit();
   },
-  loading: function(group, area, index) {
-    var letter_num = ANSWER_SET[index].length;
+  loading: function(group, area, answer_index) {
+    var letter_num = ANSWER_SET[answer_index].length;
     this.letters = [];
     var x = area.left + area.width/letter_num/2;
     for(var i=0; i<letter_num; i++) {
       this.letters[i] = LetterPanel();
       this.letters[i].loading(group, "？", DISPLAY_RECT_COLOR, x, area.y);
+      var self = this;
       x += area.width/letter_num;
     }
+  },
+  insertLetter: function(index, letter) {
+    this.letters[index].letter.text = letter;
   },
 });
 
@@ -238,7 +250,6 @@ phina.define("InputLetter", {
   },
   loading: function(group, letter, color, x, y) {
     this.superMethod('loading', group, letter, color, x, y);
-    this.isTapped = false;
   },
   tap_action: function(group) {
     this.inputButton = InputButton(this.rect.width, this.rect.height,
@@ -252,6 +263,7 @@ phina.define("InputLetter", {
     SoundManager.play('input');
     self.rect.fill = INPUT_RECT_COLOR_TAPPED;
     self.letter.fill = TEXT_COLOR_TAPPED;
+    DISPLAY_LETTERS.push(self.letter.text);
   },
   untapped: function(self) {
     self.rect.fill = INPUT_RECT_COLOR_UNTAPPED;
@@ -279,49 +291,47 @@ phina.define("InputLetters", {
     this.superInit();
   },
   loading: function(group, area, index) {
-    var cols = 4;
-    var rows = 2;
     this.panels = [];
     this.already_set_answer = [];
-    for(var j=0; j<cols; j++) {
+    for(var j=0; j<INPUT_PANEL_COLS; j++) {
       this.panels[j] = [];
       this.already_set_answer[j] = [];
     }
     this.answer_letters = ANSWER_SET[index].split('');
     
-    var x = area.left + area.width/cols/2;
-    var y = area.top + area.height/rows/2;
-    for(var i=0; i<rows; i++) {
-      for(var j=0; j<cols; j++) {
+    var x = area.left + area.width/INPUT_PANEL_COLS/2;
+    var y = area.top + area.height/INPUT_PANEL_ROWS/2;
+    for(var i=0; i<INPUT_PANEL_ROWS; i++) {
+      for(var j=0; j<INPUT_PANEL_COLS; j++) {
         this.panels[j][i] = InputLetter();
         this.panels[j][i].loading(group, this.random_hiragana(), 
                                   INPUT_RECT_COLOR_UNTAPPED, x, y);
         this.panels[j][i].tap_action(group);
-        x += area.width/rows/2;
+        x += area.width/INPUT_PANEL_ROWS/2;
       }
-      x = area.left + area.width/cols/2;
-      y += area.height/rows;
+      x = area.left + area.width/INPUT_PANEL_COLS/2;
+      y += area.height/INPUT_PANEL_ROWS;
     }
-    this.set_answer_letters(index, cols, rows);
+    this.set_answer_letters(index);
   },
   random_hiragana: function() {
     return HIRAGANA[Math.randint(0, HIRAGANA.length-1)];
   },
-  set_answer_letters: function(index, cols, rows) {
-    for(var i=0; i<rows; i++) {
-      for(var j=0; j<cols; j++) {
+  set_answer_letters: function(index) {
+    for(var i=0; i<INPUT_PANEL_ROWS; i++) {
+      for(var j=0; j<INPUT_PANEL_COLS; j++) {
         this.already_set_answer[j][i] = false;
       }
     }
     for(var k=0; k<this.answer_letters.length; k++) {
-      this.set_answer_letter(k, cols, rows);
+      this.set_answer_letter(k);
     }
   },
-  set_answer_letter: function(k, cols, rows) {
-    var j_index = Math.randint(0, cols-1);
-    var i_index = Math.randint(0, rows-1);
+  set_answer_letter: function(k) {
+    var j_index = Math.randint(0, INPUT_PANEL_COLS-1);
+    var i_index = Math.randint(0, INPUT_PANEL_ROWS-1);
     if(this.already_set_answer[j_index][i_index] == true) {
-      this.set_answer_letter(k, cols, rows);
+      this.set_answer_letter(k);
       return;
     }
     this.panels[j_index][i_index].letter.text = this.answer_letters[k];
