@@ -138,14 +138,56 @@ phina.define("GameScene", {
   },
   update: function() {
     this.update_display_letters();
+    this.check_answer();
   },
   update_display_letters: function() {
     for(var i=0; i<DISPLAY_LETTERS.length; i++) {
-      this.displayLetters.insertLetter(i, DISPLAY_LETTERS[i]);
+      this.displayLetters.insert_letter(i, DISPLAY_LETTERS[i]);
     }
   },
+  check_answer: function() {
+    if(DISPLAY_LETTERS.length != ANSWER_SET[this.questionIndex].length) {
+      return;
+    }
+    if(this.displayLetters.is_correct_answer(this.questionIndex)) {
+      this.correct();
+    } else {
+      this.incorrect();
+    }
+  },
+  correct: function() {
+    SoundManager.play('ok');
+    this.restart();
+    this.exit();
+  },
+  incorrect: function() {
+    SoundManager.play('ng');
+    this.restart();
+    this.exit();
+  },
+  restart: function() {
+    DISPLAY_LETTERS = [];
+  }
 });
 
+/*
+ * result scene
+ */
+phina.define("ResultScene", {
+  superClass: "DisplayScene",
+  init: function() {
+    this.superInit();
+    
+    Label({
+      text: 'つぎのもんだい',
+      fontSize: 48,
+      fill: 'black',
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
+  },
+  onpointstart: function() {
+    this.exit();
+  },
+});
 /*
  * background of area
  */
@@ -238,8 +280,15 @@ phina.define("DisplayLetters", {
       x += area.width/letter_num;
     }
   },
-  insertLetter: function(index, letter) {
+  insert_letter: function(index, letter) {
     this.letters[index].letter.text = letter;
+  },
+  is_correct_answer: function(answer_index) {
+    var display_string = '';
+    for(var i=0; i<DISPLAY_LETTERS.length; i++) {
+      display_string += this.letters[i].letter.text;
+    }
+    return (display_string == ANSWER_SET[answer_index]) ? true : false;
   },
 });
 
@@ -361,7 +410,12 @@ phina.main(function() {
       {
         label: "game",
         className: "GameScene",
-        nextLabel: "title",
+        nextLabel: "result",
+      },
+      {
+        label: "result",
+        className: "ResultScene",
+        nextLabel: "game",
       },
     ]
   });
