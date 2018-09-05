@@ -157,15 +157,15 @@ phina.define("GameScene", {
   },
   correct: function() {
     SoundManager.play('ok');
-    this.restart();
+    this.reset_question_info();
     this.exit();
   },
   incorrect: function() {
     SoundManager.play('ng');
-    this.restart();
+    this.reset_question_info();
     this.exit();
   },
-  restart: function() {
+  reset_question_info: function() {
     DISPLAY_LETTERS = [];
   }
 });
