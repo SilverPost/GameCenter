@@ -7,6 +7,8 @@ phina.globalize();
 // size information
 var SCREEN_WIDTH  = 640;
 var SCREEN_HEIGHT = 960;
+var TITLE_LOGO_WIDTH   = 600;
+var TITLE_LOGO_HEIGHT  = 192;
 var TITLE_PANDA_WIDTH   = 611;
 var TITLE_PANDA_HEIGHT  = 575;
 var QUESTION_IMAGE_WIDTH   = 288;
@@ -49,8 +51,8 @@ var ASSETS = {
     'input': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/sound/input.mp3',
   },
   image: {
+    'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_logo.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_panda.png',
-    '50on': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/50on.png',
     'question': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/questions.png',
   },
   spritesheet: {
@@ -80,6 +82,11 @@ phina.define("TitleScene", {
     SoundManager.playMusic('bgm');
     SoundManager.setVolumeMusic(0.5);
     
+    this.logo = Sprite('logo').addChildTo(this);
+    this.logo.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.25);
+    this.logo.width = TITLE_LOGO_WIDTH;
+    this.logo.height = TITLE_LOGO_HEIGHT;
+    
     this.panda = Sprite('panda').addChildTo(this);
     this.panda.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
     this.panda.width = TITLE_PANDA_WIDTH;
@@ -90,9 +97,14 @@ phina.define("TitleScene", {
       text: 'ここをおしてね',
       fontSize: 48,
       fill: 'black',
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.45);
   },
   update: function(app) {
+    this.logo.tweener
+      .scaleTo(1.04, 1000)
+      .scaleTo(0.98, 1000)
+      .play();
+
     if(app.frame % 30 === 0) {
       this.panda.rotation *= -1;
     }
@@ -188,6 +200,7 @@ phina.define("ResultScene", {
     this.exit();
   },
 });
+
 /*
  * background of area
  */
