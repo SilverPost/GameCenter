@@ -483,7 +483,7 @@ phina.main(function() {
   });
 
   // enable FPS
-  app.enableStats();
+//  app.enableStats();
   
   app.run();
 });
