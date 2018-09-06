@@ -16,6 +16,8 @@ var QUESTION_IMAGE_HEIGHT  = 216;
 var LETTER_RECT_WIDTH = 120;
 var LETTER_RECT_HEIGHT = 120;
 var LETTER_FONT_SIZE = 64;
+var RESULT_IMAGE_WIDTH = 600;
+var RESULT_IMAGE_HEIGHT = 252;
 
 // value information
 var TEXT_COLOR_TAPPED = 'lightgray';
@@ -54,7 +56,7 @@ var ASSETS = {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_logo.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_panda.png',
     'question': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/questions.png',
-    'answer': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/answer.png',
+    'result': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/answer.png',
   },
   spritesheet: {
     'question_ss':
@@ -64,6 +66,17 @@ var ASSETS = {
         "height": QUESTION_IMAGE_HEIGHT,
         "cols": 4,
         "rows": 2,
+      },
+      "animations" : {
+      }
+    },
+    'result_ss':
+    {
+      "frame": {
+        "width": RESULT_IMAGE_WIDTH,
+        "height": RESULT_IMAGE_HEIGHT,
+        "cols": 2,
+        "rows": 1,
       },
       "animations" : {
       }
@@ -171,12 +184,16 @@ phina.define("GameScene", {
   correct: function() {
     SoundManager.play('ok');
     this.reset_question_info();
-    this.exit();
+    this.exit({
+      result: 'correct',
+    });
   },
   incorrect: function() {
     SoundManager.play('ng');
     this.reset_question_info();
-    this.exit();
+    this.exit({
+      result: 'incorrect',
+    });
   },
   reset_question_info: function() {
     DISPLAY_LETTERS = [];
@@ -188,14 +205,37 @@ phina.define("GameScene", {
  */
 phina.define("ResultScene", {
   superClass: "DisplayScene",
-  init: function() {
-    this.superInit();
-    
+  init: function(param) {
+    this.superInit(param);
+    this.resultSprite = this.result_sprite(param);
+    this.resultSprite.addChildTo(this);
+    this.result_sprite_animation();
     Label({
-      text: 'つぎのもんだい',
+      text: 'つぎのもんだい にすすむ',
       fontSize: 48,
       fill: 'black',
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
+  },
+  result_sprite: function(param) {
+    var result_image = Sprite('result');
+    result_image.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
+    result_image.width = RESULT_IMAGE_WIDTH;
+    result_image.height = RESULT_IMAGE_HEIGHT;
+    result_image.alpha = 0;
+    var ss = FrameAnimation('result_ss');
+    ss.attachTo(this);
+    var image_index = this.is_correct(param.result) ? 0 : 1;
+    result_image.frameIndex = image_index;
+    return result_image;
+  },
+  result_sprite_animation: function() {
+    var tween1 = Tweener().fadeIn(1000);
+    var tween2 = Tweener().scaleTo(1.1, 1000);
+    tween1.attachTo(this.resultSprite);
+    tween2.attachTo(this.resultSprite);
+  },
+  is_correct: function(result) {
+    return (result == 'correct') ? true : false;
   },
   onpointstart: function() {
     this.exit();
