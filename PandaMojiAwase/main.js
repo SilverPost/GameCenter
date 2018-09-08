@@ -481,9 +481,6 @@ phina.main(function() {
     s.play().stop();
     app.domElement.removeEventListener('touchend', dummy);
   });
-
-  // enable FPS
-//  app.enableStats();
   
   app.run();
 });
