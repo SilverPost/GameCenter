@@ -67,7 +67,7 @@ var ASSETS = {
         "width": QUESTION_IMAGE_WIDTH,
         "height": QUESTION_IMAGE_HEIGHT,
         "cols": 4,
-        "rows": 2,
+        "rows": 4,
       },
       "animations" : {
       }
