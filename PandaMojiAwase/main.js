@@ -28,6 +28,9 @@ var DISPLAY_RECT_COLOR = "#c1cfff";
 var INPUT_PANEL_COLS = 4;
 var INPUT_PANEL_ROWS = 2;
 
+// font information
+var FONT_FAMILY = "Verdana, Roboto, 'Droid Sans', 'Hiragino Kaku Gothic ProN', sans-serif";
+
 // hiragana list
 var HIRAGANA = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 
                 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 
@@ -36,7 +39,7 @@ var HIRAGANA = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', '
                 'る', 'れ', 'ろ', 'わ', 'を', 'ん', 'が', 'ぎ', 'ぐ', 'げ', 
                 'ご', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'だ', 'ぢ', 'づ', 'で', 
                 'ど', 'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 
-                'ぽ', 'ゃ', 'ゅ', 'ょ', 'っ', 'ー'];
+                'ぽ', 'ゃ', 'ゅ', 'ょ', 'っ', 'ぁ', 'ぃ', 'ぅ', 'ぇ', 'ぉ'];
 
 // answer information
 var ANSWER_SET = [
@@ -113,6 +116,7 @@ phina.define("TitleScene", {
       text: 'ここをおしてね',
       fontSize: 48,
       fill: 'black',
+      fontFamily: FONT_FAMILY,
     }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.45);
   },
   update: function(app) {
@@ -216,6 +220,7 @@ phina.define("ResultScene", {
       text: 'つぎのもんだい にすすむ',
       fontSize: 48,
       fill: 'black',
+      fontFamily: FONT_FAMILY,
     }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
   },
   result_sprite: function(param) {
@@ -311,6 +316,7 @@ phina.define("LetterPanel", {
     var label = Label({
       text:letter,
       fontSize:LETTER_FONT_SIZE,
+      fontFamily: FONT_FAMILY,
     });
     label.setPosition(x, y);
     return label;
