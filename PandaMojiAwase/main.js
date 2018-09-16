@@ -189,21 +189,16 @@ phina.define("GameScene", {
   },
   correct: function() {
     SoundManager.play('ok');
-    this.reset_question_info();
     this.exit({
       result: 'correct',
     });
   },
   incorrect: function() {
     SoundManager.play('ng');
-    this.reset_question_info();
     this.exit({
       result: 'incorrect',
     });
   },
-  reset_question_info: function() {
-    DISPLAY_LETTERS = [];
-  }
 });
 
 /*
@@ -244,7 +239,11 @@ phina.define("ResultScene", {
   is_correct: function(result) {
     return (result == 'correct') ? true : false;
   },
+  reset_question_info: function() {
+    DISPLAY_LETTERS = [];
+  },
   onpointstart: function() {
+    this.reset_question_info();
     this.exit();
   },
 });
