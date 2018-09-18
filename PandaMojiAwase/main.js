@@ -165,12 +165,12 @@ phina.define("GameScene", {
     this.inputLetters = InputLetters();
     this.inputLetters.loading(this.inputLettersGroup, this.inputArea, this.questionIndex);
   },
-  question_index: function() {
-    return Math.randint(0, ANSWER_SET.length-1);
-  },
   update: function() {
     this.update_display_letters();
     this.check_answer();
+  },
+  question_index: function() {
+    return Math.randint(0, ANSWER_SET.length-1);
   },
   update_display_letters: function() {
     for(var i=0; i<DISPLAY_LETTERS.length; i++) {
@@ -191,12 +191,14 @@ phina.define("GameScene", {
     SoundManager.play('ok');
     this.exit({
       result: 'correct',
+      questionIndex: this.questionIndex,
     });
   },
   incorrect: function() {
     SoundManager.play('ng');
     this.exit({
       result: 'incorrect',
+      questionIndex: this.questionIndex,
     });
   },
 });
@@ -208,9 +210,21 @@ phina.define("ResultScene", {
   superClass: "DisplayScene",
   init: function(param) {
     this.superInit(param);
+    
+    // result image
     this.resultSprite = this.result_sprite(param);
     this.resultSprite.addChildTo(this);
     this.result_sprite_animation();
+    
+    // display area
+    this.displayArea = BackgroundArea().addChildTo(this);
+    this.displayArea.loading(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, SCREEN_WIDTH,SCREEN_HEIGHT*0.2);
+    this.displayArea.fill = 'transparent';
+    this.displayArea.stroke = 'transparent';
+    this.displayLettersGroup = DisplayElement().addChildTo(this);
+    this.displayLetters = DisplayLetters();
+    this.displayLetters.loading(this.displayLettersGroup, this.displayArea, param.questionIndex);
+    
     Label({
       text: 'つぎのもんだい にすすむ',
       fontSize: 48,
@@ -218,9 +232,12 @@ phina.define("ResultScene", {
       fontFamily: FONT_FAMILY,
     }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
   },
+  update: function() {
+    this.update_display_letters();
+  },
   result_sprite: function(param) {
     var result_image = Sprite('result');
-    result_image.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.4);
+    result_image.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.25);
     result_image.width = RESULT_IMAGE_WIDTH;
     result_image.height = RESULT_IMAGE_HEIGHT;
     result_image.alpha = 0;
@@ -238,6 +255,11 @@ phina.define("ResultScene", {
   },
   is_correct: function(result) {
     return (result == 'correct') ? true : false;
+  },
+  update_display_letters: function() {
+    for(var i=0; i<DISPLAY_LETTERS.length; i++) {
+      this.displayLetters.insert_letter(i, DISPLAY_LETTERS[i]);
+    }
   },
   reset_question_info: function() {
     DISPLAY_LETTERS = [];
@@ -336,7 +358,11 @@ phina.define("DisplayLetters", {
     var x = area.left + area.width/letter_num/2;
     for(var i=0; i<letter_num; i++) {
       this.letters[i] = LetterPanel();
-      this.letters[i].loading(group, "？", DISPLAY_RECT_COLOR, x, area.y);
+      if(DISPLAY_LETTERS.length == 0) {
+        this.letters[i].loading(group, "？", DISPLAY_RECT_COLOR, x, area.y);
+      } else {
+        this.letters[i].loading(group, DISPLAY_LETTERS[i], DISPLAY_RECT_COLOR, x, area.y);
+      }
       var self = this;
       x += area.width/letter_num;
     }
