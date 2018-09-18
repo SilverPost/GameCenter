@@ -130,6 +130,7 @@ phina.define("TitleScene", {
     }
   },
   onpointstart: function() {
+    SoundManager.setVolumeMusic(0.3);
     SoundManager.play('ok');
     this.exit();
   },
