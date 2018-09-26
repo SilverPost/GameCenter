@@ -27,7 +27,7 @@ var ASSETS = {
   image: {
     'logo': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/title_logo.png',
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/title_panda.png',
-    'clock': 'https://unilab.gbb60166.jp/tokei/none.png',
+    'clock': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/clock.png',
   },
 };
 
