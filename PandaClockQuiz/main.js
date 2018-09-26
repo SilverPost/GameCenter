@@ -85,6 +85,7 @@ phina.define("GameScene", {
   superClass: "DisplayScene",
   init: function() {
     this.superInit();
+    this.backgroundColor = '#f5f5f5';
     this.loading();
   },
   loading: function() {
