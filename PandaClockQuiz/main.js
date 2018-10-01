@@ -15,6 +15,9 @@ var CLOCK_BG_WIDTH  = SCREEN_WIDTH*0.6;
 var CLOCK_BG_HEIGHT = CLOCK_BG_WIDTH/1204*1188;
 var NEEDLE_WIDTH  = 63;
 var NEEDLE_HEIGHT = 1090;
+var NUMBER_RECT_WIDTH = 100;
+var NUMBER_RECT_HEIGHT = 120;
+var NUMBER_FONT_SIZE = 64;
 
 // font information
 var FONT_FAMILY = "Verdana, Roboto, 'Droid Sans', 'Hiragino Kaku Gothic ProN', sans-serif";
@@ -109,6 +112,10 @@ phina.define("GameScene", {
     this.clock.loading(this);
     // set hands (for debug)
     this.clock.set_needles(3, 0);
+    // display times
+    this.timePanelGroup = DisplayElement().addChildTo(this);
+    this.timePanels = TimePanels();
+    this.timePanels.loading(this.timePanelGroup);
   },
 });
 
@@ -169,6 +176,63 @@ phina.define("NeedleImage", {
     this.scaleX = 0.34;
     this.scaleY = 0.34;
   }
+});
+
+/*
+ * time panels
+ */
+phina.define("TimePanels", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+    this.fill = 'transparent';
+    this.stroke = 'transparent';
+  },
+  loading: function(group) {
+    var initNum;
+    this.panels = [];
+    for(var i=0; i<5; i++) {
+      this.panels[i] = NumberPanel().addChildTo(group);
+      initNum = (i === 2) ? '：' : '?';
+      this.panels[i].loading(group, initNum, 'white', 
+                             Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
+    }
+  }
+});
+
+/*
+ * number panel
+ */
+phina.define("NumberPanel", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+    this.fill = 'transparent';
+    this.stroke = 'transparent';
+  },
+  loading: function(group, num, color, x, y) {
+    this.rect = this.rect(color, x, y);
+    this.rect.addChildTo(group);
+    this.number = this.number(num, x, y);
+    this.number.addChildTo(group);
+  },
+  rect: function(color, x, y) {
+    var rect = RectangleShape();
+    rect.setPosition(x, y);
+    rect.width = NUMBER_RECT_WIDTH;
+    rect.height = NUMBER_RECT_HEIGHT;
+    rect.fill = color;
+    return rect;
+  },
+  number: function(num, x, y) {
+    var numLabel = Label({
+      text:num,
+      fontSize:NUMBER_FONT_SIZE,
+      fontFamily: FONT_FAMILY,
+    });
+    numLabel.setPosition(x, y);
+    return numLabel;
+  },
 });
 
 /*
