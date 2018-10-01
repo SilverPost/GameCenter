@@ -19,6 +19,15 @@ var NUMBER_RECT_WIDTH = 100;
 var NUMBER_RECT_HEIGHT = 120;
 var NUMBER_FONT_SIZE = 64;
 
+// value information
+var TEXT_COLOR_TAPPED = 'lightgray';
+var TEXT_COLOR_UNTAPPED = 'black';
+var INPUT_RECT_COLOR_TAPPED = 'white';
+var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
+
+// display time
+var DISPLAY_TIME = [];
+
 // font information
 var FONT_FAMILY = "Verdana, Roboto, 'Droid Sans', 'Hiragino Kaku Gothic ProN', sans-serif";
 
@@ -225,6 +234,7 @@ phina.define("InputPanels", {
         panel_x = Math.round(SCREEN_WIDTH/6*(j+1));
         panel_y = Math.round((SCREEN_HEIGHT*0.74)+(NUMBER_RECT_HEIGHT*i));
         this.panels[i][j].loading(group, i*5+j, '#dbffe5', panel_x, panel_y);
+        this.panels[i][j].tap_action(group);
       }
     }
   }
@@ -251,13 +261,25 @@ phina.define("InputPanel", {
   },
   tapped: function(self) {
     SoundManager.play('input');
-    self.rect.fill = INPUT_RECT_COLOR_TAPPED;
-    self.letter.fill = TEXT_COLOR_TAPPED;
-    DISPLAY_LETTERS.push(self.letter.text);
-  },
-  untapped: function(self) {
-    self.rect.fill = INPUT_RECT_COLOR_UNTAPPED;
-    self.letter.fill = TEXT_COLOR_UNTAPPED;
+    
+    self.rect.tweener.to({
+      scaleX: 1.1,
+      scaleY: 1.1,
+    },100)
+    .set({
+      fill: INPUT_RECT_COLOR_TAPPED,
+    })
+    .wait(100)
+    .to({
+      scaleX: 1,
+      scaleY: 1,
+    },100)
+    .set({
+      fill: INPUT_RECT_COLOR_UNTAPPED,
+    })
+    .play();
+    
+    DISPLAY_TIME.push(self.number.text);
   },
 });
 
