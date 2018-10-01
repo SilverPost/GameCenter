@@ -116,6 +116,10 @@ phina.define("GameScene", {
     this.timePanelGroup = DisplayElement().addChildTo(this);
     this.timePanels = TimePanels();
     this.timePanels.loading(this.timePanelGroup);
+    // input panels
+    this.inputPanelGroup = DisplayElement().addChildTo(this);
+    this.inputPanels = InputPanels();
+    this.inputPanels.loading(this.inputPanelGroup);
   },
 });
 
@@ -198,6 +202,77 @@ phina.define("TimePanels", {
                              Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
     }
   }
+});
+
+/*
+ * input panels
+ */
+phina.define("InputPanels", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+    this.fill = 'transparent';
+    this.stroke = 'transparent';
+  },
+  loading: function(group) {
+    this.panels = [];
+    var panel_x
+    var panel_y;
+    for(var i=0; i<2; i++) {
+      for(var j=0; j<5; j++) {
+        this.panels[i] = [];
+        this.panels[i][j] = InputPanel().addChildTo(group);
+        panel_x = Math.round(SCREEN_WIDTH/6*(j+1));
+        panel_y = Math.round((SCREEN_HEIGHT*0.74)+(NUMBER_RECT_HEIGHT*i));
+        this.panels[i][j].loading(group, i*5+j, '#dbffe5', panel_x, panel_y);
+      }
+    }
+  }
+});
+
+/*
+ * panel to input answer numbers
+ */
+phina.define("InputPanel", {
+  superClass: "NumberPanel",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(group, num, color, x, y) {
+    this.superMethod('loading', group, num, color, x, y);
+  },
+  tap_action: function(group) {
+    this.inputButton = InputButton(this.rect.width, this.rect.height,
+                                   this.rect.x, this.rect.y).addChildTo(group);
+    var self = this;
+    this.inputButton.onpointend = function() {
+      self.tapped(self);
+    };
+  },
+  tapped: function(self) {
+    SoundManager.play('input');
+    self.rect.fill = INPUT_RECT_COLOR_TAPPED;
+    self.letter.fill = TEXT_COLOR_TAPPED;
+    DISPLAY_LETTERS.push(self.letter.text);
+  },
+  untapped: function(self) {
+    self.rect.fill = INPUT_RECT_COLOR_UNTAPPED;
+    self.letter.fill = TEXT_COLOR_UNTAPPED;
+  },
+});
+
+phina.define("InputButton", {
+  superClass: "Button",
+  init: function(w, h, x, y) {
+    this.superInit({
+      width: w,
+      height: h,
+      text: '',
+      strokeWidth: 0,
+    });
+    this.setPosition(x, y);
+    this.fill = 'transparent';
+  },
 });
 
 /*
