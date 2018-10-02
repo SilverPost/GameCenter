@@ -20,12 +20,16 @@ var NUMBER_RECT_HEIGHT = 120;
 var NUMBER_FONT_SIZE = 64;
 var RESULT_IMAGE_WIDTH = 600;
 var RESULT_IMAGE_HEIGHT = 252;
+var RESULT_BG_IMAGE_WIDTH = 683;
+var RESULT_BG_IMAGE_HEIGHT = 640;
 
 // value information
 var TEXT_COLOR_TAPPED = 'lightgray';
 var TEXT_COLOR_UNTAPPED = 'black';
 var INPUT_RECT_COLOR_TAPPED = '#f8f988';
 var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
+var DIFFICULTY = 'normal'; // 'normal' or 'hard'
+var MINUTES_FOR_NORMAL = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
 // display time
 var DISPLAY_TIME = [];
@@ -46,6 +50,7 @@ var ASSETS = {
     'clock': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/clock.png',
     'needle': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/needle.png',
     'result': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/answer.png',
+    'result_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/result_bg.png',
   },
   spritesheet: {
     'needle_ss':
@@ -66,6 +71,17 @@ var ASSETS = {
         "height": RESULT_IMAGE_HEIGHT,
         "cols": 2,
         "rows": 1,
+      },
+      "animations" : {
+      }
+    },
+    'result_bg_ss':
+    {
+      "frame": {
+        "width": RESULT_BG_IMAGE_WIDTH,
+        "height": RESULT_BG_IMAGE_HEIGHT,
+        "cols": 1,
+        "rows": 3,
       },
       "animations" : {
       }
@@ -156,7 +172,11 @@ phina.define("GameScene", {
   },
   load_question: function() {
     this.answer_hour = Math.randint(1, 12);
-    this.answer_minute = Math.randint(0, 59);
+    if(DIFFICULTY == 'normal') {
+      this.answer_minute = MINUTES_FOR_NORMAL[Math.randint(0, 11)];
+    } else if(DIFFICULTY == 'hard') {
+      this.answer_minute = Math.randint(0, 59);
+    }
     this.clock.set_needles(this.answer_hour, this.answer_minute);
   },
   check_answer: function() {
@@ -401,15 +421,29 @@ phina.define("ResultScene", {
   init: function(param) {
     this.superInit(param);
     
+    // background image
+    this.result_bg = Sprite('result_bg').addChildTo(this);
+    this.result_bg.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
+    this.result_bg.width = RESULT_BG_IMAGE_WIDTH;
+    this.result_bg.height = RESULT_BG_IMAGE_HEIGHT;
+    this.result_bg.frameIndex = Math.randint(0, 2);
+    this.result_bg.scaleX = 1.4;
+    this.result_bg.scaleY = 1.4;
+    this.result_bg.alpha = 0.5;
+    
     // result image
     this.resultSprite = this.result_sprite(param);
     this.resultSprite.addChildTo(this);
     this.result_sprite_animation();
     
+    // message
     Label({
       text: 'つぎのもんだい にすすむ',
-      fontSize: 48,
+      fontSize: 52,
+      fontWeight:"bold",
       fill: 'black',
+      stroke: 'white',
+      strokeWidth: 10,
       fontFamily: FONT_FAMILY,
     }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
   },
