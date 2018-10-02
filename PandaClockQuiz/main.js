@@ -178,6 +178,9 @@ phina.define("GameScene", {
       this.answer_minute = Math.randint(0, 59);
     }
     this.clock.set_needles(this.answer_hour, this.answer_minute);
+    if(this.answer_hour < 10) {
+      DISPLAY_TIME[0] = 0;
+    }
   },
   check_answer: function() {
     if(DISPLAY_TIME.length != 4) {
