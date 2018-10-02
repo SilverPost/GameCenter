@@ -18,11 +18,13 @@ var NEEDLE_HEIGHT = 1090;
 var NUMBER_RECT_WIDTH = 100;
 var NUMBER_RECT_HEIGHT = 120;
 var NUMBER_FONT_SIZE = 64;
+var RESULT_IMAGE_WIDTH = 600;
+var RESULT_IMAGE_HEIGHT = 252;
 
 // value information
 var TEXT_COLOR_TAPPED = 'lightgray';
 var TEXT_COLOR_UNTAPPED = 'black';
-var INPUT_RECT_COLOR_TAPPED = 'white';
+var INPUT_RECT_COLOR_TAPPED = '#f8f988';
 var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
 
 // display time
@@ -43,6 +45,7 @@ var ASSETS = {
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/title_panda.png',
     'clock': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/clock.png',
     'needle': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/needle.png',
+    'result': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/answer.png',
   },
   spritesheet: {
     'needle_ss':
@@ -52,6 +55,17 @@ var ASSETS = {
         "height": NEEDLE_HEIGHT,
         "cols": 1,
         "rows": 2,
+      },
+      "animations" : {
+      }
+    },
+    'result_ss':
+    {
+      "frame": {
+        "width": RESULT_IMAGE_WIDTH,
+        "height": RESULT_IMAGE_HEIGHT,
+        "cols": 2,
+        "rows": 1,
       },
       "animations" : {
       }
@@ -119,8 +133,6 @@ phina.define("GameScene", {
   loading: function() {
     this.clock = Clock().addChildTo(this);
     this.clock.loading(this);
-    // set hands (for debug)
-    this.clock.set_needles(3, 0);
     // display times
     this.timePanelGroup = DisplayElement().addChildTo(this);
     this.timePanels = TimePanels();
@@ -129,6 +141,52 @@ phina.define("GameScene", {
     this.inputPanelGroup = DisplayElement().addChildTo(this);
     this.inputPanels = InputPanels();
     this.inputPanels.loading(this.inputPanelGroup);
+    // load question
+    this.load_question();
+  },
+  update: function() {
+    for(var i=0; i<DISPLAY_TIME.length; i++) {
+      if(i >= 2) {
+        this.timePanels.insert_number(i+1, DISPLAY_TIME[i]);
+      } else {
+        this.timePanels.insert_number(i, DISPLAY_TIME[i]);
+      }
+    }
+    this.check_answer();
+  },
+  load_question: function() {
+    this.answer_hour = Math.randint(1, 12);
+    this.answer_minute = Math.randint(0, 59);
+    this.clock.set_needles(this.answer_hour, this.answer_minute);
+  },
+  check_answer: function() {
+    if(DISPLAY_TIME.length != 4) {
+      return;
+    }
+    if(this.is_correct_answer(this.answer_hour, this.answer_minute)) {
+      this.correct();
+    } else {
+      this.incorrect();
+    }
+  },
+  is_correct_answer: function(answer_hour, answer_minute) {
+    var input_hour = DISPLAY_TIME[0]*10+DISPLAY_TIME[1];
+    var input_minute = DISPLAY_TIME[2]*10+DISPLAY_TIME[3];
+    if(input_hour !== answer_hour) return false;
+    if(input_minute !== answer_minute) return false;
+    return true;
+  },
+  correct: function() {
+    SoundManager.play('ok');
+    this.exit({
+      result: 'correct',
+    });
+  },
+  incorrect: function() {
+    SoundManager.play('ng');
+    this.exit({
+      result: 'incorrect',
+    });
   },
 });
 
@@ -210,7 +268,10 @@ phina.define("TimePanels", {
       this.panels[i].loading(group, initNum, 'white', 
                              Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
     }
-  }
+  },
+  insert_number: function(index, num) {
+    this.panels[index].number.text = num;
+  },
 });
 
 /*
@@ -339,7 +400,47 @@ phina.define("ResultScene", {
   superClass: "DisplayScene",
   init: function(param) {
     this.superInit(param);
-  }
+    
+    // result image
+    this.resultSprite = this.result_sprite(param);
+    this.resultSprite.addChildTo(this);
+    this.result_sprite_animation();
+    
+    Label({
+      text: 'つぎのもんだい にすすむ',
+      fontSize: 48,
+      fill: 'black',
+      fontFamily: FONT_FAMILY,
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
+  },
+  result_sprite: function(param) {
+    var result_image = Sprite('result');
+    result_image.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.25);
+    result_image.width = RESULT_IMAGE_WIDTH;
+    result_image.height = RESULT_IMAGE_HEIGHT;
+    result_image.alpha = 0;
+    var ss = FrameAnimation('result_ss');
+    ss.attachTo(this);
+    var image_index = this.is_correct(param.result) ? 0 : 1;
+    result_image.frameIndex = image_index;
+    return result_image;
+  },
+  result_sprite_animation: function() {
+    var tween1 = Tweener().fadeIn(1000);
+    var tween2 = Tweener().scaleTo(1.1, 1000);
+    tween1.attachTo(this.resultSprite);
+    tween2.attachTo(this.resultSprite);
+  },
+  is_correct: function(result) {
+    return (result == 'correct') ? true : false;
+  },
+  reset_question_info: function() {
+    DISPLAY_TIME = [];
+  },
+  onpointstart: function() {
+    this.reset_question_info();
+    this.exit();
+  },
 });
 
 /*
