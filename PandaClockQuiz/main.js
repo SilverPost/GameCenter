@@ -31,8 +31,9 @@ var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
 var DIFFICULTY = 'normal'; // 'normal' or 'hard'
 var MINUTES_FOR_NORMAL = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
-// display time
+// value updated by anywhere
 var DISPLAY_TIME = [];
+var CONTINUOUS_CORRECT_ANSWER = 0;
 
 // font information
 var FONT_FAMILY = "Verdana, Roboto, 'Droid Sans', 'Hiragino Kaku Gothic ProN', sans-serif";
@@ -200,12 +201,14 @@ phina.define("GameScene", {
     return true;
   },
   correct: function() {
+    CONTINUOUS_CORRECT_ANSWER++;
     SoundManager.play('ok');
     this.exit({
       result: 'correct',
     });
   },
   incorrect: function() {
+    CONTINUOUS_CORRECT_ANSWER = 0;
     SoundManager.play('ng');
     this.exit({
       result: 'incorrect',
@@ -423,8 +426,9 @@ phina.define("ResultScene", {
   superClass: "DisplayScene",
   init: function(param) {
     this.superInit(param);
-    
-    // background image
+    this.result_effect(param, this);
+  },
+  show_result_bg: function() {
     this.result_bg = Sprite('result_bg').addChildTo(this);
     this.result_bg.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
     this.result_bg.width = RESULT_BG_IMAGE_WIDTH;
@@ -433,13 +437,8 @@ phina.define("ResultScene", {
     this.result_bg.scaleX = 1.4;
     this.result_bg.scaleY = 1.4;
     this.result_bg.alpha = 0.5;
-    
-    // result image
-    this.resultSprite = this.result_sprite(param);
-    this.resultSprite.addChildTo(this);
-    this.result_sprite_animation();
-    
-    // message
+  },
+  show_label_to_next: function() {
     Label({
       text: 'つぎのもんだい にすすむ',
       fontSize: 52,
@@ -467,6 +466,33 @@ phina.define("ResultScene", {
     var tween2 = Tweener().scaleTo(1.1, 1000);
     tween1.attachTo(this.resultSprite);
     tween2.attachTo(this.resultSprite);
+  },
+  result_effect: function(param) {
+    if(CONTINUOUS_CORRECT_ANSWER % 10 === 0) {
+      this.multiple_of_10(param);
+      return;
+    } else if(CONTINUOUS_CORRECT_ANSWER % 5 === 0) {
+      this.multiple_of_5(param);
+      return;
+    } else {
+      this.noraml_effect(param);
+      return;
+    }
+  },
+  multiple_of_5: function(param) {
+    // tmp function
+    this.noraml_effect(param)
+  },
+  multiple_of_10: function(param) {
+    // tmp function
+    this.noraml_effect(param)
+  },
+  noraml_effect: function(param) {
+      this.show_result_bg();
+      this.show_label_to_next();
+      this.resultSprite = this.result_sprite(param);
+      this.resultSprite.addChildTo(this);
+      this.result_sprite_animation();
   },
   is_correct: function(result) {
     return (result == 'correct') ? true : false;
