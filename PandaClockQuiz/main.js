@@ -290,13 +290,28 @@ phina.define("TimePanels", {
     this.panels = [];
     for(var i=0; i<5; i++) {
       this.panels[i] = NumberPanel().addChildTo(group);
-      initNum = (i === 2) ? '：' : '?';
-      this.panels[i].loading(group, initNum, 'white', 
-                             Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
+      switch (i) {
+        case 0:
+        case 1:
+          // hour
+          this.panels[i].loading(group, '？', 'white', 'red',
+                                 Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
+          break;
+        case 2:
+          this.panels[i].loading(group, '：', 'transparent', 'transparent',
+                                 Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
+          break;
+        case 3:
+        case 4:
+          this.panels[i].loading(group, '？', 'white', 'blue',
+                                 Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
+          break;
+        default:
+      }
     }
   },
   insert_number: function(index, num) {
-    this.panels[index].number.text = num;
+    this.panels[index].num.text = num;
   },
 });
 
@@ -320,7 +335,7 @@ phina.define("InputPanels", {
         this.panels[i][j] = InputPanel().addChildTo(group);
         panel_x = Math.round(SCREEN_WIDTH/6*(j+1));
         panel_y = Math.round((SCREEN_HEIGHT*0.74)+(NUMBER_RECT_HEIGHT*i));
-        this.panels[i][j].loading(group, i*5+j, '#dbffe5', panel_x, panel_y);
+        this.panels[i][j].loading(group, i*5+j, '#dbffe5', 'black', panel_x, panel_y);
         this.panels[i][j].tap_action(group);
       }
     }
@@ -335,8 +350,8 @@ phina.define("InputPanel", {
   init: function() {
     this.superInit();
   },
-  loading: function(group, num, color, x, y) {
-    this.superMethod('loading', group, num, color, x, y);
+  loading: function(group, num, rect_color, stroke_color, x, y) {
+    this.superMethod('loading', group, num, rect_color, stroke_color, x, y);
   },
   tap_action: function(group) {
     this.inputButton = InputButton(this.rect.width, this.rect.height,
@@ -366,7 +381,7 @@ phina.define("InputPanel", {
     })
     .play();
     
-    DISPLAY_TIME.push(self.number.text);
+    DISPLAY_TIME.push(self.num.text);
   },
 });
 
@@ -394,18 +409,19 @@ phina.define("NumberPanel", {
     this.fill = 'transparent';
     this.stroke = 'transparent';
   },
-  loading: function(group, num, color, x, y) {
-    this.rect = this.rect(color, x, y);
+  loading: function(group, num, rect_color, stroke_color, x, y) {
+    this.rect = this.rectangle(rect_color, stroke_color, x, y);
     this.rect.addChildTo(group);
-    this.number = this.number(num, x, y);
-    this.number.addChildTo(group);
+    this.num = this.number(num, x, y);
+    this.num.addChildTo(group);
   },
-  rect: function(color, x, y) {
+  rectangle: function(rect_color, stroke_color, x, y) {
     var rect = RectangleShape();
     rect.setPosition(x, y);
     rect.width = NUMBER_RECT_WIDTH;
     rect.height = NUMBER_RECT_HEIGHT;
-    rect.fill = color;
+    rect.fill = rect_color;
+    rect.stroke = stroke_color;
     return rect;
   },
   number: function(num, x, y) {
