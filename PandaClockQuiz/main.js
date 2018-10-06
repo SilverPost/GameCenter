@@ -11,8 +11,8 @@ var TITLE_LOGO_WIDTH    = 600;
 var TITLE_LOGO_HEIGHT   = 192;
 var TITLE_PANDA_WIDTH   = 611;
 var TITLE_PANDA_HEIGHT  = 575;
-var CLOCK_BG_WIDTH  = SCREEN_WIDTH*0.6;
-var CLOCK_BG_HEIGHT = CLOCK_BG_WIDTH/1204*1188;
+var CLOCK_BG_WIDTH  = SCREEN_WIDTH*0.66;
+var CLOCK_BG_HEIGHT = CLOCK_BG_WIDTH/1300*1283;
 var NEEDLE_WIDTH  = 63;
 var NEEDLE_HEIGHT = 1090;
 var NUMBER_RECT_WIDTH = 100;
@@ -226,7 +226,7 @@ phina.define("Clock", {
   },
   loading: function(self) {
     // background image
-    this.setPosition(SCREEN_WIDTH*0.5, CLOCK_BG_HEIGHT*0.6);
+    this.setPosition(SCREEN_WIDTH*0.5, CLOCK_BG_HEIGHT*0.54);
     this.width = CLOCK_BG_WIDTH;
     this.height = CLOCK_BG_HEIGHT;
     // long hand
