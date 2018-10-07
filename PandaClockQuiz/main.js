@@ -21,7 +21,7 @@ var NUMBER_FONT_SIZE = 64;
 var RESULT_IMAGE_WIDTH = 600;
 var RESULT_IMAGE_HEIGHT = 252;
 var RESULT_BG_IMAGE_WIDTH = 683;
-var RESULT_BG_IMAGE_HEIGHT = 640;
+var RESULT_BG_IMAGE_HEIGHT = 683;
 
 // value information
 var TEXT_COLOR_TAPPED = 'lightgray';
@@ -81,7 +81,7 @@ var ASSETS = {
       "frame": {
         "width": RESULT_BG_IMAGE_WIDTH,
         "height": RESULT_BG_IMAGE_HEIGHT,
-        "cols": 1,
+        "cols": 2,
         "rows": 3,
       },
       "animations" : {
@@ -453,12 +453,10 @@ phina.define("ResultScene", {
   },
   show_result_bg: function() {
     this.result_bg = Sprite('result_bg').addChildTo(this);
-    this.result_bg.setPosition(SCREEN_WIDTH*0.7, SCREEN_HEIGHT*0.8);
+    this.result_bg.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
     this.result_bg.width = RESULT_BG_IMAGE_WIDTH;
     this.result_bg.height = RESULT_BG_IMAGE_HEIGHT;
-    this.result_bg.frameIndex = Math.randint(0, 2);
-    this.result_bg.scaleX = 1.4;
-    this.result_bg.scaleY = 1.4;
+    this.result_bg.frameIndex = Math.randint(0, 5);
     this.result_bg.alpha = 0.5;
   },
   show_label_to_next: function() {
@@ -470,7 +468,7 @@ phina.define("ResultScene", {
       stroke: 'white',
       strokeWidth: 10,
       fontFamily: FONT_FAMILY,
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.7);
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.42);
   },
   result_sprite: function(param) {
     var result_image = Sprite('result');
