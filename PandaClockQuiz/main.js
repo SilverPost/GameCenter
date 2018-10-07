@@ -22,6 +22,8 @@ var RESULT_IMAGE_WIDTH = 600;
 var RESULT_IMAGE_HEIGHT = 252;
 var RESULT_BG_IMAGE_WIDTH = 683;
 var RESULT_BG_IMAGE_HEIGHT = 683;
+var RESULT_ANIMATION_WIDTH = 300;
+var RESULT_ANIMATION_HEIGHT = 171;
 
 // value information
 var TEXT_COLOR_TAPPED = 'lightgray';
@@ -52,6 +54,7 @@ var ASSETS = {
     'needle': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/needle.png',
     'result': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/answer.png',
     'result_bg': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/result_bg.png',
+    'animation': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaClockQuiz/image/animation.png',
   },
   spritesheet: {
     'needle_ss':
@@ -86,6 +89,21 @@ var ASSETS = {
       },
       "animations" : {
       }
+    },
+    'result_animation_ss':
+    {
+      "frame": {
+        "width": RESULT_ANIMATION_WIDTH,
+        "height": RESULT_ANIMATION_HEIGHT,
+        "cols": 35,
+        "rows": 1,
+      },
+      "animations" : {
+        "hayabusa": {
+          "frames": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34],
+          "frequency": 4,
+        },
+      },
     },
   },
 };
@@ -449,6 +467,7 @@ phina.define("ResultScene", {
   superClass: "DisplayScene",
   init: function(param) {
     this.superInit(param);
+    this.backgroundColor = '#f5f5f5';
     this.result_effect(param, this);
   },
   show_result_bg: function() {
@@ -459,7 +478,7 @@ phina.define("ResultScene", {
     this.result_bg.frameIndex = Math.randint(0, 5);
     this.result_bg.alpha = 0.5;
   },
-  show_label_to_next: function() {
+  show_label_to_next: function(w, h) {
     Label({
       text: 'つぎのもんだい にすすむ',
       fontSize: 52,
@@ -468,11 +487,11 @@ phina.define("ResultScene", {
       stroke: 'white',
       strokeWidth: 10,
       fontFamily: FONT_FAMILY,
-    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.42);
+    }).addChildTo(this).setPosition(w, h);
   },
-  result_sprite: function(param) {
+  result_sprite: function(param, w, h) {
     var result_image = Sprite('result');
-    result_image.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.25);
+    result_image.setPosition(w, h);
     result_image.width = RESULT_IMAGE_WIDTH;
     result_image.height = RESULT_IMAGE_HEIGHT;
     result_image.alpha = 0;
@@ -482,9 +501,9 @@ phina.define("ResultScene", {
     result_image.frameIndex = image_index;
     return result_image;
   },
-  result_sprite_animation: function() {
+  result_sprite_animation: function(scale) {
     var tween1 = Tweener().fadeIn(1000);
-    var tween2 = Tweener().scaleTo(1.1, 1000);
+    var tween2 = Tweener().scaleTo(scale, 1000);
     tween1.attachTo(this.resultSprite);
     tween2.attachTo(this.resultSprite);
   },
@@ -492,28 +511,42 @@ phina.define("ResultScene", {
     if(CONTINUOUS_CORRECT_ANSWER % 10 === 0) {
       this.multiple_of_10(param);
       return;
-    } else if(CONTINUOUS_CORRECT_ANSWER % 5 === 0) {
+    }
+    if(CONTINUOUS_CORRECT_ANSWER % 5 === 0) {
       this.multiple_of_5(param);
       return;
-    } else {
-      this.noraml_effect(param);
-      return;
     }
+    this.noraml_effect(param);
+    return;
   },
   multiple_of_5: function(param) {
-    // tmp function
-    this.noraml_effect(param)
+    this.result_ss_animation('hayabusa');
+    this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.75);
+    this.resultSprite = this.result_sprite(param, SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.15);
+    this.resultSprite.addChildTo(this);
+    this.result_sprite_animation(0.5);
   },
   multiple_of_10: function(param) {
-    // tmp function
-    this.noraml_effect(param)
+    this.result_ss_animation('hayabusa');
+    this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.75);
   },
   noraml_effect: function(param) {
       this.show_result_bg();
-      this.show_label_to_next();
-      this.resultSprite = this.result_sprite(param);
+      this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.42);
+      this.resultSprite = this.result_sprite(param, SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.25);
       this.resultSprite.addChildTo(this);
-      this.result_sprite_animation();
+      this.result_sprite_animation(1.1);
+  },
+  result_ss_animation: function(anim_name) {
+    var result_anime = Sprite('animation').addChildTo(this);
+    result_anime.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.45);
+    result_anime.width = SCREEN_WIDTH*0.5;
+    result_anime.height = SCREEN_HEIGHT*0.25;
+    result_anime.scaleX = 2;
+    result_anime.scaleY = 2;
+    var anim = FrameAnimation('result_animation_ss');
+    anim.attachTo(result_anime);
+    anim.gotoAndPlay(anim_name);
   },
   is_correct: function(result) {
     return (result == 'correct') ? true : false;
