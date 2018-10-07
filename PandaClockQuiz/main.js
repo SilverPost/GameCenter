@@ -311,6 +311,9 @@ phina.define("TimePanels", {
     }
   },
   insert_number: function(index, num) {
+    if(index > 4) {
+      return;
+    }
     this.panels[index].num.text = num;
   },
 });
@@ -362,6 +365,10 @@ phina.define("InputPanel", {
     };
   },
   tapped: function(self) {
+    if(DISPLAY_TIME.length > 4) {
+      return;
+    }
+    
     SoundManager.play('input');
     
     self.rect.tweener.to({
