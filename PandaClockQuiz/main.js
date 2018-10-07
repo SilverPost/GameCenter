@@ -508,38 +508,41 @@ phina.define("ResultScene", {
     tween2.attachTo(this.resultSprite);
   },
   result_effect: function(param) {
-    if(CONTINUOUS_CORRECT_ANSWER % 10 === 0) {
-      this.multiple_of_10(param);
+    if(CONTINUOUS_CORRECT_ANSWER === 0) {
+      this.noraml_effect(param);
+      return;
+    } else if(CONTINUOUS_CORRECT_ANSWER % 3 === 0) {
+      this.just_num();
+      return;
+    } else {
+      this.noraml_effect(param);
       return;
     }
-    if(CONTINUOUS_CORRECT_ANSWER % 5 === 0) {
-      this.multiple_of_5(param);
-      return;
-    }
-    this.noraml_effect(param);
-    return;
   },
-  multiple_of_5: function(param) {
+  just_num: function() {
     this.result_ss_animation('hayabusa');
-    this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.75);
-    this.resultSprite = this.result_sprite(param, SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.15);
-    this.resultSprite.addChildTo(this);
-    this.result_sprite_animation(0.5);
-  },
-  multiple_of_10: function(param) {
-    this.result_ss_animation('hayabusa');
-    this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.75);
+    this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.9);
+    var str = CONTINUOUS_CORRECT_ANSWER + '\nれんぞく\nせいかい';
+    Label({
+      text: str,
+      fontSize: 128,
+      fontWeight:"bold",
+      fill: 'red',
+      stroke: 'white',
+      strokeWidth: 10,
+      fontFamily: FONT_FAMILY,
+    }).addChildTo(this).setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.24);
   },
   noraml_effect: function(param) {
       this.show_result_bg();
       this.show_label_to_next(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.42);
-      this.resultSprite = this.result_sprite(param, SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.25);
+      this.resultSprite = this.result_sprite(param, SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.2);
       this.resultSprite.addChildTo(this);
       this.result_sprite_animation(1.1);
   },
   result_ss_animation: function(anim_name) {
     var result_anime = Sprite('animation').addChildTo(this);
-    result_anime.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.45);
+    result_anime.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.66);
     result_anime.width = SCREEN_WIDTH*0.5;
     result_anime.height = SCREEN_HEIGHT*0.25;
     result_anime.scaleX = 2;
