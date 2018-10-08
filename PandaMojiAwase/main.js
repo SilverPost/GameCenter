@@ -18,6 +18,8 @@ var LETTER_RECT_HEIGHT = 120;
 var LETTER_FONT_SIZE = 64;
 var RESULT_IMAGE_WIDTH = 600;
 var RESULT_IMAGE_HEIGHT = 252;
+var HINT_MODAL_WIDTH = 620;
+var HINT_MODAL_HEIGHT = 482;
 
 // value information
 var TEXT_COLOR_TAPPED = 'lightgray';
@@ -56,12 +58,25 @@ var ANSWER_SET = [
   'アンパンマン', 'ばいきんまん', 'ドキンちゃん', 'バタコさん', 'ダッフィー', 'シェリーメイ', 'ベイマックス', 'ドリー', 'ひつじ', 'さる',
   'ミッキー', 'ミニー', 'ドナルド', 'プーさん', 'バズ', 'ウッディ', 'プルート', 'ニモ', 'いぬ', 'コアラ',
   'デイジー', 'シャショット', 'グーフィー', 'みずほ', 'のぞみ', 'パンダ', 'ライオン', 'ねこ', 'しろくま', 'ペンギン',
-  'うさぎ', 'キリン', 'ゴリラ', 'ニワトリ', 'ハムスター', 'ゾウ', 'てんとうむし', 'タカラトミー', 'しまうま', 'りんご',
+  'うさぎ', 'キリン', 'ゴリラ', 'ニワトリ', 'ハムスター', 'ぞう', 'てんとうむし', 'タカラトミー', 'しまうま', 'りんご',
   'ハヤト', 'アキタ', 'ツラヌキ', 'そらジロー', 'くもジロー', 'ぽつリン', 'ワンワン', 'うーたん', 'バナナ', 'すいか',
   'パトカー', 'きしゃ', 'バス', 'タクシー', 'ブルドーザー', 'しょうぼうしゃ', 'バイク', 'じてんしゃ', 'ショベルカー', 'ダンプカー',
   'ひこうき', 'ヘリコプター', 'トラック', 'ドラえもん', 'あり', 'にんじん', 'ブロッコリー', 'じゃがいも', 'だいこん', 'キャベツ',
   'はなかっぱ', 'カレーパンマン', 'しょくぱんまん', 'チーズ', 'イーストアイ', 'ジェイク', 'フック', 'スミー', 'レグ', 'チーバくん'
   ];
+var HINT_SET = [
+  'はやぶさ', 'こまち', 'かがやき', 'つばさ', 'はやぶさ', 'のぞみ', 'つばめ', 'こだま', 'こっしー', 'さぼさん',
+  'とよた', 'ほんだ', 'すばる', 'まつだ', 'にっさん', 'すずき', 'だいはつ', 'れくさす', 'うし', 'うま',
+  'あんぱんまん', 'ばいきんまん', 'どきんちゃん', 'ばたこさん', 'だっふぃー', 'しぇりーめい', 'べいまっくす', 'どりー', 'ひつじ', 'さる',
+  'みっきー', 'みにー', 'どなるど', 'ぷーさん', 'ばず', 'うっでぃ', 'ぷるーと', 'にも', 'いぬ', 'こあら',
+  'でいじー', 'しゃしょっと', 'ぐーふぃー', 'みずほ', 'のぞみ', 'ぱんだ', 'らいおん', 'ねこ', 'しろくま', 'ぺんぎん',
+  'うさぎ', 'きりん', 'ごりら', 'にわとり', 'はむすたー', 'ぞう', 'てんとうむし', 'たからとみー', 'しまうま', 'りんご',
+  'はやと', 'あきた', 'つらぬき', 'そらじろー', 'くもじろー', 'ぽつりん', 'わんわん', 'うーたん', 'ばなな', 'すいか',
+  'ぱとかー', 'きしゃ', 'ばす', 'たくしー', 'ぶるどーざー', 'しょうぼうしゃ', 'ばいく', 'じてんしゃ', 'しょべるかー', 'だんぷかー',
+  'ひこうき', 'へりこぷたー', 'とらっく', 'どらえもん', 'あり', 'にんじん', 'ぶろっこりー', 'じゃがいも', 'だいこん', 'きゃべつ',
+  'はなかっぱ', 'かれーぱんまん', 'しょくぱんまん', 'ちーず', 'いーすとあい', 'じぇいく', 'ふっく', 'すみー', 'れぐ', 'ちーばくん'
+];
+
 var DISPLAY_LETTERS = [];
 
 var ASSETS = {
@@ -76,6 +91,7 @@ var ASSETS = {
     'panda': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/title_panda.png',
     'question': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/questions.png',
     'result': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/answer.png',
+    'hint': 'https://raw.githubusercontent.com/SilverPost/GameCenter/master/PandaMojiAwase/image/hint.png',
   },
   spritesheet: {
     'question_ss':
@@ -179,6 +195,10 @@ phina.define("GameScene", {
     this.inputLettersGroup = DisplayElement().addChildTo(this);
     this.inputLetters = InputLetters();
     this.inputLetters.loading(this.inputLettersGroup, this.inputArea, this.questionIndex);
+    // hint button
+    this.hintButtonGroup = DisplayElement().addChildTo(this);
+    this.hintButton = HintButton();
+    this.hintButton.loading(this.hintButtonGroup, this.imageArea, this.questionIndex);
   },
   update: function() {
     this.update_display_letters();
@@ -298,6 +318,97 @@ phina.define("BackgroundArea", {
     this.width = width;
     this.height = height;
     this.fill = '#f5f5f5';
+  },
+});
+
+/*
+ * hint button
+ */
+phina.define("HintButton", {
+  superClass: "Button",
+  init: function() {
+    this.superInit();
+  },
+  loading: function(group, image_area, answer_index) {
+    this.width = image_area.width*0.1;
+    this.height = image_area.height*0.8;
+    this.setPosition(image_area.width*0.072, image_area.height*0.5);
+    this.fill = '#e97062';
+    this.stroke = 'brown';
+    this.text = '';
+    var self = this;
+    this.onpointend = function() {
+      self.tapped(group, answer_index);
+    };
+    this.addChildTo(group);
+    // string
+    this.str = Label({
+                  text: 'ヒ\nン\nト',
+                  fontSize: 36,
+                  fill: 'white',
+                  stroke: 'transparent',
+                  fontFamily: FONT_FAMILY,
+                }).addChildTo(group);
+    this.str.setPosition(this.x, this.y);
+  },
+  tapped: function(group, answer_index) {
+    this.hintModal = HintModal();
+    this.hintModal.loading(group, answer_index);
+  },
+});
+
+/*
+ * hint modal
+ */
+phina.define("HintModal", {
+  superClass: "RectangleShape",
+  init: function() {
+    this.superInit();
+    this.width = SCREEN_WIDTH;
+    this.height = SCREEN_HEIGHT;
+    this.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5);
+    this.fill = 'black';
+    this.alpha = 0.6;
+  },
+  loading: function(group, answer_index) {
+    this.addChildTo(group);
+    // modal rectangle
+    this.modal = Sprite('hint').addChildTo(group);
+    this.modal.width = HINT_MODAL_WIDTH;
+    this.modal.height = HINT_MODAL_HEIGHT;
+    this.modal.setPosition(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.6);
+    // hint string
+    this.hint_label = Label({
+                        text: HINT_SET[answer_index],
+                        fontSize: 64,
+                        fill: 'blue',
+                        fontFamily: FONT_FAMILY,
+                      }).addChildTo(group);
+    this.hint_label.setPosition(HINT_MODAL_WIDTH*0.5,
+                                this.modal.top + HINT_MODAL_HEIGHT*0.64);
+    // close Button
+    this.close_button = Button({
+                          width: HINT_MODAL_WIDTH*0.14,
+                          height: HINT_MODAL_WIDTH*0.14,
+                          text: '',
+                          fill: 'transparent',
+                          strokeWidth: 0,
+                        }).addChildTo(group);
+    this.close_button.setPosition(this.modal.left + HINT_MODAL_WIDTH*0.88,
+                                  this.modal.top + HINT_MODAL_HEIGHT*0.28);
+    var self = this;
+    this.close_button.onpointend = function() {
+      self.tapped();
+    };
+  },
+  tapped: function(group, answer_index) {
+    this.remove_modal();
+  },
+  remove_modal: function() {
+    this.close_button.remove();
+    this.hint_label.remove();
+    this.modal.remove();
+    this.remove();
   },
 });
 
