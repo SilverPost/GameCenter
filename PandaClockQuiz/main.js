@@ -30,7 +30,8 @@ var TEXT_COLOR_TAPPED = 'lightgray';
 var TEXT_COLOR_UNTAPPED = 'black';
 var INPUT_RECT_COLOR_TAPPED = '#f8f988';
 var INPUT_RECT_COLOR_UNTAPPED = '#dbffe5';
-var DIFFICULTY = 'normal'; // 'normal' or 'hard'
+var DIFFICULTY = 'easy'; // 'easy', normal' or 'hard'
+var MINUTES_FOR_EASY = [0, 15, 30, 45];
 var MINUTES_FOR_NORMAL = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
 // value updated by anywhere
@@ -203,7 +204,9 @@ phina.define("GameScene", {
   },
   load_question: function() {
     this.answer_hour = Math.randint(1, 12);
-    if(DIFFICULTY == 'normal') {
+    if(DIFFICULTY == 'easy') {
+      this.answer_minute = MINUTES_FOR_EASY[Math.randint(0, 3)];
+    } else if(DIFFICULTY == 'normal') {
       this.answer_minute = MINUTES_FOR_NORMAL[Math.randint(0, 11)];
     } else if(DIFFICULTY == 'hard') {
       this.answer_minute = Math.randint(0, 59);
