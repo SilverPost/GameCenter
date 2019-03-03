@@ -331,7 +331,7 @@ phina.define("TimePanels", {
                                  Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
           break;
         case 2:
-          this.panels[i].loading(group, '：', 'transparent', 'transparent',
+          this.panels[i].loading(group, 'じ', 'transparent', 'transparent',
                                  Math.round(SCREEN_WIDTH/6*(i+1)), Math.round(SCREEN_HEIGHT*0.54));
           break;
         case 3:
